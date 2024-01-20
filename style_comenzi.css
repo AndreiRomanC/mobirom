@@ -1,0 +1,181 @@
+#detaliiComanda {
+  width: 70%;
+  padding: 10px;
+  overflow-y: auto; /* Activarea scroll-ului dacă detaliile sunt prea lungi */
+}
+
+#detaliiComanda {
+  background-color: #ffffff;
+  /* Culoare de fundal albă */
+  border: 1px solid #ddd;
+  /* Bordură subtilă */
+  padding: 20px;
+  /* Padding intern */
+  border-radius: 5px;
+  /* Margini rotunjite */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Umbră subtilă */
+  margin: 5px;
+  /* Spațiu suplimentar deasupra */
+}
+
+#detaliiComanda h3 {
+  color: #333;
+  /* Culoare titlu */
+  margin-bottom: 20px;
+  /* Spațiu sub titlu */
+}
+
+#detaliiComanda p {
+  color: #666;
+  /* Culoare text */
+  line-height: 1.5;
+  /* Spațiu între linii */
+  margin-bottom: 10px;
+  /* Spațiu între paragrafe */
+}
+
+#detaliiComanda input[type="text"],
+#detaliiComanda input[type="date"],
+#detaliiComanda input[type="number"],
+#detaliiComanda select {
+  width: 100%;
+  /* Lățime completă */
+  padding: 8px;
+  /* Padding intern */
+  margin-bottom: 10px;
+  /* Spațiu sub fiecare câmp */
+  border: 1px solid #ccc;
+  /* Bordură subtilă */
+  border-radius: 4px;
+  /* Margini rotunjite */
+}
+
+#detaliiComanda button {
+  padding: 10px 15px;
+  /* Padding pentru buton */
+  background-color: #4CAF50;
+  /* Culoare de fundal pentru buton */
+  color: white;
+  /* Text alb pentru buton */
+  border: none;
+  /* Fără bordură */
+  border-radius: 5px;
+  /* Margini rotunjite */
+  cursor: pointer;
+  /* Cursor pointer pentru buton */
+  font-size: 1em;
+  /* Mărimea fontului pentru buton */
+}
+
+#detaliiComanda button:hover {
+  background-color: #45a049;
+  /* Culoare la hover pentru buton */
+}
+
+
+#detaliiComanda {
+  background-color: #ffffff;
+  /* Culoare de fundal albă */
+  border: 1px solid #ddd;
+  /* Bordură subtilă */
+  padding: 20px;
+  /* Padding intern */
+  border-radius: 5px;
+  /* Margini rotunjite */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Umbră subtilă */
+  margin: 5px;
+  /* Spațiu suplimentar deasupra */
+}
+
+#detaliiComanda h3 {
+  color: #333;
+  /* Culoare titlu */
+  margin-bottom: 20px;
+  /* Spațiu sub titlu */
+}
+
+#detaliiComanda p {
+  color: #666;
+  /* Culoare text */
+  line-height: 1.5;
+  /* Spațiu între linii */
+  margin-bottom: 10px;
+  /* Spațiu între paragrafe */
+}
+
+#detaliiComanda input[type="text"],
+#detaliiComanda input[type="date"],
+#detaliiComanda input[type="number"],
+#detaliiComanda select {
+  width: 100%;
+  /* Lățime completă */
+  padding: 8px;
+  /* Padding intern */
+  margin-bottom: 10px;
+  /* Spațiu sub fiecare câmp */
+  border: 1px solid #ccc;
+  /* Bordură subtilă */
+  border-radius: 4px;
+  /* Margini rotunjite */
+}
+
+#detaliiComanda button {
+  padding: 10px 15px;
+  /* Padding pentru buton */
+  background-color: #4CAF50;
+  /* Culoare de fundal pentru buton */
+  color: white;
+  /* Text alb pentru buton */
+  border: none;
+  /* Fără bordură */
+  border-radius: 5px;
+  /* Margini rotunjite */
+  cursor: pointer;
+  /* Cursor pointer pentru buton */
+  font-size: 1em;
+  /* Mărimea fontului pentru buton */
+}
+
+#detaliiComanda button {
+  transition: background-color 0.1s ease-in-out, transform 0.1s ease;
+}
+
+
+
+#detaliiComanda button#butonSalveaza {
+  background: linear-gradient(to bottom, #5890f8, #4786fa); /* Gradient Roșu Șters */
+  color: #FFFFFF;
+}
+
+#detaliiComanda button#butonSalveaza:hover {
+  background: linear-gradient(to bottom, #4786fa, #5890f8); /* Gradient Roșu Șters */
+}
+
+#detaliiComanda button#butonSterge {
+  background: linear-gradient(to bottom, #ec5858, #e73c3c); /* Gradient Roșu Șters */
+  color: #FFFFFF;
+}
+
+#detaliiComanda button#butonSterge:hover {
+  background: linear-gradient(to bottom, #e73c3c, #ec5858); /* Gradient Roșu Șters */
+}
+
+
+#containerButoane {
+  display: flex;
+  justify-content: center;
+  /* Centrează elementele pe orizontală */
+  align-items: center;
+  /* Opțional, pentru centrarea pe verticală */
+  flex-direction: row;
+  /* Așează elementele unul sub altul */
+}
+
+#butonSalveaza, #butonSterge {
+  display: inline-block;
+  /* Asigură că butoanele sunt tratate ca blocuri */
+  margin: 10px auto;
+  /* Adaugă spațiu și centrează pe orizontală */
+}

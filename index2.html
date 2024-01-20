@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gestionare Comenzi</title>
+    <link rel="stylesheet" type="text/css" href="style_comenzi.css">
+    <link rel="stylesheet" type="text/css" href="general.css">
+    <script type="module" src="script.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+  <div class="menu">
+    <a href="#" id = "butonMeniu1" onclick="">Comenzi</a>
+    <a href="#" id = "butonAdaugaComanda" onclick="">Comanda noua</a>
+    <!-- Alte link-uri ale meniului, după necesitate -->
+</div>
+    <div id="container">
+      <div id="listaComenzi">
+        <div id="formFiltrareContainer">
+          <!-- Formularul de filtrare aici -->
+          <form id="formFiltrare">
+            <input type="date" id="dataStart" name="dataStart">
+            <input type="date" id="dataEnd" name="dataEnd">
+            <button id="sortButton" type="button">
+               <i class="fa fa-sort"></i></button>
+          </form>
+            <form id="searchForm">
+              <input type="text" id="searchInput" name="search" placeholder="Caută...">
+              <button id="searchButton" type="submit"><i class="fa fa-search"></i></button>
+            </form> 
+            <select id="filterByStatus">
+              <option value="all">Toate comenzile</option>
+              <option value="completed">Comenzi finalizate</option>
+              <option value="pending">Comenzi în așteptare</option>
+              <option value="canceled">Comenzi anulate</option>
+            </select>         
+        </div>
+        <div id="comenziContainer">
+          <!-- Lista de comenzi va fi aici -->
+        </div>
+      </div>
+      <div id="detaliiComanda">
+        <!-- Detalii Comanda vor fi aici -->
+      </div>
+    </div>
+  </body>
+</html>
