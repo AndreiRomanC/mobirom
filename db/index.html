@@ -5,24 +5,26 @@
 </head>
 <body>
     <div id="result"></div>
+    <script src="db_use.js"></script> <!-- Încarcă fișierul JavaScript cu funcția fetchFromApi -->
+
     <script>
+
         // Funcția pentru a actualiza conținutul paginii cu datele primite
         function updatePageWithData(data) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<h2>Date primite de la server:</h2>';
-            for (const item of data) {
-                resultDiv.innerHTML += '<p>' + item.nume + ': ' + item.valoare + '</p>';
-            }
+                const resultDiv = document.getElementById('result');
+                let newContent = '<h2>Date primite de la server:</h2>';
+                for (const item of data) {
+                    newContent += `<p>${item.nume}: ${item.produs}: ${item.detalii}: ${item.data}</p>`;
+    }
+    resultDiv.innerHTML = newContent;
         }
 
-        // Solicitarea AJAX pentru a obține datele de la server
-        fetch('api.php?action=getData') // Adresa API-ului și acțiunea
-           .then(response => response.json()) // Parsați răspunsul JSON
-           .then(data => {
-               // Actualizați conținutul paginii cu datele primite
-               updatePageWithData(data);
-           })
-           .catch(error => console.error('Eroare: ' + error));
-    </script>
+            fetchFromApi('listAll', { id: 14594 })
+            .then(updatePageWithData);
+               
+                </script>
+
+
+
 </body>
 </html>
