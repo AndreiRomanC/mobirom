@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const nameToSearch = document.getElementById('searchInput').value;
     incarcaComenzi(cautaComenziDupaNume(nameToSearch));
   })
+  document.getElementById('butonMeniu1').addEventListener('click', function() { 
+    adaugaFormularComanda();
+  })
   document.getElementById('butonAdaugaComanda').addEventListener('click', function() { 
     adaugaFormularComanda();
   })
