@@ -11,7 +11,7 @@ export let comenziFictive = [
   { id: 5, client: 'Mihai Popa', data: '2024-01-20', status: 'Finalizată', total: 250.0 },
   { id: 6, client: 'Alexandru Ionescu', data: '2024-01-05', status: 'În așteptare', total: 180.0 },
   { id: 7, client: 'Elena Stan', data: '2024-01-10', status: 'Finalizată', total: 300.0 },
-  { id: 8, client: 'Andreea Popescu', data: '2024-01-14', status: 'În așteptare', total: 120.0 },
+  { id: 8, client: 'Andreea Popescu', data: '2024-01-15', status: 'În așteptare', total: 120.0 },
 ];
 console.log(comenziFictive);
 initialize(comenziFictive);
