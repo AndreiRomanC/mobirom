@@ -1,4 +1,5 @@
 import { actualizaza_lisa } from "./dom/dom_api.js";
+import {selectElement} from "./dom/dom_api.js";
 export function cautaComenziDupaNume(nameToSearch,listaComenzi){  
   let comenziGasite = listaComenzi.filter(comanda => comanda.client.toLowerCase().includes(nameToSearch.toLowerCase()));
   //aplicaFiltru(comenziGasite);
@@ -108,6 +109,13 @@ export function aplicaFiltru(listaComenzi) {
   const dataStart = document.getElementById('dataStart').value;
   const dataEnd = document.getElementById('dataEnd').value;
   const nameToSearch = document.getElementById('searchInput').value;
+  if(selectElement.value !== "all"){
+    rezultat = rezultat.filter(function(comanda) {
+      return comanda.status === selectElement.value;
+    });
+  }
+
+  console.log(selectElement.value);
   if (nameToSearch) {
     rezultat = cautaComenziDupaNume(nameToSearch,rezultat);
   }

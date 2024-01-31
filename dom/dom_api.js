@@ -2,6 +2,8 @@ import * as operatiiComenzi from '../operatiiComenzi.js';
 import { adaugaFormularComanda } from '../OrderForm/formularComanda.js';
 
 const sortButton = document.getElementById('sortButton');
+export var selectElement = document.getElementById("filterByStatus");
+
 let ascendent = true; // Folosim o variabilă pentru a ține evidența sortării
 let listaComenzi = []; // Initialize an empty array to hold the latest data
 export function actualizaza_lisa(nouaLista){
@@ -57,5 +59,11 @@ export function initialize(initialData) {
         operatiiComenzi.incarcaComenzi(operatiiComenzi.aplicaFiltru(listaComenzi));
       }
     });
+
+    selectElement.addEventListener("change", function() {
+      operatiiComenzi.incarcaComenzi(operatiiComenzi.aplicaFiltru(listaComenzi));      
+    });
+
+
   });
 }
