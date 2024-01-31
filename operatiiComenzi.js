@@ -101,6 +101,10 @@ export function stergeComanda(idComanda, listaComenzi) {
     })
 }
 
+export function setAscendent(newValue) {
+  ascendent = newValue;
+}
+
 const sortButton = document.getElementById('sortButton');
 export let ascendent = true; // Folosim o variabilă pentru a ține evidența sortării
 
@@ -128,7 +132,6 @@ export function aplicaFiltru(listaComenzi) {
   } else {
     rezultat.sort((a, b) => b.data.localeCompare(a.data));
   }
-  ascendent = !ascendent; // Schimbăm starea sortării
 
   // Afișați rezultatul în interfața utilizatorului
   return rezultat;

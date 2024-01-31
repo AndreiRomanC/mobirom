@@ -4,10 +4,10 @@ import { adaugaFormularComanda } from '../OrderForm/formularComanda.js';
 const sortButton = document.getElementById('sortButton');
 export var selectElement = document.getElementById("filterByStatus");
 
-let ascendent = true; // Folosim o variabilă pentru a ține evidența sortării
 let listaComenzi = []; // Initialize an empty array to hold the latest data
 export function actualizaza_lisa(nouaLista){
   listaComenzi = nouaLista;
+  console.log(listaComenzi);
 }
 export function initialize(initialData) {
   // Initialize the latest data with the initialData
@@ -16,6 +16,7 @@ export function initialize(initialData) {
   operatiiComenzi.incarcaComenzi(operatiiComenzi.aplicaFiltru(listaComenzi));
   sortButton.addEventListener('click', function() {
     let filtrate = operatiiComenzi.aplicaFiltru(listaComenzi);
+    operatiiComenzi.setAscendent(!operatiiComenzi.ascendent); // Schimbăm starea sortării
     operatiiComenzi.incarcaComenzi(filtrate);
   });
   const comenziContainer = document.getElementById('comenziContainer');
@@ -42,7 +43,9 @@ export function initialize(initialData) {
     });
 
     document.getElementById('butonMeniu1').addEventListener('click', function() {
-      adaugaFormularComanda();
+      adaugaFormularComanda(listaComenzi);
+      operatiiComenzi.incarcaComenzi(operatiiComenzi.aplicaFiltru(listaComenzi));
+
     });
 
     document.getElementById('butonMeniu2').addEventListener('click', function() {

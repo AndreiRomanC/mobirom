@@ -1,6 +1,8 @@
-export function adaugaFormularComanda() {
-  const container = document.getElementById('detaliiComanda');
+import { actualizaza_lisa } from "../dom/dom_api.js";
 
+export function adaugaFormularComanda(listaComenzi) {
+  const container = document.getElementById('detaliiComanda');
+  container.innerHTML = '';
   const formularContainer = document.createElement('div');
   formularContainer.classList.add('formularComanda');
 
@@ -57,14 +59,39 @@ export function adaugaFormularComanda() {
 
   const adaugaComandaButton = document.createElement('button');
   adaugaComandaButton.textContent = 'Adaugă Comandă';
+  adaugaComandaButton.addEventListener('click', function() {
+    // Aici poți adăuga codul care trebuie executat atunci când butonul este apăsat
+    const client = clientInput.value;
+    const data = dataInput.value;
+    const status = statusInput.value;
+    const total = parseFloat(totalInput.value);
 
-  buttonContainer.appendChild(adaugaComandaButton);
+    // Creăm un obiect nou cu datele preluate
+    const comandaNoua = {
+      id: listaComenzi.length + 1, // Setăm un ID unic pentru comanda nouă
+      client: client,
+      data: data,
+      status: status,
+      total: total
+    };
+    listaComenzi.push(comandaNoua);
+    actualizaza_lisa(listaComenzi)
 
-  formularContainer.appendChild(buttonContainer);
+    console.log('Butonul "Adaugă Comandă" a fost apăsat.',listaComenzi);
+    
+  });
+
+
 
   formularContainer.appendChild(statusInput);
+  formularContainer.appendChild(dataInput);
+
   formularContainer.appendChild(totalInput);
   formularContainer.appendChild(clientInput);
+
+  formularContainer.appendChild(buttonContainer);
+  buttonContainer.appendChild(adaugaComandaButton);
+
 
   const link = document.createElement('link');
   link.href = './OrderForm/OrderFormStyle.css';
