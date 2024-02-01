@@ -4,10 +4,12 @@
     <title>Exemplu JavaScript</title>
 </head>
 <body>
-    <div id="result"></div>
-    <script src="db_use.js"></script> <!-- Încarcă fișierul JavaScript cu funcția fetchFromApi -->
+    <script type="module" src="../db/db_use.js">
+    </script>
 
-    <script>
+    <div id="result"></div>
+
+    <script type="module">
 
         // Funcția pentru a actualiza conținutul paginii cu datele primite
         function updatePageWithData(data) {
@@ -18,7 +20,7 @@
     }
     resultDiv.innerHTML = newContent;
         }
-
+             import { fetchFromApi } from '../db/db_use.js';
             fetchFromApi('listAll', { id: 14594 })
             .then(updatePageWithData);
                
