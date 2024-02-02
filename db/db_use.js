@@ -1,6 +1,18 @@
+export function updatePageWithData(data, divelement) {
+    const resultDiv = document.getElementById('detaliiComanda');
+
+    console.log("sunt in updatePageWithData", data);
+    let newContent = '<h2>Date primite de la server:</h2>';
+    for (const item of data) {
+        newContent += `<p>${item.nume}: ${item.produs}: ${item.detalii}: ${item.data}</p>`;
+}
+resultDiv.innerHTML = newContent;
+
+} 
+
    export async function fetchFromApi(action, params = {}) {
     params.action = action;
-    const url = "api.php"; 
+    const url = "db/api.php"; 
     try {
           const response = await fetch(url + '?' + new URLSearchParams(params), {
               method: 'GET'
