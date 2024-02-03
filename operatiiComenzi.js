@@ -6,8 +6,11 @@ export function cautaComenziDupaNume(nameToSearch,listaComenzi){
   return comenziGasite;
 }
 
+
 export function salveazaModificari(idComanda, listaComenzi) {
   const comanda = listaComenzi.find(comanda => comanda.id === idComanda);
+  actualizaza_lisa(listaComenzi)
+
   if (!comanda) {
       alert('Comanda nu a fost găsită.');
       return;
@@ -16,7 +19,7 @@ export function salveazaModificari(idComanda, listaComenzi) {
   // Obținerea valorilor modificate
   comanda.client = document.getElementById('clientInput').value;
   comanda.data = document.getElementById('dataInput').value;
-  comanda.status = document.getElementById('statusSelect').value;
+  comanda.status = document.getElementById('statusSelect_comanda').value;
   comanda.total = parseFloat(document.getElementById('totalInput').value);
 
   alert('Modificările au fost salvate.');
@@ -70,28 +73,68 @@ export function stergeComanda(idComanda, listaComenzi) {
     }
 
     let detaliiHTML = `
-        <h3>Detalii Comandă</h3>
-        <p><strong>ID:</strong> ${comanda.id}</p>
-        <p><strong>Client:</strong> <input type="text" value="${comanda.client}" id="clientInput"></p>
-        <p><strong>Data:</strong> <input type="date" value="${comanda.data}" id="dataInput"></p>
-        <p><strong>Status:</strong> 
-            <select id="statusSelect">
-                <option value="În așteptare" ${comanda.status === 'În așteptare' ? 'selected' : ''}>În așteptare</option>
-                <option value="Finalizată" ${comanda.status === 'Finalizată' ? 'selected' : ''}>Finalizată</option>
-                <option value="Anulată" ${comanda.status === 'Anulată' ? 'selected' : ''}>Anulată</option>
-            </select>
-        </p>
-        <p><strong>Total:</strong> <input type="number" value="${comanda.total}" id="totalInput"></p>
-        <div id="containerButoane">
-          <button id="butonSalveaza">Salvează Modificările</button>
-          <button id="butonSterge">Șterge Comandă</button>
-        </div>
+    <div class="flex-container justify-space-between align-items-center">
+    <h3>Comandă #${comanda.id}</h3>
+    <div>
+        <label for="comandaUrgentaInput"><strong>Comandă Urgentă:</strong></label>
+        <input type="checkbox" id="comandaUrgentaInput" ${comanda.urgenta ? 'checked' : ''}>
+    </div>
+</div>
+<div class="flex-container align-items-center">
+    <div class="flex-item medium"><strong>Client:</strong> <input type="text" value="${comanda.client}" id="clientInput" class="input-field"></div>
+    <div class="flex-item medium"><strong>Telefon:</strong> <input type="tel" value="${comanda.telefon}" id="telefonInput" class="input-field"></div>
+    <div class="flex-item medium"><strong>Data:</strong> <input type="date" value="${comanda.data}" id="dataInput" class="input-field"></div>
+    <div class="flex-item medium"><strong>Termen Livrare:</strong> <input type="date" value="${comanda.termenLivrare}" id="termenLivrareInput" class="input-field"></div>
+</div>
+<div class="flex-container justify-content-center align-items-center">
+    <div class="flex-item medium"><strong>Produs:</strong> <input type="text" value="${comanda.produs}" id="produsInput" class="input-field"></div>
+    <div class="flex-item small"><strong>Cantitate:</strong> <input type="number" value="${comanda.cantitate}" id="cantitateInput" class="input-field"></div>
+    <div class="flex-item medium"><strong>Total Valoare:</strong> <input type="text" value="${comanda.total}" id="totalInput" class="input-field"></div>
+    <div class="flex-item large"><strong>Etapa Fabricație:</strong> 
+        <select id="etapaFabricatieSelect" class="input-field">
+            <option value="Pregătire" ${comanda.etapaFabricatie === 'Pregătire' ? 'selected' : ''}>Pregătire</option>
+            <option value="În producție" ${comanda.etapaFabricatie === 'În producție' ? 'selected' : ''}>În producție</option>
+            <option value="Finalizat" ${comanda.etapaFabricatie === 'Finalizat' ? 'selected' : ''}>Finalizat</option>
+        </select>
+    </div>
+    <!-- Butonul "+" mic și plasat central pe linie -->
+    <div>
+        <button id="butonAdaugare" class="btn-small" title="Adaugă element">+</button>
+    </div>
+</div>
+<div class="flex-container">
+    <div class="flex-item medium"><strong>Status:</strong> 
+        <select id="statusSelect_comanda" class="input-field status">
+            <option value="În așteptare" ${comanda.status === 'În așteptare' ? 'selected' : ''}>În așteptare</option>
+            <option value="Finalizată" ${comanda.status === 'Finalizată' ? 'selected' : ''}>Finalizată</option>
+            <option value="Anulată" ${comanda.status === 'Anulată' ? 'selected' : ''}>Anulată</option>
+        </select>
+    </div>
+</div>
+<div class="flex-container full-width">
+    <strong>Detalii Comandă:</strong><br>
+    <textarea id="detaliiInput" class="input-field full-width">${comanda.note}</textarea>
+</div>
+<div class="flex-container full-width">
+    <strong>Note Comandă:</strong><br>
+    <textarea id="noteInput" class="input-field full-width">${comanda.note}</textarea>
+</div>
+<div class="flex-container button-container">
+    <button id="butonSalveaza">Salvează Modificările</button>
+    <button id="butonSterge">Șterge Comandă</button>
+</div>
+
+
+
+
+    
+    
 
     `;
     document.getElementById('detaliiComanda').innerHTML = detaliiHTML;
     document.getElementById('butonSalveaza').addEventListener('click', () => {
       salveazaModificari(idComanda,listaComenzi);
-      incarcaComenzi(listaComenzi);
+      incarcaComenzi(aplicaFiltru(listaComenzi));
     });
     document.getElementById('butonSterge').addEventListener('click', () => {
       stergeComanda(idComanda, listaComenzi);
@@ -99,6 +142,13 @@ export function stergeComanda(idComanda, listaComenzi) {
       console.log(listaComenzi);
 
     })
+      const statusSelect_comanda = document.getElementById('statusSelect_comanda');
+  console.log(statusSelect_comanda);
+  const updateStatusColor = () => {
+    statusSelect_comanda.className = 'input-field status-' + statusSelect_comanda.value.replace(/\s+/g, '-');
+  };
+  statusSelect_comanda.addEventListener('change', updateStatusColor);
+  updateStatusColor(); // Aplicați culoarea inițială bazată pe valoarea preselectată
 }
 
 export function setAscendent(newValue) {
@@ -136,3 +186,5 @@ export function aplicaFiltru(listaComenzi) {
   // Afișați rezultatul în interfața utilizatorului
   return rezultat;
 }
+
+

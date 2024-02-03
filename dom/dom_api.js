@@ -1,5 +1,6 @@
 import * as operatiiComenzi from '../operatiiComenzi.js';
 import { adaugaFormularComanda } from '../OrderForm/formularComanda.js';
+import * as db from '../db/db_use.js';
 
 const sortButton = document.getElementById('sortButton');
 export var selectElement = document.getElementById("filterByStatus");
@@ -49,12 +50,13 @@ export function initialize(initialData) {
     });
 
     document.getElementById('butonMeniu2').addEventListener('click', function() {
-      afiseaza_data("test");
-      fetchFromApi('listAll', { userId: 1234 })
+      //db.updatePageWithData("test", 'comenziContainer');
+      db.fetchFromApi('listAll', { userId: 14594 })
         .then(data => {
-          afiseaza_data(data);
+           console.log(data);
+          db.updatePageWithData(data, 'detaliiComanda');
         })
-        .catch(error => afiseaza_data(error));
+        .catch(error => console.log(error));
     });
 
     document.getElementById('searchInput').addEventListener('keydown', function(event) {

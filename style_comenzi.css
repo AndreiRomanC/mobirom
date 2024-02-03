@@ -1,125 +1,3 @@
-#detaliiComanda {
-  width: 70%;
-  padding: 10px;
-  overflow-y: auto; /* Activarea scroll-ului dacă detaliile sunt prea lungi */
-}
-
-#detaliiComanda {
-  background-color: #ffffff;
-  /* Culoare de fundal albă */
-  border: 1px solid #ddd;
-  /* Bordură subtilă */
-  padding: 20px;
-  /* Padding intern */
-  border-radius: 5px;
-  /* Margini rotunjite */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  /* Umbră subtilă */
-  margin: 5px;
-  /* Spațiu suplimentar deasupra */
-}
-
-#detaliiComanda h3 {
-  color: #333;
-  /* Culoare titlu */
-  margin-bottom: 20px;
-  /* Spațiu sub titlu */
-}
-
-#detaliiComanda p {
-  color: #666;
-  /* Culoare text */
-  line-height: 1.5;
-  /* Spațiu între linii */
-  margin-bottom: 10px;
-  /* Spațiu între paragrafe */
-}
-
-#detaliiComanda input[type="text"],
-#detaliiComanda input[type="date"],
-#detaliiComanda input[type="number"],
-#detaliiComanda select {
-  width: 100%;
-  /* Lățime completă */
-  padding: 8px;
-  /* Padding intern */
-  margin-bottom: 10px;
-  /* Spațiu sub fiecare câmp */
-  border: 1px solid #ccc;
-  /* Bordură subtilă */
-  border-radius: 4px;
-  /* Margini rotunjite */
-}
-
-#detaliiComanda button {
-  padding: 10px 15px;
-  /* Padding pentru buton */
-  background-color: #4CAF50;
-  /* Culoare de fundal pentru buton */
-  color: white;
-  /* Text alb pentru buton */
-  border: none;
-  /* Fără bordură */
-  border-radius: 5px;
-  /* Margini rotunjite */
-  cursor: pointer;
-  /* Cursor pointer pentru buton */
-  font-size: 1em;
-  /* Mărimea fontului pentru buton */
-}
-
-#detaliiComanda button:hover {
-  background-color: #45a049;
-  /* Culoare la hover pentru buton */
-}
-
-
-#detaliiComanda {
-  background-color: #ffffff;
-  /* Culoare de fundal albă */
-  border: 1px solid #ddd;
-  /* Bordură subtilă */
-  padding: 20px;
-  /* Padding intern */
-  border-radius: 5px;
-  /* Margini rotunjite */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  /* Umbră subtilă */
-  margin: 5px;
-  /* Spațiu suplimentar deasupra */
-}
-
-#detaliiComanda h3 {
-  color: #333;
-  /* Culoare titlu */
-  margin-bottom: 20px;
-  /* Spațiu sub titlu */
-}
-
-#detaliiComanda p {
-  color: #666;
-  /* Culoare text */
-  line-height: 1.5;
-  /* Spațiu între linii */
-  margin-bottom: 10px;
-  /* Spațiu între paragrafe */
-}
-
-#detaliiComanda input[type="text"],
-#detaliiComanda input[type="date"],
-#detaliiComanda input[type="number"],
-#detaliiComanda select {
-  width: 100%;
-  /* Lățime completă */
-  padding: 8px;
-  /* Padding intern */
-  margin-bottom: 10px;
-  /* Spațiu sub fiecare câmp */
-  border: 1px solid #ccc;
-  /* Bordură subtilă */
-  border-radius: 4px;
-  /* Margini rotunjite */
-}
 
 #detaliiComanda button {
   padding: 10px 15px;
@@ -148,6 +26,8 @@
   background: linear-gradient(to bottom, #5890f8, #4786fa); /* Gradient Roșu Șters */
   color: #FFFFFF;
 }
+
+
 
 #detaliiComanda button#butonSalveaza:hover {
   background: linear-gradient(to bottom, #4786fa, #5890f8); /* Gradient Roșu Șters */
@@ -178,4 +58,192 @@
   /* Asigură că butoanele sunt tratate ca blocuri */
   margin: 10px auto;
   /* Adaugă spațiu și centrează pe orizontală */
+}
+
+#detaliiComanda {
+  width: 70%;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.flex-item {
+  flex: 1;
+  min-width:  50px;
+  margin-right: 20px;
+}
+
+.flex-item.full-width, .full-width {
+  flex-basis: 100%;
+  margin-right: 0;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Asigură că padding-ul nu adaugă la lățimea totală */
+}
+
+.input-field.full-width {
+  margin-bottom: 10px; /* Distanță suplimentară pentru 'Note Comandă' */
+}
+
+.button-container {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#detaliiComanda button {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 5px;
+}
+
+#detaliiComanda button:hover {
+  background-color: #45a049;
+}
+
+#detaliiComanda {
+  width: 70%;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.flex-item {
+  margin-right: 20px;
+}
+
+.xlarge { flex: 5; }
+
+.large { flex: 3; }
+.medium { flex: 2; }
+.small { flex: 1; }
+
+.input-field {
+  width: -webkit-fill-available;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+.button-container {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#detaliiComanda button {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 5px;
+}
+
+#detaliiComanda button:hover {
+  background-color: #45a049;
+}
+
+/* Stiluri pentru statusul comenzii */
+#statusSelect {
+  transition: background-color 0.3s ease;
+}
+
+/* Culorile ar trebui ajustate în JavaScript în funcție de valoarea selectată */
+.status-În-așteptare { background-color: rgb(245, 237, 183); color: white; }
+.status-Finalizată { background-color: rgb(197, 243, 197); color: white; }
+.status-Anulată { background-color: rgb(255, 195, 195); color: white; }
+
+/* Asigurați-vă că inputurile și selecturile pot avea culoarea de fundal modificată */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: black; /* Asigurați-vă că textul este lizibil */
+    transition: background-color 0.3s ease;
+}
+
+.full-width {
+  flex-basis: 100%;
+  max-width: 100%; /* Asigură că nu există o lățime maximă setată care să restrângă elementul */
+  padding: 0; /* Elimină padding-ul care ar putea afecta lățimea */
+  margin: 0; /* Elimină margin-ul care ar putea afecta lățimea */
+}
+
+.input-field.full-width {
+  width: calc(100% - 20px); /* Ajustează 100% minus padding-ul containerului dacă este cazul */
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Include padding și border în lățimea elementului */
+}
+
+
+
+#noteInput {
+    width: 100%; /* ocupă 100% din lățimea containerului său */
+    padding: 10px; /* padding intern */
+    margin-top: 5px; /* spațiu deasupra */
+    margin-bottom: 10px; /* spațiu dedesubt */
+    border: 2px solid #ccc; /* chenarul */
+    border-radius: 4px; /* colțuri rotunjite */
+    box-sizing: border-box; /* include padding-ul și chenarul în lățimea totală */
+}
+
+#detaliiInput {
+  width: 100%; /* ocupă 100% din lățimea containerului său */
+  padding: 10px; /* padding intern */
+  margin-top: 5px; /* spațiu deasupra */
+  margin-bottom: 10px; /* spațiu dedesubt */
+  border: 2px solid #ccc; /* chenarul */
+  border-radius: 4px; /* colțuri rotunjite */
+  box-sizing: border-box; /* include padding-ul și chenarul în lățimea totală */
+}
+
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.btn-small {
+  padding: 4px 8px;
+  font-size: 12px;
+  margin-left: 10px; /* Ajustează după nevoie */
 }

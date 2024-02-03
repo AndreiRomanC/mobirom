@@ -50,7 +50,7 @@ function fetchDataFromDatabase() {
 
 
 
-$pdo = new PDO('mysql:host=localhost;dbname=test', 'admin', 'admin');
+$pdo = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'admin', 'admin');
 
 $action = $_GET['action'];
 $params = $_GET;
@@ -67,11 +67,13 @@ switch ($action) {
 
 function listAll($pdo, $params) {
     //$userId = $params['userId'];
+
     $stmt = $pdo->prepare("SELECT * FROM comenzi");
     //    $stmt = $pdo->prepare("SELECT * FROM some_table WHERE user_id = :userId");
     //    $stmt->execute(['userId' => $userId]);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     echo json_encode($data);
 }
 function updateID($pdo, $params) {
