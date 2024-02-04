@@ -1,5 +1,7 @@
 import { actualizaza_lisa } from "./dom/dom_api.js";
 import {selectElement} from "./dom/dom_api.js";
+import {generateDetaliiComandaHTML} from "./orderForm.js";
+
 export function cautaComenziDupaNume(nameToSearch,listaComenzi){  
   let comenziGasite = listaComenzi.filter(comanda => comanda.client.toLowerCase().includes(nameToSearch.toLowerCase()));
   //aplicaFiltru(comenziGasite);
@@ -71,66 +73,8 @@ export function stergeComanda(idComanda, listaComenzi) {
         document.getElementById('detaliiComanda').innerHTML = 'Comanda nu a fost găsită.';
         return;
     }
+    let detaliiHTML = generateDetaliiComandaHTML(comanda);
 
-    let detaliiHTML = `
-    <div class="flex-container justify-space-between align-items-center">
-    <h3>Comandă #${comanda.id}</h3>
-    <div>
-        <label for="comandaUrgentaInput"><strong>Comandă Urgentă:</strong></label>
-        <input type="checkbox" id="comandaUrgentaInput" ${comanda.urgenta ? 'checked' : ''}>
-    </div>
-</div>
-<div class="flex-container align-items-center">
-    <div class="flex-item medium"><strong>Client:</strong> <input type="text" value="${comanda.client}" id="clientInput" class="input-field"></div>
-    <div class="flex-item medium"><strong>Telefon:</strong> <input type="tel" value="${comanda.telefon}" id="telefonInput" class="input-field"></div>
-    <div class="flex-item medium"><strong>Data:</strong> <input type="date" value="${comanda.data}" id="dataInput" class="input-field"></div>
-    <div class="flex-item medium"><strong>Termen Livrare:</strong> <input type="date" value="${comanda.termenLivrare}" id="termenLivrareInput" class="input-field"></div>
-</div>
-<div class="flex-container justify-content-center align-items-center">
-    <div class="flex-item medium"><strong>Produs:</strong> <input type="text" value="${comanda.produs}" id="produsInput" class="input-field"></div>
-    <div class="flex-item small"><strong>Cantitate:</strong> <input type="number" value="${comanda.cantitate}" id="cantitateInput" class="input-field"></div>
-    <div class="flex-item medium"><strong>Total Valoare:</strong> <input type="text" value="${comanda.total}" id="totalInput" class="input-field"></div>
-    <div class="flex-item large"><strong>Etapa Fabricație:</strong> 
-        <select id="etapaFabricatieSelect" class="input-field">
-            <option value="Pregătire" ${comanda.etapaFabricatie === 'Pregătire' ? 'selected' : ''}>Pregătire</option>
-            <option value="În producție" ${comanda.etapaFabricatie === 'În producție' ? 'selected' : ''}>În producție</option>
-            <option value="Finalizat" ${comanda.etapaFabricatie === 'Finalizat' ? 'selected' : ''}>Finalizat</option>
-        </select>
-    </div>
-    <!-- Butonul "+" mic și plasat central pe linie -->
-    <div>
-        <button id="butonAdaugare" class="btn-small" title="Adaugă element">+</button>
-    </div>
-</div>
-<div class="flex-container">
-    <div class="flex-item medium"><strong>Status:</strong> 
-        <select id="statusSelect_comanda" class="input-field status">
-            <option value="În așteptare" ${comanda.status === 'În așteptare' ? 'selected' : ''}>În așteptare</option>
-            <option value="Finalizată" ${comanda.status === 'Finalizată' ? 'selected' : ''}>Finalizată</option>
-            <option value="Anulată" ${comanda.status === 'Anulată' ? 'selected' : ''}>Anulată</option>
-        </select>
-    </div>
-</div>
-<div class="flex-container full-width">
-    <strong>Detalii Comandă:</strong><br>
-    <textarea id="detaliiInput" class="input-field full-width">${comanda.note}</textarea>
-</div>
-<div class="flex-container full-width">
-    <strong>Note Comandă:</strong><br>
-    <textarea id="noteInput" class="input-field full-width">${comanda.note}</textarea>
-</div>
-<div class="flex-container button-container">
-    <button id="butonSalveaza">Salvează Modificările</button>
-    <button id="butonSterge">Șterge Comandă</button>
-</div>
-
-
-
-
-    
-    
-
-    `;
     document.getElementById('detaliiComanda').innerHTML = detaliiHTML;
     document.getElementById('butonSalveaza').addEventListener('click', () => {
       salveazaModificari(idComanda,listaComenzi);
@@ -147,9 +91,42 @@ export function stergeComanda(idComanda, listaComenzi) {
   const updateStatusColor = () => {
     statusSelect_comanda.className = 'input-field status-' + statusSelect_comanda.value.replace(/\s+/g, '-');
   };
+  document.getElementById('butonAdaugare').addEventListener('click', function() {
+    var container = document.getElementById('liniiAdaugate');
+    var template = document.getElementById('linieProdusTemplate').cloneNode(true);
+    template.id = ""; // Eliminăm ID-ul pentru a evita duplicarea
+       // Eliminăm butonul "+" din linia clonată și adăugăm un buton de ștergere dacă este necesar
+       var butonAdaugare = template.querySelector('#butonAdaugare');
+       butonAdaugare.remove();
+       template.querySelectorAll('.input-field').forEach(function(input) {
+        if (input.type === 'text' || input.type === 'number') {
+            input.value = '';
+        } else if (input.tagName.toLowerCase() === 'select') {
+            input.selectedIndex = 0; // sau orice alt index relevant
+        }
+    });
+    // Adăugăm un buton de ștergere la linia clonată
+    var butonSterge = document.createElement('button');
+    butonSterge.textContent = '-';
+    butonSterge.className = 'btn-small btn-sterge';
+    butonSterge.title = 'Șterge element';
+    butonSterge.addEventListener('click', function() {
+        // Șterge linia
+        container.removeChild(template);
+    });
+
+    // Adăugăm butonul de ștergere la template
+    template.appendChild(butonSterge);
+
+    // Adăugăm linia clonată la container
+    container.appendChild(template);
+});
+
   statusSelect_comanda.addEventListener('change', updateStatusColor);
   updateStatusColor(); // Aplicați culoarea inițială bazată pe valoarea preselectată
 }
+
+
 
 export function setAscendent(newValue) {
   ascendent = newValue;

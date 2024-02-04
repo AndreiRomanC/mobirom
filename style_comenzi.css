@@ -247,3 +247,14 @@
   font-size: 12px;
   margin-left: 10px; /* Ajustează după nevoie */
 }
+
+.btn-small, .btn-sterge {
+  margin: 0 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.btn-sterge {
+  background-color: #f44336; /* Roșu */
+  color: white;
+}
