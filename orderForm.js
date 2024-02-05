@@ -29,6 +29,11 @@ comanda.produse.forEach((produs, index) => {
                 `<option value="Finalizat" ${produs.etapaFabricatie === "Finalizat" ? "selected" : ""}>Finalizat</option>
             </select>
         </div>
+            <!-- Butonul "+" mic și plasat central pe linie -->
+    <div>
+        <button id="butonAdaugare" class="btn-small" title="Adaugă element">+</button>
+    </div>
+</div
     </div>`;
 });
 
@@ -59,3 +64,4 @@ detaliiHTML += `</div>
 
 return detaliiHTML;
 }
+
