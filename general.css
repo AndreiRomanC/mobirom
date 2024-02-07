@@ -11,7 +11,7 @@ body, html {
 }
 
 #listaComenzi {
-  width: 30%;
+  width: 20%;
   overflow-y: auto; /* Activarea scroll-ului dacă lista este prea lungă */
   padding: 20px;
   background-color: #fff; /* Fundal alb pentru lista */

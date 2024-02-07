@@ -1,6 +1,7 @@
 import { actualizaza_lisa } from "./dom/dom_api.js";
 import {selectElement} from "./dom/dom_api.js";
 import {generateDetaliiComandaHTML} from "./orderForm.js";
+import {adaugaEvenimentButonAdaugare} from "./eventLAddProd.js";
 
 export function cautaComenziDupaNume(nameToSearch,listaComenzi){  
   let comenziGasite = listaComenzi.filter(comanda => comanda.client.toLowerCase().includes(nameToSearch.toLowerCase()));
@@ -76,6 +77,7 @@ export function stergeComanda(idComanda, listaComenzi) {
     let detaliiHTML = generateDetaliiComandaHTML(comanda);
 
     document.getElementById('detaliiComanda').innerHTML = detaliiHTML;
+
     document.getElementById('butonSalveaza').addEventListener('click', () => {
       salveazaModificari(idComanda,listaComenzi);
       incarcaComenzi(aplicaFiltru(listaComenzi));
@@ -87,41 +89,24 @@ export function stergeComanda(idComanda, listaComenzi) {
 
     })
       const statusSelect_comanda = document.getElementById('statusSelect_comanda');
-  console.log(statusSelect_comanda);
-  const updateStatusColor = () => {
-    statusSelect_comanda.className = 'input-field status-' + statusSelect_comanda.value.replace(/\s+/g, '-');
-  };
-  document.getElementById('butonAdaugare').addEventListener('click', function() {
-    var container = document.getElementById('liniiAdaugate');
-    var template = document.getElementById('linieProdusTemplate').cloneNode(true);
-    template.id = ""; // Eliminăm ID-ul pentru a evita duplicarea
-       // Eliminăm butonul "+" din linia clonată și adăugăm un buton de ștergere dacă este necesar
-       var butonAdaugare = template.querySelector('#butonAdaugare');
-       butonAdaugare.remove();
-       template.querySelectorAll('.input-field').forEach(function(input) {
-        if (input.type === 'text' || input.type === 'number') {
-            input.value = '';
-        } else if (input.tagName.toLowerCase() === 'select') {
-            input.selectedIndex = 0; // sau orice alt index relevant
-        }
-    });
-    // Adăugăm un buton de ștergere la linia clonată
-    var butonSterge = document.createElement('button');
-    butonSterge.textContent = '-';
-    butonSterge.className = 'btn-small btn-sterge';
-    butonSterge.title = 'Șterge element';
-    butonSterge.addEventListener('click', function() {
-        // Șterge linia
-        container.removeChild(template);
-    });
+      const updateStatusColor = () => {
+        statusSelect_comanda.className = 'input-field status-' + statusSelect_comanda.value.replace(/\s+/g, '-');
+      };
 
-    // Adăugăm butonul de ștergere la template
-    template.appendChild(butonSterge);
-
-    // Adăugăm linia clonată la container
-    container.appendChild(template);
+  adaugaEvenimentButonAdaugare();
+const buttonsSterge = document.querySelectorAll('.btn-sterge');
+// Adăugați un event listener pentru fiecare buton
+    buttonsSterge.forEach((button) => {
+        button.addEventListener('click', function() {
+            // Implementați aici codul pentru acțiunea de ștergere
+            // De exemplu, puteți șterge elementul părinte al butonului pentru a elimina întreaga linie de produs
+           console.log(button);
+            const linieProdus = button.closest('.linieProdusTemplate');
+            if (linieProdus) {
+                linieProdus.remove();
+            }
+        });
 });
-
   statusSelect_comanda.addEventListener('change', updateStatusColor);
   updateStatusColor(); // Aplicați culoarea inițială bazată pe valoarea preselectată
 }

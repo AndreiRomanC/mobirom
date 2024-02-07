@@ -14,11 +14,12 @@ let detaliiHTML = `
     <div class="flex-item medium"><strong>Termen Livrare:</strong> <input type="date" value="${comanda.termenLivrare}" id="termenLivrareInput" class="input-field"></div>
 </div>
 <div id="liniiAdaugate">`;
+let isFirstProduct = true;
 
 // Aici generăm HTML pentru fiecare produs
 comanda.produse.forEach((produs, index) => {
     detaliiHTML += `
-    <div class="flex-container justify-content-center align-items-center">
+    <div id = "linieProdusTemplate" class="linieProdusTemplate flex-container justify-content-center align-items-center">
         <div class="flex-item medium"><strong>Produs:</strong> <input type="text" value="${produs.nume}" class="input-field produsInput"></div>
         <div class="flex-item small"><strong>Cantitate:</strong> <input type="number" value="${produs.cantitate}" class="input-field cantitateInput"></div>
         <div class="flex-item medium"><strong>Total Valoare:</strong> <input type="text" value="${produs.valoare}" class="input-field totalInput"></div>
@@ -28,15 +29,26 @@ comanda.produse.forEach((produs, index) => {
                 `<option value="În producție" ${produs.etapaFabricatie === "În producție" ? "selected" : ""}>În producție</option>` +
                 `<option value="Finalizat" ${produs.etapaFabricatie === "Finalizat" ? "selected" : ""}>Finalizat</option>
             </select>
-        </div>
-            <!-- Butonul "+" mic și plasat central pe linie -->
-    <div>
-        <button id="butonAdaugare" class="btn-small" title="Adaugă element">+</button>
-    </div>
-</div
+            </select>
+        </div>`;
+    
+    // Adăugăm butonul "+" doar la primul produs
+    if (isFirstProduct) {
+        detaliiHTML += `
+        <div>
+            <button id="butonAdaugare" class="btn-small" title="Adaugă element">+</button>
+        </div>`;
+        isFirstProduct = false;
+    } else {
+        // Pentru celelalte produse adăugăm butonul "-" și gestionăm evenimentul de ștergere
+        detaliiHTML += `
+        <div>
+            <button class="btn-small btn-sterge" title="Șterge element">-</button>
+        </div>`;
+    }
+    detaliiHTML += `
     </div>`;
 });
-
 // Continuăm string-ul după bucla forEach
 detaliiHTML += `</div>
 <div class="flex-container">
