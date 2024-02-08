@@ -48,16 +48,39 @@ export function adaugaFormularComanda(listaComenzi) {
   adaugaComandaButton.textContent = 'Adaugă Comandă';
   buttonContainer.appendChild(adaugaComandaButton);
   container.appendChild(buttonContainer);
-  adaugaComandaButton.addEventListener('click', function() {
+  document.getElementById('butonSalveaza').addEventListener('click', function() {
     // Aici poți adăuga codul care trebuie executat atunci când butonul este apăsat
-    const client = clientInput.value;
-    const data = dataInput.value;
-    const status = statusInput.value;
-    const total = parseFloat(totalInput.value);
+    const comandaUrgenta = document.getElementById('comandaUrgentaInput').checked;
+    const client = document.getElementById('clientInput').value;
+    const telefon = document.getElementById('telefonInput').value;
+    const data = document.getElementById('dataInput').value;
+    const termenLivrare = document.getElementById('termenLivrareInput').value;
+    const statusComanda = document.getElementById('statusSelect_comanda').value;
+    const detaliiComanda = document.getElementById('detaliiInput').value;
+    const noteComanda = document.getElementById('noteInput').value;
 
-    // Creăm un obiect nou cu datele preluate
 
+    const produse = [];
+        document.querySelectorAll('.linieProdusTemplate').forEach(function(produsElement) {
+            const numeProdus = produsElement.querySelector('.produsInput').value;
+            const cantitateProdus = produsElement.querySelector('.cantitateInput').value;
+            const valoareProdus = produsElement.querySelector('.totalInput').value;
+            const etapaFabricatie = produsElement.querySelector('.etapaFabricatieSelect').value;
+            produse.push({nume: numeProdus, cantitate: cantitateProdus, valoare: valoareProdus, etapaFabricatie: etapaFabricatie});
+        });
 
+        console.log({
+          comandaUrgenta,
+          client,
+          telefon,
+          data,
+          termenLivrare,
+          statusComanda,
+          detaliiComanda,
+          noteComanda,
+          produse
+      });
+ 
 
 
     //actualizaza_lisa(listaComenzi)
