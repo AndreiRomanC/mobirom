@@ -3,6 +3,8 @@ import {selectElement} from "./dom/dom_api.js";
 import {generateDetaliiComandaHTML} from "./orderForm.js";
 import {adaugaEvenimentButonAdaugare} from "./eventLAddProd.js";
 
+import * as IdxDbManager from "./db/idxDbMangager.js";
+
 export function cautaComenziDupaNume(nameToSearch,listaComenzi){  
   let comenziGasite = listaComenzi.filter(comanda => comanda.client.toLowerCase().includes(nameToSearch.toLowerCase()));
   //aplicaFiltru(comenziGasite);
@@ -60,6 +62,7 @@ export function stergeComanda(idComanda, listaComenzi) {
   if (index !== -1) {
       // Șterge comanda din array
       listaComenzi.splice(index, 1);
+      IdxDbManager.stergeComandaDtbIdx(idComanda);
       actualizaza_lisa(listaComenzi)
       incarcaComenzi(listaComenzi);
   } else {
@@ -111,7 +114,15 @@ const buttonsSterge = document.querySelectorAll('.btn-sterge');
   updateStatusColor(); // Aplicați culoarea inițială bazată pe valoarea preselectată
 }
 
-
+export function adaugaComanda(comanda, listaComenzi) {
+  if (!comanda.client || !comanda.produse || comanda.produse.length === 0) {
+    alert("Comanda trebuie să aibă un client și cel puțin un produs.")
+    return; // Încetează execuția funcției dacă validarea eșuează
+  }
+    listaComenzi.push(comanda);
+    incarcaComenzi(aplicaFiltru(listaComenzi));
+    //copieazaComenziInDatabaseIDX(listaComenzi);
+}
 
 export function setAscendent(newValue) {
   ascendent = newValue;
@@ -148,5 +159,6 @@ export function aplicaFiltru(listaComenzi) {
   // Afișați rezultatul în interfața utilizatorului
   return rezultat;
 }
+
 
 

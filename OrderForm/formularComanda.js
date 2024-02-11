@@ -1,8 +1,17 @@
 import { actualizaza_lisa } from "../dom/dom_api.js";
 import {generateDetaliiComandaHTML } from "../orderForm.js";
 import {adaugaEvenimentButonAdaugare} from "../eventLAddProd.js";
-
+import { adaugaComanda } from "../operatiiComenzi.js"; 
+import { adaugaComandaIDB } from "../db/idxDbMangager.js";
 // Crearea unei instanțe Date pentru data curentă
+function generatePositiveNumericId() {
+    // Definim minimul și maximul pentru a asigura că ID-ul are întotdeauna 8 cifre
+    const min = 10000000; // Minimul pentru un număr de 8 cifre
+    const max = 99999999; // Maximul pentru un număr de 8 cifre
+    // Generăm un număr aleatoriu între min și max
+    const id = Math.floor(Math.random() * (max - min + 1)) + min;
+    return id.toString();
+}
 const dataCurenta = new Date();
 // Obținerea șirului ISO8601 pentru data curentă (de exemplu, "2024-02-04")
 const dataCurentaISO = dataCurenta.toISOString().split('T')[0];
@@ -14,8 +23,10 @@ const dataLivrareISO = dataLivrare.toISOString().split('T')[0];
 
 
 export function adaugaFormularComanda(listaComenzi) {
+
+  const id_unique = generatePositiveNumericId();
   const comandaNoua = {
-    id: listaComenzi.length + 1, // ID-ul este bazat pe numărul de comenzi existente
+    id: id_unique, // ID-ul este bazat pe numărul de comenzi existente
     client: 'Nume Client',
     telefon: 'Telefon Client',
     data: dataCurentaISO, // Data curentă
@@ -69,6 +80,28 @@ export function adaugaFormularComanda(listaComenzi) {
             produse.push({nume: numeProdus, cantitate: cantitateProdus, valoare: valoareProdus, etapaFabricatie: etapaFabricatie});
         });
 
+    const comandaNoua = {
+    id: id_unique, // Presupunând că vrei să folosești lungimea listei pentru a genera un nou ID
+    client: client,
+    telefon: telefon,
+    data: data,
+    termenLivrare: termenLivrare,
+    urgenta: comandaUrgenta,
+    produse: produse, // Acesta este array-ul de produse colectat din formular
+    status: statusComanda,
+    note: noteComanda,
+    detalii: detaliiComanda,
+    // Calculul totalului ar trebui să fie efectuat pe baza produselor; exemplu simplu de calcul al totalului
+    total: produse.reduce((total, produs) => total + (produs.cantitate * produs.valoare), 0)
+};
+
+// Adaugă comanda nouă la lista de comenzi
+    adaugaComanda(comandaNoua,listaComenzi);
+    adaugaComandaIDB(comandaNoua).then(id => {
+      console.log('Comanda adăugată cu succes in indexDB. ID comandă:', id);
+  }).catch(error => {
+      console.error('Eroare la adăugarea comenzii in indexDB:', error);
+  });
         console.log({
           comandaUrgenta,
           client,
@@ -80,7 +113,6 @@ export function adaugaFormularComanda(listaComenzi) {
           noteComanda,
           produse
       });
- 
 
 
     //actualizaza_lisa(listaComenzi)

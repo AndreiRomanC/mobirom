@@ -1,6 +1,7 @@
 import * as operatiiComenzi from '../operatiiComenzi.js';
 import { adaugaFormularComanda } from '../OrderForm/formularComanda.js';
 import * as db from '../db/db_use.js';
+import * as idxDbManager from '../db/idxDbMangager.js';
 
 const sortButton = document.getElementById('sortButton');
 export var selectElement = document.getElementById("filterByStatus");
@@ -14,16 +15,31 @@ export function initialize(initialData) {
   // Initialize the latest data with the initialData
   listaComenzi = initialData;
   //console.log(listaComenzi);
-  operatiiComenzi.incarcaComenzi(operatiiComenzi.aplicaFiltru(listaComenzi));
-  sortButton.addEventListener('click', function() {
-    let filtrate = operatiiComenzi.aplicaFiltru(listaComenzi);
-    operatiiComenzi.setAscendent(!operatiiComenzi.ascendent); // Schimbăm starea sortării
-    operatiiComenzi.incarcaComenzi(filtrate);
-  });
+
   const comenziContainer = document.getElementById('comenziContainer');
+ 
+ 
+ // *** DOMContentLoaded ***
+
   document.addEventListener('DOMContentLoaded', function() {
+    listaComenzi = "";
+    idxDbManager.incarcaListaComenziDtbIdx().then(comenziIncarcate => {
+      listaComenzi = comenziIncarcate; // Actualizează listaComenzi cu comenzile încărcate
+      console.log("Comenzi încărcate cu succes:", listaComenzi);
+      operatiiComenzi.incarcaComenzi(operatiiComenzi.aplicaFiltru(listaComenzi));
+
+      }).catch(error => {
+          console.error(error);
+
+      });
+      console.log("Comenzi încărcate cu succes 2:", listaComenzi);
 
 
+      sortButton.addEventListener('click', function() {
+        let filtrate = operatiiComenzi.aplicaFiltru(listaComenzi);
+        operatiiComenzi.setAscendent(!operatiiComenzi.ascendent); // Schimbăm starea sortării
+        operatiiComenzi.incarcaComenzi(filtrate);
+      });
     document.getElementById('dataStart').value = '2023-12-02';
     document.getElementById('dataEnd').value = '2024-02-28';
 

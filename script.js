@@ -3,8 +3,9 @@ import { adaugaFormularComanda } from './OrderForm/formularComanda.js';
 import { fetchFromApi } from './db/db_use.js';
 import { initialize } from './dom/dom_api.js';
 
-import { comenziFictive } from './comenzi.js';  
-console.log(comenziFictive);
+//import { comenziFictive } from './comenzi.js';  
+//console.log(comenziFictive);
+let comenziFictive = "";
 initialize(comenziFictive);
 
 
