@@ -147,3 +147,24 @@ export function incarcaListaComenziDtbIdx() {
       });
   });
 }
+
+
+export function actualizeazaComandaDtbIdx(comanda) {
+  return new Promise((resolve, reject) => {
+      openDatabase().then(db => {
+          const transaction = db.transaction(['comenzi'], 'readwrite');
+          const store = transaction.objectStore('comenzi');
+          const request = store.put(comanda); // Actualizează sau adaugă comanda
+
+          request.onsuccess = () => {
+              resolve(`Comanda cu ID-ul ${comanda.id} a fost actualizată cu succes.`);
+          };
+
+          request.onerror = (event) => {
+              reject(`Eroare la actualizarea comenzii cu ID-ul ${comanda.id}: ${event.target.error}`);
+          };
+      }).catch(error => {
+          reject(`Eroare la deschiderea bazei de date: ${error}`);
+      });
+  });
+}

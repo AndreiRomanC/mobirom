@@ -13,20 +13,54 @@ export function cautaComenziDupaNume(nameToSearch,listaComenzi){
 
 
 export function salveazaModificari(idComanda, listaComenzi) {
-  const comanda = listaComenzi.find(comanda => comanda.id === idComanda);
-  actualizaza_lisa(listaComenzi)
 
-  if (!comanda) {
-      alert('Comanda nu a fost găsită.');
-      return;
+  const comandaUrgenta = document.getElementById('comandaUrgentaInput').checked;
+  const client = document.getElementById('clientInput').value;
+  const telefon = document.getElementById('telefonInput').value;
+  const data = document.getElementById('dataInput').value;
+  const termenLivrare = document.getElementById('termenLivrareInput').value;
+  const statusComanda = document.getElementById('statusSelect_comanda').value;
+  const detaliiComanda = document.getElementById('detaliiInput').value;
+  const noteComanda = document.getElementById('noteInput').value;
+
+  const produse = [];
+      document.querySelectorAll('.linieProdusTemplate').forEach(function(produsElement) {
+          const numeProdus = produsElement.querySelector('.produsInput').value;
+          const cantitateProdus = produsElement.querySelector('.cantitateInput').value;
+          const valoareProdus = produsElement.querySelector('.totalInput').value;
+          const etapaFabricatie = produsElement.querySelector('.etapaFabricatieSelect').value;
+          produse.push({nume: numeProdus, cantitate: cantitateProdus, valoare: valoareProdus, etapaFabricatie: etapaFabricatie});
+      });
+  const comandaModificata = {
+        id: idComanda, // Presupunând că vrei să folosești lungimea listei pentru a genera un nou ID
+        client: client,
+        telefon: telefon,
+        data: data,
+        termenLivrare: termenLivrare,
+        urgenta: comandaUrgenta,
+        produse: produse, // Acesta este array-ul de produse colectat din formular
+        status: statusComanda,
+        note: noteComanda,
+        detalii: detaliiComanda,
+        // Calculul totalului ar trebui să fie efectuat pe baza produselor; exemplu simplu de calcul al totalului
+        total: produse.reduce((total, produs) => total + (produs.cantitate * produs.valoare), 0)
+    };
+   
+  
+  const index = listaComenzi.findIndex(c => c.id === idComanda);
+
+  // Verifică dacă comanda a fost găsită
+  if (index !== -1) {
+      // Actualizează comanda în listaComenzi
+      listaComenzi[index] = comandaModificata;
+      IdxDbManager.actualizeazaComandaDtbIdx(comandaModificata);
+      console.log(`Comanda cu ID-ul ${idComanda} a fost actualizată în listaComenzi.`);
+  } else {
+      // Dacă comanda nu există în listaComenzi, opțional o poți adăuga
+      listaComenzi.push(comandaModificata);
+      console.log(`Comanda cu ID-ul ${idComanda} a fost adăugată în listaComenzi.`);
   }
-
-  // Obținerea valorilor modificate
-  comanda.client = document.getElementById('clientInput').value;
-  comanda.data = document.getElementById('dataInput').value;
-  comanda.status = document.getElementById('statusSelect_comanda').value;
-  comanda.total = parseFloat(document.getElementById('totalInput').value);
-
+  actualizaza_lisa(listaComenzi);
   alert('Modificările au fost salvate.');
 
   // Re-afișarea detaliilor comenzi actualizate
