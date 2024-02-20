@@ -11,7 +11,6 @@ export function cautaComenziDupaNume(nameToSearch,listaComenzi){
   return comenziGasite;
 }
 
-
 export function salveazaModificari(idComanda, listaComenzi) {
 
   const comandaUrgenta = document.getElementById('comandaUrgentaInput').checked;

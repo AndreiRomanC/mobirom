@@ -10,20 +10,22 @@ resultDiv.innerHTML = newContent;
 
 } 
 
-   export async function fetchFromApi(action, params = {}) {
+export async function fetchFromApi(action, params) {
     params.action = action;
+    
     const url = "db/api.php"; 
     try {
-          const response = await fetch(url + '?' + new URLSearchParams(params), {
-              method: 'GET'
-          });
-          if (!response.ok) {
-              throw new Error('Eroare rețea: ' + response.statusText);
-          }
-          return await response.json();
-      } catch (error) {
-          return console.error('Eroare: ' + error);
-      }
+        const response = await fetch(url + '?' + new URLSearchParams(params), {
+            method: 'GET'
+        });
+        if (!response.ok) {
+            throw new Error('Eroare rețea fetchFromApi: ' + response.statusText);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Eroare:', error);
+        throw error; // Tratați eroarea în mod corespunzător sau relansați-o pentru a fi tratată mai sus
+    }
 }
 
 //  async function fetchFromApi(action) {

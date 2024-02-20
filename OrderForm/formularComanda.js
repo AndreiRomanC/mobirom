@@ -3,6 +3,8 @@ import {generateDetaliiComandaHTML } from "../orderForm.js";
 import {adaugaEvenimentButonAdaugare} from "../eventLAddProd.js";
 import { adaugaComanda } from "../operatiiComenzi.js"; 
 import { adaugaComandaIDB } from "../db/idxDbMangager.js";
+import { fetchFromApi } from '../db/db_use.js';
+
 // Crearea unei instanțe Date pentru data curentă
 function generatePositiveNumericId() {
     // Definim minimul și maximul pentru a asigura că ID-ul are întotdeauna 8 cifre
@@ -55,9 +57,7 @@ export function adaugaFormularComanda(listaComenzi) {
     container.innerHTML = "";
     console.log(listaComenzi);
   })
-  const adaugaComandaButton = document.createElement('button');
-  adaugaComandaButton.textContent = 'Adaugă Comandă';
-  buttonContainer.appendChild(adaugaComandaButton);
+
   container.appendChild(buttonContainer);
   document.getElementById('butonSalveaza').addEventListener('click', function() {
     // Aici poți adăuga codul care trebuie executat atunci când butonul este apăsat
@@ -114,6 +114,18 @@ export function adaugaFormularComanda(listaComenzi) {
           produse
       });
 
+      //update mysql DB
+      fetchFromApi('addNewOrder', { comandaNouaParam: comandaNoua })
+      .then(response => {
+        console.log("Response:", response); // Afișează răspunsul primit de la server
+    })
+      .then(data => {
+          console.log("Am salvat datele în MySQL:", data);
+          console.log('Datele primite de la server:', data); // Afișează datele primite de la server în consolă
+      })
+      .catch(error => {
+          console.error("Eroare la adăugarea comenzii:", error);
+      });
 
     //actualizaza_lisa(listaComenzi)
 
@@ -123,21 +135,10 @@ export function adaugaFormularComanda(listaComenzi) {
 
 
 
-  // formularContainer.appendChild(statusInput);
-  // formularContainer.appendChild(dataInput);
-
-  // formularContainer.appendChild(totalInput);
-  // formularContainer.appendChild(clientInput);
-
-  // formularContainer.appendChild(buttonContainer);
-  // buttonContainer.appendChild(adaugaComandaButton);
-
-
   const link = document.createElement('link');
   link.href = './OrderForm/OrderFormStyle.css';
   link.rel = 'stylesheet';
   link.type = 'text/css';
 
-  // container.appendChild(formularContainer);
-  // container.appendChild(link);
+
 }
