@@ -115,13 +115,11 @@ export function adaugaFormularComanda(listaComenzi) {
       });
 
       //update mysql DB
-      fetchFromApi('addNewOrder', { comandaNouaParam: comandaNoua })
-      .then(response => {
-        console.log("Response:", response); // Afișează răspunsul primit de la server
-    })
+      const comandaNouaJSON = JSON.stringify(comandaNoua);
+
+      fetchFromApi('addNewOrder', { comandaNouaParam: comandaNouaJSON })
       .then(data => {
-          console.log("Am salvat datele în MySQL:", data);
-          console.log('Datele primite de la server:', data); // Afișează datele primite de la server în consolă
+          console.log("din formularComanda.js :", data);
       })
       .catch(error => {
           console.error("Eroare la adăugarea comenzii:", error);

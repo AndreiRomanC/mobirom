@@ -113,15 +113,14 @@ function updateID($pdo, $params) {
     echo json_encode($data);
 }
 
-function addNewOrder($pdo, $params) {
+function addNewOrder_old($pdo, $params) {
     try {
         // Începeți o tranzacție
+        echo json_encode(['success' => true, 'message' => 'Sunt în try de la insert']);
+
          $orderData = $params;
         header('Content-Type: application/json');
 
-       //print($params);
-
-       // Adăugați comanda în tabela comenzi
        try {
         // Începeți o tranzacție
         $pdo->beginTransaction();
@@ -139,9 +138,16 @@ function addNewOrder($pdo, $params) {
             'detalii' => $orderData['detalii'],
             'total' => $orderData['total']
         ]);
-        print("sunt in try de la insert ");
+        try {
+            // ...
+            echo json_encode(['success' => true, 'message' => 'Sunt în try de la insert']);
+        } catch (PDOException $e) {
+            // ...
+            echo json_encode(['success' => false, 'message' => 'Eroare la inserarea comenzii: ' . $e->getMessage()]);
+        }
+
         // Obțineți ID-ul comenzii inserate
-        $comandaID = 5;
+        $comandaID = $orderData['id'];
     
         // Aici puteți adăuga cod pentru a insera produsele asociate comenzii, dacă este cazul
     
@@ -183,13 +189,75 @@ function addNewOrder($pdo, $params) {
 
         // // Confirmați tranzacția
          // $pdo->commit();
-        // header('Content-Type: application/json');
+         header('Content-Type: application/json');
         // // Returnați ID-ul comenzii adăugate sau altă informație relevantă
        echo json_encode($params);
     } catch (PDOException $e) {
         // În caz de eroare, revocați tranzacția
         $pdo->rollBack();
         throw $e; // Tratați eroarea în mod corespunzător sau relansați-o pentru a fi tratată mai sus
+    }
+}
+
+
+function addNewOrder($pdo, $params) {
+    try {
+        // Începeți o tranzacție
+        $orderData = $params;
+        header('Content-Type: application/json');
+
+        // Adăugați comanda în tabela comenzi
+        $pdo->beginTransaction();
+            // Asigurați-vă că toate datele necesare sunt prezente
+        if (!isset($orderData['client'], $orderData['telefon'], $orderData['data'], $orderData['termenLivrare'], $orderData['urgenta'], $orderData['status'], $orderData['note'], $orderData['detalii'], $orderData['total'], $orderData['produse'])) {
+            throw new Exception("Lipsesc date necesare pentru inserarea comenzii.");
+        }
+
+        $urgentaValue = $orderData['urgenta'] ? 1 : 0;
+
+        $stmt = $pdo->prepare("INSERT INTO comenzi (client, telefon, data, termenLivrare, urgenta, status, note, detalii, total) VALUES (:client, :telefon, :data, :termenLivrare, :urgenta, :status, :note, :detalii, :total)");
+        $stmt->execute([
+            'client' => $orderData['client'],
+            'telefon' => $orderData['telefon'],
+            'data' => $orderData['data'],
+            'termenLivrare' => $orderData['termenLivrare'],
+            'urgenta' => $urgentaValue,
+            'status' => $orderData['status'],
+            'note' => $orderData['note'],
+            'detalii' => $orderData['detalii'],
+            'total' => $orderData['total']
+        ]);
+
+            // Obțineți ID-ul comenzii inserate
+    $comandaID = $pdo->lastInsertId();
+
+    // Inserarea produselor asociate comenzii
+
+        
+        foreach ($orderData['produse'] as $produs) {
+            if (!isset($produs['nume'], $produs['cantitate'], $produs['valoare'], $produs['etapaFabricatie'])) {
+                throw new Exception("Lipsesc date necesare pentru inserarea produselor.");
+            }
+            $stmt = $pdo->prepare("INSERT INTO produse (comanda_id, nume, cantitate, valoare, etapaFabricatie) VALUES (:comanda_id, :nume, :cantitate, :valoare, :etapaFabricatie)");
+            $stmt->execute([
+                'comanda_id' => $comandaID,
+                'nume' => $produs['nume'],
+                'cantitate' => $produs['cantitate'],
+                'valoare' => $produs['valoare'],
+                'etapaFabricatie' => $produs['etapaFabricatie']
+            ]);
+        }
+        // Confirmați tranzacția
+        $pdo->commit();
+
+        // Afișați un mesaj de succes în răspunsul JSON
+        return json_encode(['success' => true, 'message' => 'Comanda a fost adăugată cu succes.']);
+    } catch (PDOException $e) {
+        // Revocați tranzacția pentru a menține integritatea datelor
+        $pdo->rollBack();
+    
+        // Afișați un mesaj de eroare în răspunsul JSON
+        echo json_encode(['success' => false, 'message' => 'Eroare la inserarea comenzii: ' . $e->getMessage()]);
     }
 }
 

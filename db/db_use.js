@@ -21,12 +21,25 @@ export async function fetchFromApi(action, params) {
         if (!response.ok) {
             throw new Error('Eroare rețea fetchFromApi: ' + response.statusText);
         }
-        return await response.json();
+        
+        // Extrageți conținutul text al răspunsului
+        const responseBody = await response.text();
+
+        // Afișați conținutul text în consolă
+        console.log('fetchFromApi response:', responseBody);
+
+        // Returnați conținutul text al răspunsului
+        return responseBody;
     } catch (error) {
-        console.error('Eroare:', error);
+        // Tratați cazurile de eroare
+        console.error('Error:', error.message);
         throw error; // Tratați eroarea în mod corespunzător sau relansați-o pentru a fi tratată mai sus
     }
+
+
 }
+
+
 
 //  async function fetchFromApi(action) {
 //     params.action = action;
