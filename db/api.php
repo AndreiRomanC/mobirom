@@ -66,16 +66,27 @@ if (isset($_GET['action'])) {
 $pdo = new PDO('mysql:host=localhost;dbname=mobiromr;charset=utf8', 'admin', 'admin');
 
 $action = $_GET['action'];
-$params = $_GET['comandaNouaParam'];
 print($params);
 switch ($action) {
+    case 'fetchFromMysql':
+        fetchFromMysql($pdo, $params);
+        break;
+
     case 'listAll':
         listAll($pdo, $params);
         break;
-    case 'update':
+    case 'update':       
             updateID($pdo, $params);
             break;
+    case 'deleteOrder':       
+        $params = $_GET['id'];
+        print($params);
+       // $params = json_decode($params, true); // true pentru a obține un array asociativ
+       deleteOrder($pdo, $params);
+
+                break;
     case 'addNewOrder':
+        $params = $_GET['comandaNouaParam'];
         print($params);
         $params = json_decode($params, true); // true pentru a obține un array asociativ
 
@@ -84,10 +95,29 @@ switch ($action) {
             addNewOrder($pdo, $params);
         } else {
             // Gestionarea erorii în cazul în care JSON-ul nu poate fi decodat
-            echo "Eroarea la decodarea JSON.";
+            echo "Eroarea la decodarea JSON. din api.php";
         }
         //addNewOrder($pdo, $params);
         break;
+     case "newOrdersFromSite":
+        $pdo2 = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'admin', 'admin');
+        newOrders($pdo2, $params);
+        break;
+
+     case 'updateOrder':
+            $params = $_GET['comandaMod'];
+            print($params);
+            $params = json_decode($params, true); // true pentru a obține un array asociativ
+    
+            if (is_array($params)) {
+                // Acum $params este un array și poți accesa elementele sale
+                updateOrder($pdo, $params);
+            } else {
+                // Gestionarea erorii în cazul în care JSON-ul nu poate fi decodat
+                echo "Eroarea la decodarea JSON din api.php de la updateorder.";
+            }
+            //addNewOrder($pdo, $params);
+            break;
             // alte cazuri pentru diferite acțiuni
 }
 
@@ -113,93 +143,6 @@ function updateID($pdo, $params) {
     echo json_encode($data);
 }
 
-function addNewOrder_old($pdo, $params) {
-    try {
-        // Începeți o tranzacție
-        echo json_encode(['success' => true, 'message' => 'Sunt în try de la insert']);
-
-         $orderData = $params;
-        header('Content-Type: application/json');
-
-       try {
-        // Începeți o tranzacție
-        $pdo->beginTransaction();
-    
-        // Adăugați comanda în tabela comenzi
-        $stmt = $pdo->prepare("INSERT INTO comenzi (client, telefon, data, termenLivrare, urgenta, status, note, detalii, total) VALUES (:client, :telefon, :data, :termenLivrare, :urgenta, :status, :note, :detalii, :total)");
-        $stmt->execute([
-            'client' => $orderData['client'],
-            'telefon' => $orderData['telefon'],
-            'data' => $orderData['data'],
-            'termenLivrare' => $orderData['termenLivrare'],
-            'urgenta' => $orderData['urgenta'],
-            'status' => $orderData['status'],
-            'note' => $orderData['note'],
-            'detalii' => $orderData['detalii'],
-            'total' => $orderData['total']
-        ]);
-        try {
-            // ...
-            echo json_encode(['success' => true, 'message' => 'Sunt în try de la insert']);
-        } catch (PDOException $e) {
-            // ...
-            echo json_encode(['success' => false, 'message' => 'Eroare la inserarea comenzii: ' . $e->getMessage()]);
-        }
-
-        // Obțineți ID-ul comenzii inserate
-        $comandaID = $orderData['id'];
-    
-        // Aici puteți adăuga cod pentru a insera produsele asociate comenzii, dacă este cazul
-    
-        // Confirmați tranzacția
-        $pdo->commit();
-    
-        // Dacă totul a mers bine, puteți răspunde cu succes
-        // De exemplu: echo json_encode(['success' => true, 'comandaID' => $comandaID]);
-    } catch (PDOException $e) {
-        // Revocați tranzacția pentru a menține integritatea datelor
-        $pdo->rollBack();
-    
-        // Logați eroarea sau gestionați-o cum considerați necesar
-        print('Eroare la inserarea comenzii: ' . $e->getMessage());
-    
-        // Răspundeți cu un mesaj de eroare
-        // Într-un mediu de producție, evitați să expuneți mesajele de eroare direct utilizatorului
-        echo json_encode(['success' => false, 'message' => 'A apărut o eroare la procesarea comenzii.']);
-    
-        // Opțional, puteți alege să aruncați excepția mai departe sau să finalizați execuția scriptului
-        // throw $e;
-        // sau
-        // exit;
-    }
-
-        // //Construim un array asociativ cu ID-ul comenzii
-        // $responseData = array('comandaID' => $comandaID);
-     //   Adăugați produsele asociate comenzii în tabela produse
-        // foreach ($orderData['produse'] as $produs) {
-        //     $stmt = $pdo->prepare("INSERT INTO produse (comanda_id, nume, cantitate, valoare, etapaFabricatie) VALUES (:comanda_id, :nume, :cantitate, :valoare, :etapaFabricatie)");
-        //     $stmt->execute([
-        //         'comanda_id' => $comandaID,
-        //         'nume' => $produs['nume'],
-        //         'cantitate' => $produs['cantitate'],
-        //         'valoare' => $produs['valoare'],
-        //         'etapaFabricatie' => $produs['etapaFabricatie']
-        //     ]);
-        // }
-
-        // // Confirmați tranzacția
-         // $pdo->commit();
-         header('Content-Type: application/json');
-        // // Returnați ID-ul comenzii adăugate sau altă informație relevantă
-       echo json_encode($params);
-    } catch (PDOException $e) {
-        // În caz de eroare, revocați tranzacția
-        $pdo->rollBack();
-        throw $e; // Tratați eroarea în mod corespunzător sau relansați-o pentru a fi tratată mai sus
-    }
-}
-
-
 function addNewOrder($pdo, $params) {
     try {
         // Începeți o tranzacție
@@ -215,8 +158,9 @@ function addNewOrder($pdo, $params) {
 
         $urgentaValue = $orderData['urgenta'] ? 1 : 0;
 
-        $stmt = $pdo->prepare("INSERT INTO comenzi (client, telefon, data, termenLivrare, urgenta, status, note, detalii, total) VALUES (:client, :telefon, :data, :termenLivrare, :urgenta, :status, :note, :detalii, :total)");
+        $stmt = $pdo->prepare("INSERT INTO comenzi (id, client, telefon, data, termenLivrare, urgenta, status, note, detalii, total) VALUES (:id, :client, :telefon, :data, :termenLivrare, :urgenta, :status, :note, :detalii, :total)");
         $stmt->execute([
+            'id' => $orderData['id'],
             'client' => $orderData['client'],
             'telefon' => $orderData['telefon'],
             'data' => $orderData['data'],
@@ -261,4 +205,135 @@ function addNewOrder($pdo, $params) {
     }
 }
 
+function fetchFromMysql($pdo, $params) {
+    // Preia toate comenzile
+    $stmt = $pdo->prepare("SELECT * FROM comenzi");
+    $stmt->execute();
+    $comenzi = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Iterează prin fiecare comandă pentru a prelua produsele corespunzătoare
+    foreach ($comenzi as $index => $comanda) {
+        $stmtProduse = $pdo->prepare("SELECT * FROM produse WHERE comanda_id = :comanda_id");
+        $stmtProduse->execute(['comanda_id' => $comanda['id']]);
+        $produse = $stmtProduse->fetchAll(PDO::FETCH_ASSOC);
+
+        // Conversia valorii 'urgenta' din numeric în boolean pentru coerență cu structura dorită
+        $comenzi[$index]['urgenta'] = $comanda['urgenta'] ? true : false;
+
+        // Adaugă produsele la comandă
+        $comenzi[$index]['produse'] = $produse;
+    }
+
+    // Returnează toate comenzile și produsele lor ca JSON
+    echo json_encode($comenzi);
+}
+
+
+function updateOrder($pdo, $params) {
+    try {
+        // Începeți o tranzacție
+        $pdo->beginTransaction();
+        header('Content-Type: application/json');
+
+        // Verifică dacă toate datele necesare sunt prezente
+        if (!isset($params['id'], $params['client'], $params['telefon'], $params['data'], $params['termenLivrare'], $params['urgenta'], $params['status'], $params['note'], $params['detalii'], $params['total'])) {
+            throw new Exception("Lipsesc date necesare pentru actualizarea comenzii.");
+        }
+
+        $urgentaValue = $params['urgenta'] ? 1 : 0;
+
+        // Actualizează comanda
+        $stmt = $pdo->prepare("UPDATE comenzi SET client = :client, telefon = :telefon, data = :data, termenLivrare = :termenLivrare, urgenta = :urgenta, status = :status, note = :note, detalii = :detalii, total = :total WHERE id = :id");
+        $stmt->execute([
+            'id' => $params['id'],
+            'client' => $params['client'],
+            'telefon' => $params['telefon'],
+            'data' => $params['data'],
+            'termenLivrare' => $params['termenLivrare'],
+            'urgenta' => $urgentaValue,
+            'status' => $params['status'],
+            'note' => $params['note'],
+            'detalii' => $params['detalii'],
+            'total' => $params['total']
+        ]);
+
+        // Presupunând că dorești să înlocuiești complet lista de produse, mai întâi șterge produsele existente
+        $stmt = $pdo->prepare("DELETE FROM produse WHERE comanda_id = :comanda_id");
+        $stmt->execute(['comanda_id' => $params['id']]);
+
+        // Adaugă produsele noi (sau actualizate)
+        foreach ($params['produse'] as $produs) {
+            if (!isset($produs['nume'], $produs['cantitate'], $produs['valoare'], $produs['etapaFabricatie'])) {
+                throw new Exception("Lipsesc date necesare pentru inserarea produselor.");
+            }
+            $stmt = $pdo->prepare("INSERT INTO produse (comanda_id, nume, cantitate, valoare, etapaFabricatie) VALUES (:comanda_id, :nume, :cantitate, :valoare, :etapaFabricatie)");
+            $stmt->execute([
+                'comanda_id' => $params['id'],
+                'nume' => $produs['nume'],
+                'cantitate' => $produs['cantitate'],
+                'valoare' => $produs['valoare'],
+                'etapaFabricatie' => $produs['etapaFabricatie']
+            ]);
+        }
+
+        // Confirmați tranzacția
+        $pdo->commit();
+
+        // Afișați un mesaj de succes în răspunsul JSON
+        echo json_encode(['success' => true, 'message' => 'Comanda a fost actualizată cu succes.']);
+    } catch (PDOException $e) {
+        // Revocați tranzacția pentru a menține integritatea datelor
+        $pdo->rollBack();
+
+        // Afișați un mesaj de eroare în răspunsul JSON
+        echo json_encode(['success' => false, 'message' => 'Eroare la actualizarea comenzii: ' . $e->getMessage()]);
+    }
+}
+
+function deleteOrder($pdo, $params) {
+    try {
+        // Începeți o tranzacție
+        $pdo->beginTransaction();
+
+        $comandaID = $params;
+
+        // Mai întâi, ștergeți produsele asociate comenzii
+        $stmt = $pdo->prepare("DELETE FROM produse WHERE comanda_id = :comandaID");
+        $stmt->execute(['comandaID' => $comandaID]);
+
+        // Apoi, ștergeți comanda
+        $stmt = $pdo->prepare("DELETE FROM comenzi WHERE id = :comandaID");
+        $stmt->execute(['comandaID' => $comandaID]);
+
+        // Confirmați tranzacția
+        $pdo->commit();
+        
+        echo json_encode(['success' => true, 'message' => 'Comanda și produsele asociate au fost șterse.']);
+    } catch (PDOException $e) {
+        // Revocați tranzacția în caz de eroare
+        $pdo->rollBack();
+        echo json_encode(['success' => false, 'message' => 'Eroare la ștergerea comenzii: ' . $e->getMessage()]);
+    }
+}
+function newOrders($pdo2, $params) {
+        // Obține data curentă
+        $currentDate = new DateTime(); // Implicit, obține data de azi
+                // Obține data de acum o lună
+        $oneMonthAgo = $currentDate->sub(new DateInterval('P2M'))->format('Y-m-d');
+
+        // Pregătește interogarea SQL cu clauza WHERE pentru a selecta comenzile din ultima lună
+        $stmt = $pdo2->prepare("SELECT * FROM comenzi WHERE data_comanda > :oneMonthAgo");
+
+        // Legarea parametrului
+        $stmt->bindParam(':oneMonthAgo', $oneMonthAgo);
+
+        // Execută interogarea
+        $stmt->execute();
+
+        // Obține rezultatele
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        header('Content-Type: application/json');
+
+    echo json_encode($data);
+}
 ?>

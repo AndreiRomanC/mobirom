@@ -62,7 +62,7 @@ detaliiHTML += `</div>
 </div>
 <div class="flex-container full-width">
     <strong>Detalii Comandă:</strong><br>
-    <textarea id="detaliiInput" class="input-field full-width">${comanda.note}</textarea>
+    <textarea id="detaliiInput" class="input-field full-width">${comanda.detalii}</textarea>
 </div>
 <div class="flex-container full-width">
     <strong>Note Comandă:</strong><br>

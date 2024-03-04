@@ -91,8 +91,44 @@ body, html {
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: center
+  justify-content: center;
 }
+
+#formFiltrare input, #searchForm input {
+  font-size: 12px; /* Reducem dimensiunea fontului pentru a face inputurile mai mici */
+  padding: 5px 10px; /* Reducem spațiul interior pentru a micșora înălțimea inputurilor */
+  border: 1px solid #ccc; /* Adăugăm o bordură subtilă */
+  border-radius: 5px; /* Rotunjim colțurile pentru un aspect mai modern */
+  background-color: #f9f9f9; /* Alegem o culoare de fundal deschisă */
+  outline: none; /* Eliminăm conturul albastru implicit la focus */
+  transition: border-color 0.3s ease, box-shadow 0.2s ease; /* Adăugăm tranziții pentru efecte vizuale netede */
+}
+
+#formFiltrare input:focus, #searchForm input:focus {
+  border-color: #007bff; /* Schimbăm culoarea bordurii la focus pentru a evidenția inputul */
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Adăugăm o umbră subtilă pentru a evidenția focusul */
+}
+
+#formFiltrare button, #searchForm button {
+  font-size: 12px; /* Asigurăm că fontul butoanelor este proporțional cu inputurile */
+  padding: 5px 10px; /* Ajustăm padding-ul pentru a face butoanele mai mici */
+  border: none;
+  border-radius: 5px; /* Rotunjim colțurile butoanelor */
+  background-color: #007bff; /* Alegem o culoare de fundal vibrantă */
+  color: #ffffff; /* Setăm textul butoanelor pe alb pentru contrast */
+  cursor: pointer; /* Indicăm că butonul este clicabil */
+  transition: background-color 0.3s ease; /* Adăugăm o tranziție pentru schimbarea culorii la hover */
+}
+
+#formFiltrare button:hover, #searchForm button:hover {
+  background-color: #0056b3; /* Întunecăm culoarea de fundal a butoanelor la hover */
+}
+
+#formFiltrare input[type="date"] {
+  font-size: 10px; /* Sau orice altă dimensiune care este suficient de mică pentru a se potrivi */
+}
+
+
 
 #searchInput {
   flex-grow: 1;
@@ -177,3 +213,37 @@ select option {
   cursor: pointer;
 }
 
+.item-container {
+  display: flex;
+  justify-content: space-between; /* Alinează conținutul și butonul la extremități */
+  align-items: center; /* Centrul elementelor pe direcția verticală */
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.item-properties {
+  display: flex;
+  flex-wrap: wrap; /* Permite proprietăților să ocupe mai multe linii dacă este necesar */
+  gap: 5px; /* Spațiu între proprietăți */
+}
+
+.item-property {
+  font-size: 12px;
+}
+
+.add-order-btn {
+  padding: 4px 8px; /* Buton mai mic */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Buton rotund */
+  cursor: pointer;
+  font-size: 10px; /* Font mai mic pentru textul din buton */
+}
+
+.add-order-btn:hover {
+  background-color: #45a049;
+}

@@ -24,28 +24,28 @@ const dataLivrareISO = dataLivrare.toISOString().split('T')[0];
 // Creați o comandă nouă cu datele dorite
 
 
-export function adaugaFormularComanda(listaComenzi) {
-
+export function adaugaFormularComanda(listaComenzi, comanda) {
+console.log('Adaugă formularul comenzii pentru:', comanda);
   const id_unique = generatePositiveNumericId();
-  const comandaNoua = {
-    id: id_unique, // ID-ul este bazat pe numărul de comenzi existente
-    client: 'Nume Client',
-    telefon: 'Telefon Client',
-    data: dataCurentaISO, // Data curentă
-    termenLivrare: dataLivrareISO, // Data de livrare dorită
-    urgenta: false,
-    produse: [
-        { nume: "Produs 1", cantitate: 1, valoare: 0, etapaFabricatie: "Pregătire" } // Un singur produs cu valoare 0
-    ],
+  let comandaNouaForm = {
+    id: id_unique,
+    client: comanda && comanda.nume ? comanda.nume : 'Nume Client',
+    telefon: comanda && comanda.tel ? comanda.tel : 'Telefon Client',
+    data: dataCurentaISO,
+    termenLivrare: dataLivrareISO,
+    urgenta: comanda ? comanda.urgenta : false,
+    produse: comanda && comanda.produs ? [{ nume: comanda.produs, cantitate: 1, valoare: 0, etapaFabricatie: "Pregătire" }]: [{ nume: "Produs 1", cantitate: 1, valoare: 0, etapaFabricatie: "Pregătire" }],
     status: 'În așteptare',
-    note: 'Note Comandă',
-    detalii: 'Detalii Comandă',
-    total: 0 // Totalul inițial 0
+    note: comanda && comanda.note ? comanda.note : 'Note Comandă',
+    detalii: comanda && comanda.detalii ? comanda.detalii : 'Detalii Comandă',
+    total: comanda && comanda.total ? comanda.total : 0
 };
+
+
 
   const container = document.getElementById('detaliiComanda');
   container.innerHTML = '';
-  let detaliiHTML = generateDetaliiComandaHTML(comandaNoua);
+  let detaliiHTML = generateDetaliiComandaHTML(comandaNouaForm);
   container.innerHTML = detaliiHTML;
   adaugaEvenimentButonAdaugare();
   const buttonContainer = document.createElement('div');

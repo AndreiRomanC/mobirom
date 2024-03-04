@@ -71,40 +71,54 @@ export function adaugaComandaIDB(comanda) {
 }
 
 export function copieazaComenziInDatabaseIDX(listaComenzi) {
-  return new Promise((resolve, reject) => {
-      openDatabase().then(db => {
-          const transaction = db.transaction(['comenzi'], 'readwrite');
-          const store = transaction.objectStore('comenzi');
-          let numarComenziAdaugate = 0;
+    return new Promise((resolve, reject) => {
+        openDatabase().then(db => {
+            const transaction = db.transaction(['comenzi'], 'readwrite');
+            const store = transaction.objectStore('comenzi');
+  
+            // Mai întâi, șterge toate înregistrările existente în object store
+            const clearRequest = store.clear(); // Inițiază operațiunea de ștergere
+            clearRequest.onsuccess = () => {
+                console.log("Toate înregistrările anterioare au fost șterse.");
+                // După ce ștergerea este completă, începe adăugarea noilor comenzi
+                let numarComenziAdaugate = 0;
+  
+                listaComenzi.forEach(comanda => {
+                    let request = store.add(comanda);
+                    request.onsuccess = () => {
 
-          listaComenzi.forEach(comanda => {
-              let request = store.add(comanda);
-              request.onsuccess = () => {
-                  numarComenziAdaugate++;
-                  if (numarComenziAdaugate === listaComenzi.length) {
-                      resolve(`Toate comenzile au fost adăugate. Total: ${numarComenziAdaugate}`);
-                  }
-              };
-              request.onerror = (e) => {
-                  // Aici poți decide să continui sau să oprești procesul în caz de eroare
-                  console.error("Eroare la adăugarea comenzii:", e.target.error);
-                  reject(e.target.error);
-              };
-          });
-
-          transaction.oncomplete = () => {
-              console.log("Toate tranzacțiile de adăugare a comenzilor au fost finalizate cu succes.");
-          };
-
-          transaction.onerror = (event) => {
-              reject(transaction.error);
-          };
-
-      }).catch(error => {
-          reject(error);
-      });
-  });
-}
+                        console.log("comanda :",comanda.id);
+                         numarComenziAdaugate++;
+                        if (numarComenziAdaugate === listaComenzi.length) {
+                            resolve(`Toate comenzile au fost adăugate. Total: ${numarComenziAdaugate}`);
+                        }
+                    };
+                    request.onerror = (e) => {
+                        // Aici poți decide să continui sau să oprești procesul în caz de eroare
+                        console.error("Eroare la adăugarea comenzii:", e.target.error);
+                        reject(e.target.error);
+                    };
+                });
+            };
+  
+            clearRequest.onerror = (e) => {
+                console.error("Eroare la ștergerea înregistrărilor anterioare:", e.target.error);
+                reject(e.target.error);
+            };
+  
+            transaction.oncomplete = () => {
+                console.log("Toate tranzacțiile de adăugare a comenzilor au fost finalizate cu succes.");
+            };
+  
+            transaction.onerror = (event) => {
+                reject(transaction.error);
+            };
+  
+        }).catch(error => {
+            reject(error);
+        });
+    });
+  }
 
 export function stergeComandaDtbIdx(idComanda) {
   return new Promise((resolve, reject) => {

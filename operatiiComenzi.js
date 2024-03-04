@@ -2,6 +2,7 @@ import { actualizaza_lisa } from "./dom/dom_api.js";
 import {selectElement} from "./dom/dom_api.js";
 import {generateDetaliiComandaHTML} from "./orderForm.js";
 import {adaugaEvenimentButonAdaugare} from "./eventLAddProd.js";
+import { fetchFromApi } from './db/db_use.js';
 
 import * as IdxDbManager from "./db/idxDbMangager.js";
 
@@ -53,6 +54,16 @@ export function salveazaModificari(idComanda, listaComenzi) {
       // Actualizează comanda în listaComenzi
       listaComenzi[index] = comandaModificata;
       IdxDbManager.actualizeazaComandaDtbIdx(comandaModificata);
+      const comandaModJSON = JSON.stringify(comandaModificata);
+
+      fetchFromApi('updateOrder', { comandaMod: comandaModJSON })
+      .then(data => {
+          console.log("am facut update la :", data);
+      })
+      .catch(error => {
+          console.error("Eroare la modificarea comenzii in mysql:", error);
+      });
+
       console.log(`Comanda cu ID-ul ${idComanda} a fost actualizată în listaComenzi.`);
   } else {
       // Dacă comanda nu există în listaComenzi, opțional o poți adăuga
@@ -98,6 +109,16 @@ export function stergeComanda(idComanda, listaComenzi) {
       IdxDbManager.stergeComandaDtbIdx(idComanda);
       actualizaza_lisa(listaComenzi)
       incarcaComenzi(listaComenzi);
+
+      fetchFromApi('deleteOrder', { id: idComanda }) // Presupunând că backend-ul așteaptă 'id'
+      .then(data => {
+              console.log("Comanda cu ID:", idComanda, "a fost ștearsă.");
+      })
+      .catch(error => {    
+          console.error("Eroare la ștergerea comenzii în MySQL:", error);
+      });
+  
+
   } else {
       alert('Comanda nu a fost găsită.');
   }
