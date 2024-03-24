@@ -1,15 +1,27 @@
 export function generateDetaliiComandaHTML(comanda) {
+    console.log(comanda);
 let detaliiHTML = `
-<div class="flex-container justify-space-between align-items-center">
-    <h3>Comandă #${comanda.id}</h3>
-    <div>
-        <label for="comandaUrgentaInput"><strong>Comandă Urgentă:</strong></label>
-        <input type="checkbox" id="comandaUrgentaInput" ${comanda.urgenta ? 'checked' : ''}>
+<link rel="stylesheet" href="./OrderForm/OrderFormStyle.css">
+<div class="comanda-container">
+    <div class="comanda-header">
+        <h3>Comandă #${comanda.id}</h3>
+        <div class="comanda-urgenta">
+            <label for="comandaUrgentaInput">Comandă Urgentă:</label>
+            <input type="checkbox" id="comandaUrgentaInput" ${comanda.urgenta ? 'checked' : ''}>
+        </div>
     </div>
+    <div class="ultima-modificare">
+        <span class="modificare-info"><strong>Ultima modificare:</strong> ${comanda.mod_user ? comanda.mod_user : 'N/A'}, ${comanda.mod_timestamp ? comanda.mod_timestamp : 'N/A'}</span>
+    </div>
+</div>
+
+
+
 </div>
 <div class="flex-container align-items-center">
     <div class="flex-item medium"><strong>Client:</strong> <input type="text" value="${comanda.client}" id="clientInput" class="input-field"></div>
     <div class="flex-item medium"><strong>Telefon:</strong> <input type="tel" value="${comanda.telefon}" id="telefonInput" class="input-field"></div>
+    <div class="flex-item medium"><strong>Email:</strong> <input type="tel" value="${comanda.email}" id="emailInput" class="input-field"></div>
     <div class="flex-item medium"><strong>Data:</strong> <input type="date" value="${comanda.data}" id="dataInput" class="input-field"></div>
     <div class="flex-item medium"><strong>Termen Livrare:</strong> <input type="date" value="${comanda.termenLivrare}" id="termenLivrareInput" class="input-field"></div>
 </div>
@@ -43,7 +55,7 @@ comanda.produse.forEach((produs, index) => {
         // Pentru celelalte produse adăugăm butonul "-" și gestionăm evenimentul de ștergere
         detaliiHTML += `
         <div>
-            <button class="btn-small btn-sterge" title="Șterge element">-</button>
+            <button id = "btn-sterge-produs" class="btn-small" title="Șterge element">-</button>
         </div>`;
     }
     detaliiHTML += `

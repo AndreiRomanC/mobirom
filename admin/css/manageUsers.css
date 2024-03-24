@@ -1,0 +1,108 @@
+.users-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 30px 0;
+}
+
+.user-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 500px; /* sau orice lățime preferi */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info > div {
+  margin-bottom: 8px;
+  margin-bottom: 0;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.delete-user {
+  padding: 8px 16px;
+  background-color: #ff4757;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-permission {
+  padding: 8px 16px;
+  background-color: #ef9835;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.save-permission {
+  padding: 8px 16px;
+  background-color: #219323;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+
+.permission-level-edit {
+  /* padding: 8px 10px; */
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ced4da; /* O bordură subtilă */
+  background-color: #ffffff;
+  color: #495057; /* Culoarea textului */
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); /* O umbră ușoară pentru a adăuga adâncime */
+  transition: all 0.2s ease-in-out; /* Tranziție lină pentru hover și focus */
+}
+
+.permission-level-edit:focus {
+  border-color: #80bdff; /* Schimbă culoarea bordurii la focus */
+  outline: none; /* Elimină outline-ul implicit la focus */
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Adaugă o umbră externă la focus */
+}
+
+.permission-level-edit:hover {
+  border-color: #aac4d5; /* Schimbă culoarea bordurii la hover */
+}
+
+/* Din păcate, opțiunile (<option>) nu pot fi stilizate foarte detaliat în majoritatea browserelor */
+/* Prin urmare, nu am adăugat stiluri specifice pentru `<option>` aici */
+.user-id, .username, .permission-level {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-left: 5px solid #007bff;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.user-id {
+  border-color: #28a745; /* Verde */
+}
+
+.username {
+  border-color: #17a2b8; /* Albastru-deschis */
+}
+
+.permission-level {
+  border-color: #ffc107; /* Galben */
+}
+
+.permission-level-display {
+  font-weight: bold;
+}

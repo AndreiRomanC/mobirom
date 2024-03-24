@@ -1,8 +1,9 @@
 import { actualizaza_lisa } from "./dom/dom_api.js";
 import {selectElement} from "./dom/dom_api.js";
-import {generateDetaliiComandaHTML} from "./orderForm.js";
+import {generateDetaliiComandaHTML} from "./OrderForm/orderForm.js";
 import {adaugaEvenimentButonAdaugare} from "./eventLAddProd.js";
 import { fetchFromApi } from './db/db_use.js';
+import { incarcaCSS, eliminaCSS } from './utils/dynamicStyles.js';
 
 import * as IdxDbManager from "./db/idxDbMangager.js";
 
@@ -12,16 +13,27 @@ export function cautaComenziDupaNume(nameToSearch,listaComenzi){
   return comenziGasite;
 }
 
+let username = '';
+document.addEventListener("DOMContentLoaded", function() {
+  // Acest cod se execută după ce se încarcă DOM-ul
+  username = document.getElementById('userInfo').getAttribute('data-username');
+  console.log('usernamul-ul este'.username); // Acum poți manipula valoarea în JavaScript
+});
+
 export function salveazaModificari(idComanda, listaComenzi) {
 
   const comandaUrgenta = document.getElementById('comandaUrgentaInput').checked;
   const client = document.getElementById('clientInput').value;
   const telefon = document.getElementById('telefonInput').value;
+  const email = document.getElementById('emailInput').value;
   const data = document.getElementById('dataInput').value;
   const termenLivrare = document.getElementById('termenLivrareInput').value;
   const statusComanda = document.getElementById('statusSelect_comanda').value;
   const detaliiComanda = document.getElementById('detaliiInput').value;
   const noteComanda = document.getElementById('noteInput').value;
+
+  const mod_user = username;
+  const mod_timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
   const produse = [];
       document.querySelectorAll('.linieProdusTemplate').forEach(function(produsElement) {
@@ -35,6 +47,7 @@ export function salveazaModificari(idComanda, listaComenzi) {
         id: idComanda, // Presupunând că vrei să folosești lungimea listei pentru a genera un nou ID
         client: client,
         telefon: telefon,
+        email: email,
         data: data,
         termenLivrare: termenLivrare,
         urgenta: comandaUrgenta,
@@ -42,39 +55,47 @@ export function salveazaModificari(idComanda, listaComenzi) {
         status: statusComanda,
         note: noteComanda,
         detalii: detaliiComanda,
+        mod_user: mod_user,
+        mod_timestamp: mod_timestamp,
         // Calculul totalului ar trebui să fie efectuat pe baza produselor; exemplu simplu de calcul al totalului
         total: produse.reduce((total, produs) => total + (produs.cantitate * produs.valoare), 0)
     };
    
   
-  const index = listaComenzi.findIndex(c => c.id === idComanda);
+    const index = listaComenzi.findIndex(c => c.id === idComanda);
+    console.log("comanda modificata", comandaModificata);
+    const comMOd = comandaModificata;
+    if (index !== -1) {
+        IdxDbManager.actualizeazaComandaDtbIdx(comandaModificata)
+          .then(() => {
+              // Prima actualizare realizată cu succes
+              console.log("!!!!!!!!!!!!!", comMOd);
+              console.log("comanda modificata ", comandaModificata);
+              listaComenzi[index] = comMOd;
+              console.log("listaComenzi[index] :", listaComenzi[index]);
 
-  // Verifică dacă comanda a fost găsită
-  if (index !== -1) {
-      // Actualizează comanda în listaComenzi
-      listaComenzi[index] = comandaModificata;
-      IdxDbManager.actualizeazaComandaDtbIdx(comandaModificata);
-      const comandaModJSON = JSON.stringify(comandaModificata);
 
-      fetchFromApi('updateOrder', { comandaMod: comandaModJSON })
-      .then(data => {
-          console.log("am facut update la :", data);
-      })
-      .catch(error => {
-          console.error("Eroare la modificarea comenzii in mysql:", error);
-      });
+              return fetchFromApi('updateOrder', { comandaMod: JSON.stringify(comandaModificata) });
+          })
+          .then(data => {
+              // A doua actualizare realizată cu succes
+              console.log("Comanda actualizată cu succes în MySQL și în lista locală:", comandaModificata, index);
+              actualizaza_lisa(listaComenzi);
+              alert('Modificările au fost salvate!');
+              console.log("listaComenzi[index] :", listaComenzi[index]);
+              afiseazaDetaliiComanda(idComanda, listaComenzi);
+              incarcaComenzi(listaComenzi);
+          })
+          .catch(error => {
+              console.error("Eroare la actualizarea comenzii:", error);
+              // Opțional, gestionează rollback-ul aici
+          });
+    } else {
+        console.log(`Comanda cu ID-ul ${idComanda} nu a fost găsită în listaComenzi.`);
+        // Logica pentru adăugarea comenzii, dacă este necesar
+    }
 
-      console.log(`Comanda cu ID-ul ${idComanda} a fost actualizată în listaComenzi.`);
-  } else {
-      // Dacă comanda nu există în listaComenzi, opțional o poți adăuga
-      listaComenzi.push(comandaModificata);
-      console.log(`Comanda cu ID-ul ${idComanda} a fost adăugată în listaComenzi.`);
-  }
-  actualizaza_lisa(listaComenzi);
-  alert('Modificările au fost salvate.');
 
-  // Re-afișarea detaliilor comenzi actualizate
-  afiseazaDetaliiComanda(idComanda, listaComenzi);
 }
 
 export function incarcaComenzi(listaComenzi) {
@@ -93,26 +114,35 @@ export function incarcaComenzi(listaComenzi) {
           <p>Data: ${comanda.data}</p>
       `;
       elementComanda.onclick = function() {
-          afiseazaDetaliiComanda(comanda.id, listaComenzi);
+        // eliminaCSS('ordersForm.css');
+         afiseazaDetaliiComanda(comanda.id, listaComenzi);
       };
       comenziContainer.appendChild(elementComanda);
   });
 }
  
 export function stergeComanda(idComanda, listaComenzi) {
-  document.getElementById('detaliiComanda').innerHTML = "";
   // Găsește indexul comenzii în array
   const index = listaComenzi.findIndex(comanda => comanda.id === idComanda);
+  const confirmare = confirm("Ești sigur că vrei să ștergi această comandă?");
+if(confirmare === true){
+  document.getElementById('detaliiComanda').innerHTML = "";
+
   if (index !== -1) {
       // Șterge comanda din array
-      listaComenzi.splice(index, 1);
-      IdxDbManager.stergeComandaDtbIdx(idComanda);
-      actualizaza_lisa(listaComenzi)
-      incarcaComenzi(listaComenzi);
-
       fetchFromApi('deleteOrder', { id: idComanda }) // Presupunând că backend-ul așteaptă 'id'
       .then(data => {
               console.log("Comanda cu ID:", idComanda, "a fost ștearsă.");
+              IdxDbManager.stergeComandaDtbIdx(idComanda).then(() => {  
+                  console.log("Comanda a fost ștearsă din IndexDB cu succes.");
+                  listaComenzi.splice(index, 1);   
+                  actualizaza_lisa(listaComenzi)
+                  incarcaComenzi(listaComenzi);
+
+              })
+              .catch(error => {
+                  console.error("Eroare la ștergerea comenzii în IndexDB:", error);
+              }); 
       })
       .catch(error => {    
           console.error("Eroare la ștergerea comenzii în MySQL:", error);
@@ -121,10 +151,16 @@ export function stergeComanda(idComanda, listaComenzi) {
 
   } else {
       alert('Comanda nu a fost găsită.');
+  } }
+else {
+    alert('Comanda nu a fost ștearsă.');
   }
+
 }
   // Funcție pentru afișarea detaliilor unei comenzi
  export function afiseazaDetaliiComanda(idComanda, listaComenzi) {
+    eliminaCSS('./OrderFormSite/orderForm.css');
+
     const comanda = listaComenzi.find(comanda => comanda.id === idComanda);
 
     if (!comanda) {
@@ -141,9 +177,7 @@ export function stergeComanda(idComanda, listaComenzi) {
     });
     document.getElementById('butonSterge').addEventListener('click', () => {
       stergeComanda(idComanda, listaComenzi);
-      incarcaComenzi(aplicaFiltru(listaComenzi));
       console.log(listaComenzi);
-
     })
       const statusSelect_comanda = document.getElementById('statusSelect_comanda');
       const updateStatusColor = () => {
@@ -169,15 +203,36 @@ const buttonsSterge = document.querySelectorAll('.btn-sterge');
 }
 
 export function adaugaComanda(comanda, listaComenzi) {
-  if (!comanda.client || !comanda.produse || comanda.produse.length === 0) {
-    alert("Comanda trebuie să aibă un client și cel puțin un produs.")
-    return; // Încetează execuția funcției dacă validarea eșuează
+    try {
+      if (!comanda.client || !comanda.produse || comanda.produse.length === 0) {
+        alert("Comanda trebuie să aibă un client și cel puțin un produs.")
+        return; // Încetează execuția funcției dacă validarea eșuează
+      }
+        listaComenzi.push(comanda);
+        incarcaComenzi(aplicaFiltru(listaComenzi));
+      return true; // sau orice alt indicator de succes
+  } catch (error) {
+      return false; // sau detalii despre eroare
   }
-    listaComenzi.push(comanda);
-    incarcaComenzi(aplicaFiltru(listaComenzi));
+
     //copieazaComenziInDatabaseIDX(listaComenzi);
 }
-
+export function PromiseAdaugaComanda(comanda, listaComenzi) {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!comanda.client || !comanda.produse || comanda.produse.length === 0) {
+        alert("Comanda trebuie să aibă un client și cel puțin un produs.");
+        reject("Validarea comenzii a eșuat."); // Folosim reject pentru a indica o eroare
+        return;
+      }
+      listaComenzi.push(comanda);
+      incarcaComenzi(aplicaFiltru(listaComenzi));
+      resolve(true); // Indicăm succesul operațiunii
+    } catch (error) {
+      reject(error); // În caz de eroare în try block, rejectăm promisiunea cu detalii despre eroare
+    }
+  });
+}
 export function setAscendent(newValue) {
   ascendent = newValue;
 }

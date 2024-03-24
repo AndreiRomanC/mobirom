@@ -1,0 +1,44 @@
+:root {
+  --primary-color: #a3d5d3; /* O nuanță pastelată de verde-albastru */
+  --secondary-color: #e1b1cb; /* O nuanță pastelată de roz */
+  --animation-duration: 2s; /* Durata animației pentru fiecare cerc */
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  animation: pulse var(--animation-duration) ease-in-out infinite;
+}
+
+.circle:first-child {
+  background-color: var(--primary-color);
+  animation-delay: -1s;
+}
+
+.circle:last-child {
+  background-color: var(--secondary-color);
+  margin-left: -60px; /* Acesta suprapune parțial cele două cercuri */
+}

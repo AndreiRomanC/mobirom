@@ -1,0 +1,62 @@
+#addUserForm {
+  width: 40%; /* Setează lățimea formularului */
+  max-width: 600px; /* O lățime maximă pentru a menține aspectul estetic pe ecrane mari */
+  margin: 0 auto; /* Centrarea formularului pe pagină */
+  padding: 20px; /* Padding în interiorul formularului */
+  background-color: #fff; /* Fundal alb pentru formular */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* O umbră subtilă pentru a adăuga adâncime */
+  border-radius: 8px; /* Colțuri rotunjite pentru un aspect modern */
+  box-sizing: border-box; /* Include padding-ul și bordura în calculul lățimii */
+}
+
+
+.form-group input[type="text"], 
+.form-group input[type="password"], 
+.form-group select {
+    width: 100%; /* Ajustează acest procentaj conform nevoilor tale */
+    max-width: 500px; /* O lățime maximă pentru a menține aspectul estetic pe ecrane mari */
+    padding: 10px; /* Adaugă padding pentru a mări înălțimea input-urilor */
+    border: 1px solid #ccc; /* O bordură subtilă */
+    border-radius: 4px; /* Colțuri ușor rotunjite pentru un look modern */
+    box-sizing: border-box; /* Asigură-te că padding-ul și bordura sunt incluse în lățimea totală */
+}
+
+
+
+/* Efect de focus pentru a îmbunătăți interactivitatea */
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group select:focus {
+  border-color: #007bff; /* Schimbă culoarea bordurii la focus */
+  outline: none; /* Elimină conturul implicit al browserului */
+}
+
+/* Stilizarea butonului de submit */
+button[type="submit"] {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Ajustări pentru a îmbunătăți vizibilitatea și accesibilitatea */
+::placeholder { /* Stil pentru textul din locul gol al input-urilor */
+  color: #bbb;
+}
+
+/* Stil pentru îmbunătățirea aspectului pe dispozitive mobile */
+@media (max-width: 768px) {
+  .form-container {
+      width: 90%;
+      padding: 15px;
+  }
+}

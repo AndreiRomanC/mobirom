@@ -1,0 +1,37 @@
+#controlPanel button,
+#controlPanel input[type="text"] {
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+#controlPanel button {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+#controlPanel button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#controlPanel input[type="text"] {
+  border: 1px solid #ccc;
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+#controlPanel input[type="text"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0,123,255,0.2);
+}
+
+#controlPanel {
+  animation: slideIn 0.5s ease-out;
+}

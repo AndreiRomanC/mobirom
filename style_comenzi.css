@@ -1,63 +1,14 @@
 
-#detaliiComanda button {
-  padding: 10px 15px;
-  /* Padding pentru buton */
-  background-color: #4CAF50;
-  /* Culoare de fundal pentru buton */
-  color: white;
-  /* Text alb pentru buton */
-  border: none;
-  /* Fără bordură */
-  border-radius: 5px;
-  /* Margini rotunjite */
-  cursor: pointer;
-  /* Cursor pointer pentru buton */
-  font-size: 1em;
-  /* Mărimea fontului pentru buton */
-}
-
-#detaliiComanda button {
-  transition: background-color 0.1s ease-in-out, transform 0.1s ease;
-}
-
-
-
-#detaliiComanda button#butonSalveaza {
-  background: linear-gradient(to bottom, #5890f8, #4786fa); /* Gradient Roșu Șters */
-  color: #FFFFFF;
-}
-
-
-
-#detaliiComanda button#butonSalveaza:hover {
-  background: linear-gradient(to bottom, #4786fa, #5890f8); /* Gradient Roșu Șters */
-}
-
-#detaliiComanda button#butonSterge {
-  background: linear-gradient(to bottom, #ec5858, #e73c3c); /* Gradient Roșu Șters */
-  color: #FFFFFF;
-}
-
-#detaliiComanda button#butonSterge:hover {
-  background: linear-gradient(to bottom, #e73c3c, #ec5858); /* Gradient Roșu Șters */
-}
-
-
 #containerButoane {
   display: flex;
   justify-content: center;
-  /* Centrează elementele pe orizontală */
   align-items: center;
-  /* Opțional, pentru centrarea pe verticală */
   flex-direction: row;
-  /* Așează elementele unul sub altul */
 }
 
 #butonSalveaza, #butonSterge {
   display: inline-block;
-  /* Asigură că butoanele sunt tratate ca blocuri */
   margin: 10px auto;
-  /* Adaugă spațiu și centrează pe orizontală */
 }
 
 #detaliiComanda {
@@ -71,190 +22,40 @@
   margin: 20px auto;
 }
 
-.flex-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 15px;
+
+
+
+.accordion {
+  position: relative;
 }
 
-.flex-item {
-  flex: 1;
-  min-width:  50px;
-  margin-right: 20px;
-}
-
-.flex-item.full-width, .full-width {
-  flex-basis: 100%;
-  margin-right: 0;
-}
-
-.input-field {
+.accordion-button {
+  background-color: #f1f1f1;
+  color: black;
+  cursor: pointer;
+  padding: 18px;
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; /* Asigură că padding-ul nu adaugă la lățimea totală */
-}
-
-.input-field.full-width {
-  margin-bottom: 10px; /* Distanță suplimentară pentru 'Note Comandă' */
-}
-
-.button-container {
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#detaliiComanda button {
-  padding: 10px 15px;
-  background-color: #4CAF50;
-  color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  margin: 5px;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
 }
 
-#detaliiComanda button:hover {
-  background-color: #45a049;
+.accordion-button:after {
+  content: '\002B'; /* Unicode character for "plus" sign (+) */
+  color: #777;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
 }
 
-#detaliiComanda {
-  width: 70%;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
+.accordion-button.active:after {
+  content: "\2212"; /* Unicode character for "minus" sign (-) */
 }
 
-.flex-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.flex-item {
-  margin-right: 20px;
-}
-
-.xlarge { flex: 5; }
-
-.large { flex: 3; }
-.medium { flex: 2; }
-.small { flex: 1; }
-
-.input-field {
-  width: -webkit-fill-available;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-
-.button-container {
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#detaliiComanda button {
-  padding: 10px 15px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  margin: 5px;
-}
-
-#detaliiComanda button:hover {
-  background-color: #45a049;
-}
-
-/* Stiluri pentru statusul comenzii */
-#statusSelect {
-  transition: background-color 0.3s ease;
-}
-
-/* Culorile ar trebui ajustate în JavaScript în funcție de valoarea selectată */
-.status-În-așteptare { background-color: rgb(245, 237, 183); color: white; }
-.status-Finalizată { background-color: rgb(197, 243, 197); color: white; }
-.status-Anulată { background-color: rgb(255, 195, 195); color: white; }
-
-/* Asigurați-vă că inputurile și selecturile pot avea culoarea de fundal modificată */
-.input-field {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    color: black; /* Asigurați-vă că textul este lizibil */
-    transition: background-color 0.3s ease;
-}
-
-.full-width {
-  flex-basis: 100%;
-  max-width: 100%; /* Asigură că nu există o lățime maximă setată care să restrângă elementul */
-  padding: 0; /* Elimină padding-ul care ar putea afecta lățimea */
-  margin: 0; /* Elimină margin-ul care ar putea afecta lățimea */
-}
-
-.input-field.full-width {
-  width: calc(100% - 20px); /* Ajustează 100% minus padding-ul containerului dacă este cazul */
-  margin-bottom: 10px;
-  box-sizing: border-box; /* Include padding și border în lățimea elementului */
-}
-
-
-
-#noteInput {
-    width: 100%; /* ocupă 100% din lățimea containerului său */
-    padding: 10px; /* padding intern */
-    margin-top: 5px; /* spațiu deasupra */
-    margin-bottom: 10px; /* spațiu dedesubt */
-    border: 2px solid #ccc; /* chenarul */
-    border-radius: 4px; /* colțuri rotunjite */
-    box-sizing: border-box; /* include padding-ul și chenarul în lățimea totală */
-}
-
-#detaliiInput {
-  width: 100%; /* ocupă 100% din lățimea containerului său */
-  padding: 10px; /* padding intern */
-  margin-top: 5px; /* spațiu deasupra */
-  margin-bottom: 10px; /* spațiu dedesubt */
-  border: 2px solid #ccc; /* chenarul */
-  border-radius: 4px; /* colțuri rotunjite */
-  box-sizing: border-box; /* include padding-ul și chenarul în lățimea totală */
-}
-
-.align-items-center {
-  align-items: center;
-}
-.justify-content-center {
-  justify-content: center;
-}
-.btn-small {
-  padding: 4px 8px;
-  font-size: 12px;
-  margin-left: 10px; /* Ajustează după nevoie */
-}
-
-.btn-small, .btn-sterge {
-  margin: 0 5px;
-  cursor: pointer;
-  padding: 5px 10px;
-}
-
-.btn-sterge {
-  background-color: #f44336; /* Roșu */
-  color: white;
+.panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
 }

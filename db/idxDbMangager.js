@@ -171,7 +171,7 @@ export function actualizeazaComandaDtbIdx(comanda) {
           const request = store.put(comanda); // Actualizează sau adaugă comanda
 
           request.onsuccess = () => {
-              resolve(`Comanda cu ID-ul ${comanda.id} a fost actualizată cu succes.`);
+              resolve(`Comanda cu ID-ul ${comanda.id} a fost actualizată cu succes in IDXdb.`);
           };
 
           request.onerror = (event) => {

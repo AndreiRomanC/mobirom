@@ -2,11 +2,11 @@ import * as operatiiComenzi from '../operatiiComenzi.js';
 import { adaugaFormularComanda } from '../OrderForm/formularComanda.js';
 import * as db from '../db/db_use.js';
 import * as idxDbManager from '../db/idxDbMangager.js';
-
+import * as ordersFromSite from '../OrdersFromSite/ordersFromSite.js';
 const sortButton = document.getElementById('sortButton');
 export var selectElement = document.getElementById("filterByStatus");
 
-let listaComenzi = []; // Initialize an empty array to hold the latest data
+export let listaComenzi = []; // Initialize an empty array to hold the latest data
 export function actualizaza_lisa(nouaLista){
   listaComenzi = nouaLista;
   console.log(listaComenzi);
@@ -75,7 +75,6 @@ export function initialize(initialData) {
     });
 
     document.getElementById('butonMeniu2').addEventListener('click', function() {
-      db.updatePageWithData("test", 'comenziContainer');
       db.fetchFromApi('fetchFromMysql', {})
         .then(data => {
            console.log("datele primite de la server: ",data);
@@ -101,7 +100,7 @@ export function initialize(initialData) {
         .then(data => {
            console.log("datele primite de la server: ",data);
            //const cleanedResponseBody = JSON.parse(data);
-          db.updatePageWithData2(data, 'detaliiComanda', listaComenzi);
+          ordersFromSite.updatePageWithOrdersFromSite(data, 'detaliiComanda', listaComenzi);
         })
         .catch(error => console.log(error));
 
