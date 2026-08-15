@@ -76,6 +76,7 @@
   }
 }
 
+
 /* Aici stabilești întârzierile specifice pentru fiecare literă */
 .letter:nth-child(1) { --delay: 0s; }
 .letter:nth-child(2) { --delay: 0.1s; }
