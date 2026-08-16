@@ -244,6 +244,7 @@ select option {
   font-size: 10px; /* Font mai mic pentru textul din buton */
 }
 
+
 .add-order-btn:hover {
   background-color: #45a049;
 }
