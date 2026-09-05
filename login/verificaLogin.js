@@ -5,3 +5,4 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   // Dacă loginul este corect, redirecționezi utilizatorul.
   window.location.href = 'index.html'; // Pagina principală după login.
 });
+
