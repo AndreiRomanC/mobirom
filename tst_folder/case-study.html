@@ -1,0 +1,544 @@
+<title>Scoring Under Uncertainty</title>
+<style>
+  /* ---- tokens: light is the complete set ---- */
+  :root{
+    --paper:#F5F7F7;
+    --surface:#FFFFFF;
+    --surface-sunk:#EDF1F1;
+    --ink:#131B1C;
+    --ink-soft:#3D4E4F;
+    --ink-mute:#637576;
+    --rule:#D8E0E0;
+    --rule-soft:#E6ECEC;
+    --accent:#0B6E67;
+    --accent-soft:#7FBDB6;
+    --accent-wash:#E2EFED;
+    --warn:#9A6608;
+    --crit:#9E362D;
+    --ok:#2F6B4F;
+
+    --w1:#0B6E67; --w2:#1A7F76; --w3:#2E9086; --w4:#4CA298;
+    --w5:#73B4AB; --w6:#9DC7C0; --wn:#B9C4C4;
+
+    --shadow:0 1px 2px rgba(19,27,28,.05), 0 8px 24px -16px rgba(19,27,28,.18);
+
+    --f-display:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+    --f-body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+    --f-mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0E1414;
+      --surface:#151E1E;
+      --surface-sunk:#111818;
+      --ink:#E7EDEC;
+      --ink-soft:#B6C5C4;
+      --ink-mute:#869897;
+      --rule:#243030;
+      --rule-soft:#1C2626;
+      --accent:#4FBFB3;
+      --accent-soft:#2A6F68;
+      --accent-wash:#152927;
+      --warn:#D7A03C;
+      --crit:#D9776B;
+      --ok:#6FBE95;
+
+      --w1:#4FBFB3; --w2:#45AAA0; --w3:#3B958C; --w4:#328079;
+      --w5:#286B65; --w6:#1F5651; --wn:#3A4747;
+
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1414;
+    --surface:#151E1E;
+    --surface-sunk:#111818;
+    --ink:#E7EDEC;
+    --ink-soft:#B6C5C4;
+    --ink-mute:#869897;
+    --rule:#243030;
+    --rule-soft:#1C2626;
+    --accent:#4FBFB3;
+    --accent-soft:#2A6F68;
+    --accent-wash:#152927;
+    --warn:#D7A03C;
+    --crit:#D9776B;
+    --ok:#6FBE95;
+
+    --w1:#4FBFB3; --w2:#45AAA0; --w3:#3B958C; --w4:#328079;
+    --w5:#286B65; --w6:#1F5651; --wn:#3A4747;
+
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--f-body);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent-wash);color:var(--ink);}
+  a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px;}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+  /* ---- document grid: prose column + full-width breakouts ---- */
+  .doc{
+    display:grid;
+    grid-template-columns:
+      [full-start] minmax(1.25rem,1fr)
+      [main-start] min(68ch,100%) [main-end]
+      minmax(1.25rem,1fr) [full-end];
+    row-gap:0;
+    padding-block:0 6rem;
+  }
+  .doc>*{grid-column:main;}
+  .doc>.wide{grid-column:full;}
+  .wide>.wide-in{width:min(100% - 2.5rem,1060px);margin-inline:auto;}
+
+  /* ---- datasheet header ---- */
+  .masthead{
+    grid-column:full;
+    border-bottom:1px solid var(--rule);
+    background:var(--surface);
+  }
+  .masthead-in{width:min(100% - 2.5rem,1060px);margin-inline:auto;padding:3.5rem 0 2rem;}
+  .stamp{
+    font-family:var(--f-mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;align-items:center;gap:.6rem;
+  }
+  .stamp::after{content:"";flex:1;height:1px;background:var(--rule);}
+  h1{
+    font-family:var(--f-display);
+    font-weight:600;
+    font-size:clamp(2.1rem,5.5vw,3.4rem);
+    line-height:1.08;
+    letter-spacing:-.015em;
+    text-wrap:balance;
+    margin:1.1rem 0 0;
+  }
+  .standfirst{
+    font-size:clamp(1.02rem,2.2vw,1.19rem);
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin:1rem 0 0;
+    text-wrap:pretty;
+  }
+  .meta{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:1px;
+    margin-top:2.5rem;
+    background:var(--rule);
+    border:1px solid var(--rule);
+  }
+  .meta div{background:var(--surface);padding:.8rem .95rem;}
+  .meta dt{
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-mute);margin:0 0 .3rem;
+  }
+  .meta dd{margin:0;font-size:14.5px;font-weight:500;line-height:1.4;}
+
+  /* ---- sections ---- */
+  section{padding-top:3.5rem;}
+  .eyebrow{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-mute);margin:0 0 .5rem;
+  }
+  h2{
+    font-family:var(--f-display);font-weight:600;
+    font-size:clamp(1.5rem,3.2vw,2.05rem);line-height:1.15;
+    letter-spacing:-.01em;text-wrap:balance;margin:0 0 .9rem;
+  }
+  h3{
+    font-size:1.02rem;font-weight:650;letter-spacing:-.005em;
+    margin:2rem 0 .5rem;
+  }
+  p{margin:0 0 1.05rem;text-wrap:pretty;}
+  .lede{font-size:1.08rem;color:var(--ink-soft);}
+  strong{font-weight:640;}
+  code{
+    font-family:var(--f-mono);font-size:.86em;
+    background:var(--surface-sunk);padding:.12em .38em;border-radius:3px;
+    border:1px solid var(--rule-soft);
+  }
+  .muted{color:var(--ink-mute);}
+  .small{font-size:14.5px;line-height:1.6;}
+
+  ul.plain{margin:0 0 1.05rem;padding-left:1.15rem;}
+  ul.plain li{margin-bottom:.45rem;}
+  ul.plain li::marker{color:var(--accent-soft);}
+
+  /* ---- weight stack (the score formula) ---- */
+  .stack{margin:0;border:1px solid var(--rule);background:var(--surface);}
+  .stack-bar{display:flex;height:56px;width:100%;overflow:hidden;}
+  .stack-bar span{
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--f-mono);font-size:11.5px;font-weight:600;
+    color:#fff;letter-spacing:.02em;
+  }
+  :root[data-theme="dark"] .stack-bar span{color:#0B1211;}
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .stack-bar span{color:#0B1211;}
+  }
+  .stack-key{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+    gap:1px;background:var(--rule);border-top:1px solid var(--rule);
+  }
+  .stack-key div{background:var(--surface);padding:.75rem .9rem;}
+  .stack-key b{
+    display:flex;align-items:baseline;gap:.5rem;font-size:14px;font-weight:650;
+  }
+  .stack-key b i{
+    width:9px;height:9px;flex:none;border-radius:1px;font-style:normal;
+    transform:translateY(-1px);
+  }
+  .stack-key b em{
+    margin-left:auto;font-style:normal;font-family:var(--f-mono);
+    font-size:12.5px;color:var(--ink-mute);font-variant-numeric:tabular-nums;
+  }
+  .stack-key p{margin:.3rem 0 0;font-size:13px;line-height:1.5;color:var(--ink-mute);}
+
+  .formula{
+    font-family:var(--f-mono);font-size:13px;line-height:1.9;
+    background:var(--surface-sunk);border:1px solid var(--rule);
+    padding:1rem 1.1rem;overflow-x:auto;white-space:nowrap;
+    margin:1.1rem 0 0;color:var(--ink-soft);
+  }
+
+  /* ---- tables ---- */
+  .tw{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px;}
+  th,td{text-align:left;padding:.7rem .9rem;border-bottom:1px solid var(--rule-soft);vertical-align:top;}
+  thead th{
+    font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-mute);font-weight:600;
+    border-bottom:1px solid var(--rule);background:var(--surface-sunk);
+    white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:0;}
+  td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;}
+
+  .cap{color:var(--crit);}
+  .capw{color:var(--warn);}
+
+  /* ---- verdict ladder ---- */
+  .ladder{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+  .ladder div{
+    background:var(--surface);padding:.8rem .95rem;
+    display:grid;grid-template-columns:74px 1fr;gap:.9rem;align-items:baseline;
+  }
+  .ladder b{
+    font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums;
+    padding:.15rem 0;border-left:3px solid var(--rule);padding-left:.6rem;
+  }
+  .ladder .l1 b{border-color:var(--ok);color:var(--ok);}
+  .ladder .l2 b{border-color:var(--accent);color:var(--accent);}
+  .ladder .l3 b{border-color:var(--ink-mute);color:var(--ink-mute);}
+  .ladder .l4 b{border-color:var(--crit);color:var(--crit);}
+  .ladder span{font-size:14.5px;}
+
+  /* ---- pipeline ---- */
+  .pipe{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+  @media(min-width:760px){.pipe{grid-template-columns:repeat(4,1fr);}}
+  .pipe div{background:var(--surface);padding:1rem;}
+  .pipe h4{
+    margin:0 0 .35rem;font-size:13.5px;font-weight:650;
+    display:flex;align-items:center;gap:.5rem;
+  }
+  .pipe h4 i{
+    font-family:var(--f-mono);font-style:normal;font-size:10px;
+    color:var(--accent);border:1px solid var(--accent-soft);
+    padding:.05rem .3rem;border-radius:2px;
+  }
+  .pipe p{margin:0;font-size:13px;line-height:1.55;color:var(--ink-mute);}
+
+  /* ---- callout ---- */
+  .note{
+    border:1px solid var(--rule);border-left:3px solid var(--accent);
+    background:var(--surface);padding:1rem 1.1rem;margin:0 0 1.05rem;
+  }
+  .note p:last-child{margin-bottom:0;}
+  .note .eyebrow{color:var(--accent);}
+
+  /* ---- stat row ---- */
+  .stats{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
+    gap:1px;background:var(--rule);border:1px solid var(--rule);
+  }
+  .stats div{background:var(--surface);padding:1rem .95rem;}
+  .stats b{
+    display:block;font-family:var(--f-mono);font-size:clamp(1.25rem,3vw,1.65rem);
+    font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+    color:var(--accent);line-height:1.1;
+  }
+  .stats span{
+    display:block;margin-top:.35rem;font-size:12.5px;line-height:1.45;color:var(--ink-mute);
+  }
+
+  hr{border:0;border-top:1px solid var(--rule);margin:3.5rem 0 0;}
+
+  footer{
+    grid-column:full;border-top:1px solid var(--rule);margin-top:4rem;
+    background:var(--surface);
+  }
+  .foot-in{
+    width:min(100% - 2.5rem,1060px);margin-inline:auto;padding:2rem 0;
+    display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:baseline;
+    font-size:13.5px;color:var(--ink-mute);
+  }
+  .foot-in .stamp{color:var(--ink-mute);}
+  .foot-in .stamp::after{display:none;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+  }
+</style>
+
+<article class="doc">
+
+  <header class="masthead">
+    <div class="masthead-in">
+      <p class="stamp">Case study &middot; Equity scoring engine</p>
+      <h1>Scoring Under Uncertainty</h1>
+      <p class="standfirst">A stock analysis engine that scores 1,538 companies from free data sources &mdash; and refuses to hand out a good score when the data doesn't support one.</p>
+      <dl class="meta">
+        <div><dt>Type</dt><dd>Independent project</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Stack</dt><dd>PHP 8, vanilla JS, no framework, no database</dd></div>
+        <div><dt>Data</dt><dd>SEC EDGAR, Yahoo Finance, Stooq</dd></div>
+        <div><dt>Status</dt><dd>Live &middot; <a href="https://andivio.com/stocks/">andivio.com/stocks</a></dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <section>
+    <p class="eyebrow">The problem</p>
+    <h2>Every free stock screener lies by omission</h2>
+    <p class="lede">Retail screeners hand you a number. What they don't tell you is how much of that number rests on data that was missing, stale, or contradicted by another source.</p>
+    <p>A company with negative equity and a broken balance sheet can still post a beautiful momentum reading. A company whose last filing is two years old still gets a P/E printed next to its name, computed from figures nobody has verified since. The screener shows 82/100 either way, and the number carries no memory of how it was made.</p>
+    <p>I wanted the opposite: an engine where <strong>data quality is a first-class input to the score</strong>, not a footnote. If the inputs are weak, the output must be visibly, structurally capped &mdash; not quietly optimistic.</p>
+  </section>
+
+  <div class="wide"><div class="wide-in">
+    <div class="stats">
+      <div><b>1,538</b><span>companies scored</span></div>
+      <div><b>1,519</b><span>with SEC CIK mapping</span></div>
+      <div><b>14</b><span>ranking strategies</span></div>
+      <div><b>6+1</b><span>score components</span></div>
+      <div><b>512<span style="font-size:.6em">MB</span></b><span>hard memory ceiling</span></div>
+    </div>
+  </div></div>
+
+  <section>
+    <p class="eyebrow">The engine</p>
+    <h2>How the score is built</h2>
+    <p>Every company gets a 0&ndash;100 score. It is a weighted mean of six measured components, plus a deliberate seventh term, minus a risk penalty &mdash; and then passed through a set of hard ceilings.</p>
+  </section>
+
+  <div class="wide"><div class="wide-in">
+    <div class="stack">
+      <div class="stack-bar" role="img" aria-label="Score weights: Quality 23 percent, Health 20 percent, Momentum 15 percent, Valuation 14 percent, Growth 12 percent, Dividend 8 percent, neutral anchor 8 percent.">
+        <span style="width:23%;background:var(--w1)">23%</span>
+        <span style="width:20%;background:var(--w2)">20%</span>
+        <span style="width:15%;background:var(--w3)">15%</span>
+        <span style="width:14%;background:var(--w4)">14%</span>
+        <span style="width:12%;background:var(--w5)">12%</span>
+        <span style="width:8%;background:var(--w6)">8%</span>
+        <span style="width:8%;background:var(--wn)">8%</span>
+      </div>
+      <div class="stack-key">
+        <div>
+          <b><i style="background:var(--w1)"></i>Quality<em>23%</em></b>
+          <p>Net and EBIT margins, ROE from SEC filings. ROE distorted by a near-zero equity base is discarded rather than rewarded.</p>
+        </div>
+        <div>
+          <b><i style="background:var(--w2)"></i>Financial health<em>20%</em></b>
+          <p>Debt/Equity, Net Debt/EBITDA, interest coverage, equity ratio. Net cash earns a bonus.</p>
+        </div>
+        <div>
+          <b><i style="background:var(--w3)"></i>Momentum<em>15%</em></b>
+          <p>Price vs MA50/MA200, RSI, position in the 52-week range, 1-year return. Parabolic moves are capped, not extrapolated.</p>
+        </div>
+        <div>
+          <b><i style="background:var(--w4)"></i>Valuation<em>14%</em></b>
+          <p>P/E, P/B, P/S, EV/EBITDA, P/FCF, FCF yield. REITs switch to P/FFO, because P/E is meaningless for them.</p>
+        </div>
+        <div>
+          <b><i style="background:var(--w5)"></i>Growth<em>12%</em></b>
+          <p>Revenue growth. Anomalies beyond +100% or &minus;50% are ignored &mdash; an accounting artifact is not a growth story.</p>
+        </div>
+        <div>
+          <b><i style="background:var(--w6)"></i>Dividend<em>8%</em></b>
+          <p>Yield computed from actual payments in the trailing 12 months, plus payout sustainability.</p>
+        </div>
+        <div>
+          <b><i style="background:var(--wn)"></i>Neutral anchor<em>8%</em></b>
+          <p>A fixed 50. Not a measurement &mdash; a damper, so no single component can drag the composite to an extreme.</p>
+        </div>
+      </div>
+    </div>
+    <p class="formula">score = 0.23·quality + 0.20·health + 0.15·momentum + 0.14·valuation + 0.12·growth + 0.08·dividend + 0.08·50 &minus; risk_penalty</p>
+  </div></div>
+
+  <section>
+    <h3>The neutral anchor is the interesting part</h3>
+    <p>Six components at full weight produce a bimodal distribution: everything clusters at the extremes, because one strong signal drags the whole composite with it. The fixed 50 at 8% acts as a regularizer &mdash; it pulls every score toward the middle by a known, constant amount, so the difference between a 71 and an 84 reflects broad agreement across components rather than one component shouting.</p>
+    <p>It costs a small amount of dynamic range and buys back a score that behaves monotonically. That trade was worth making.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Integrity</p>
+    <h2>Hard ceilings: momentum can't paper over a broken balance sheet</h2>
+    <p>Weighted means have a failure mode. A stock in a violent uptrend scores high on momentum and cheap on valuation, and those two together can carry a company with negative equity into the 70s. That's exactly the recommendation that loses people money.</p>
+    <p>So after the weighted mean, the score passes through ceilings. These are not penalties that get averaged in &mdash; they are caps applied last, and they cannot be outvoted.</p>
+  </section>
+
+  <div class="wide"><div class="wide-in">
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Condition</th><th>Score ceiling</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Financial health &lt; 35</td><td class="num capw">57</td><td>A shaky balance sheet caps the whole thesis, whatever the chart says.</td></tr>
+          <tr><td>Financial health &lt; 22</td><td class="num cap">47</td><td>Distress territory. Nothing else in the model is allowed to override it.</td></tr>
+          <tr><td>Negative equity, or invalid market cap / price</td><td class="num cap">45</td><td>The valuation inputs are not merely bad, they are undefined.</td></tr>
+          <tr><td>Fundamentals older than 18 months</td><td class="num capw">55</td><td>The figures may be accurate and still describe a company that no longer exists.</td></tr>
+          <tr><td>Unverified one-off growth, or P/E disagreeing across sources</td><td class="num capw">60</td><td>Two sources contradicting each other is information &mdash; treat it as such.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div></div>
+
+  <section>
+    <h3>Confidence is separate from score</h3>
+    <p>Alongside the score, each company carries a <strong>confidence</strong> value measuring how complete its inputs were: is SEC data present, is the P/E uncontested across sources, is anything stale. Below a threshold the score is labelled <em>uncertain</em> in the interface rather than silently presented as equivalent to a fully-sourced one.</p>
+    <div class="note">
+      <p class="eyebrow">Design rule</p>
+      <p>Missing data is displayed as <strong>N/A</strong>, never imputed and never penalised as if it were bad news. Earnings surprises, forward guidance and analyst revisions don't exist in free data sources &mdash; so the engine says so, instead of inventing a plausible number. A model that quietly fills gaps teaches you to trust it exactly where it deserves it least.</p>
+    </div>
+  </section>
+
+  <section>
+    <h3>From score to sentence</h3>
+    <p>The number is the intermediate representation, not the product. The output is a verdict in plain language, with the reasons that produced it.</p>
+    <div class="ladder">
+      <div class="l1"><b>&ge; 75</b><span>Strong candidate for analysis &mdash; requires sufficient data and no red flags</span></div>
+      <div class="l2"><b>&ge; 60</b><span>Worth analysing, check the risks &mdash; downgraded to &ldquo;Mixed&rdquo; if the balance sheet is weak</span></div>
+      <div class="l3"><b>&ge; 45</b><span>Neutral &mdash; watchlist only</span></div>
+      <div class="l4"><b>&lt; 45</b><span>Elevated risk &mdash; avoid until clarified</span></div>
+    </div>
+  </section>
+
+  <hr>
+
+  <section>
+    <p class="eyebrow">Architecture</p>
+    <h2>One PHP file, no database, no build step</h2>
+    <p>The backend is a single <code>api.php</code>: 86 functions behind 14 endpoints, running on ordinary shared hosting. The frontend is one vanilla JS file driving a hash-routed SPA. There is no framework, no bundler, no ORM, and no database.</p>
+    <p>That was a decision, not a shortcut. The workload is <em>fetch from three flaky upstream APIs, normalise wildly inconsistent shapes, compute, cache to disk</em>. A database adds a schema migration problem to a system whose canonical data lives upstream anyway; a framework adds boot cost to a request that is already latency-bound on outbound HTTP.</p>
+  </section>
+
+  <div class="wide"><div class="wide-in">
+    <div class="pipe">
+      <div>
+        <h4><i>01</i>Universe</h4>
+        <p>A static 1,538-row manifest &mdash; S&amp;P 500 constituents with GICS sector and SEC CIK, plus manually curated European and US REITs and international ADRs.</p>
+      </div>
+      <div>
+        <h4><i>02</i>Fetch</h4>
+        <p><code>curl_multi</code> issues parallel requests to SEC EDGAR companyfacts and Yahoo Finance, sharing one disk cache keyed by SHA-1 of the URL.</p>
+      </div>
+      <div>
+        <h4><i>03</i>Normalise</h4>
+        <p>SEC is authoritative where a CIK exists. Non-US issuers fall back to Yahoo <code>quoteSummary</code>. Share counts, market cap and valuation multiples get reconciled across sources.</p>
+      </div>
+      <div>
+        <h4><i>04</i>Score</h4>
+        <p>Components, risk penalty, ceilings, confidence, verdict &mdash; then ranked by whichever of the 14 strategies is active.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <section>
+    <h3>Two sources, one truth</h3>
+    <p>SEC EDGAR is the primary fundamentals source and it is excellent &mdash; official, structured, free. It also only covers US registrants. Roughly 20 companies in the universe are non-US issuers with no usable CIK, and for those the engine falls back to Yahoo's <code>quoteSummary</code>.</p>
+    <p>The two disagree more often than you'd hope. Share counts differ across reporting dates, net income gets extracted from a different line item, market cap drifts. Rather than pick a winner globally, the engine reconciles per-metric and, where the disagreement is material, treats it as a data-quality signal &mdash; the P/E-conflict ceiling above exists precisely for this case.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Constraints</p>
+    <h2>Fitting a whole-universe scan into shared hosting</h2>
+    <p>The most instructive engineering problem in this project had nothing to do with finance.</p>
+    <p>Scoring the full universe means holding decompressed SEC <code>companyfacts</code> documents in memory &mdash; some are tens of megabytes each. The first working version did the obvious thing: fetch everything in parallel, then score. On my machine it was fast. On the live host it returned <strong>zero results</strong>, with no error.</p>
+    <p>The process was being OOM-killed mid-scan. Because the failure happened inside a batch that never returned, the symptom presented as an empty result set rather than a crash &mdash; which is precisely the kind of bug that sends you hunting through scoring logic for a day while the actual cause is the host's <code>memory_limit</code>.</p>
+    <p>The fix was structural: process the pool in <strong>chunks of 25 symbols</strong>, resolve market caps per batch, and release each batch's parsed documents before the next one is fetched, so peak memory stays flat regardless of universe size rather than scaling with it.</p>
+  </section>
+
+  <div class="wide"><div class="wide-in">
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>TTL</th><th>Reasoning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SEC / Yahoo fundamentals</td><td class="num">24 h</td><td>Filings change quarterly. Refetching hourly buys nothing and risks rate limits.</td></tr>
+          <tr><td>Price history (OHLCV)</td><td class="num">15 min</td><td>Moving averages and RSI don't move meaningfully inside a quarter-hour.</td></tr>
+          <tr><td>Quotes</td><td class="num">60 s</td><td>Fresh enough to feel live, coarse enough to stay within upstream limits.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:.7rem">A cold run warms the 24-hour cache and is slow by design; every subsequent run is fast. Cache is plain files on disk, keyed by SHA-1 of the request URL, with a manual purge exposed in the UI for when a fresh filing lands.</p>
+  </div></div>
+
+  <hr>
+
+  <section>
+    <p class="eyebrow">Strategies</p>
+    <h2>Fourteen ways to ask the same data a different question</h2>
+    <p>The components are computed once. A strategy is a re-weighting plus a filter &mdash; which keeps them all consistent with one another and with the single-company detail view. Two are worth describing in full.</p>
+
+    <h3>Future Market Leaders</h3>
+    <p>A gate before a score. A company must clear every hard filter &mdash; revenue growth above 20% year-over-year, trading above both MA50 and MA200, MA50 above MA200, trend rising, and <em>not</em> over-extended &mdash; before it is scored at all. Survivors get a dedicated 0&ndash;100 composite: growth 40%, trend and relative strength 25%, quality 20%, balance sheet 15%. The filter does the work; the score only ranks what's left.</p>
+
+    <h3>Fair value</h3>
+    <p>Intrinsic value is estimated three independent ways &mdash; a normalised P/E, a free-cash-flow reversion, and EV/EBITDA &mdash; and the engine takes the <strong>median</strong>, not the mean. One broken input can't drag the estimate; it just loses the vote. Only profitable companies with a genuine margin of safety against current price are surfaced as undervalued.</p>
+
+    <h3>Supply chains</h3>
+    <p>Sector labels are close to useless for thematic investing &mdash; a chip-packaging supplier and a consumer laptop brand both file under Information Technology. So chains (semiconductors, AI &amp; data centre, pharma, energy) are a hand-curated catalogue mapping companies to their role in a value chain, independent of GICS classification.</p>
+
+    <p>The technical setups &mdash; pre-golden-cross, trend repair, quality pullback, breakout confirmation, earnings acceleration &mdash; each run an explicit step-by-step checklist and emit a staged verdict (<code>WATCH</code> &rarr; <code>ACCUMULATE</code> &rarr; <code>BUY CONFIRMED</code> &rarr; <code>INVALID SETUP</code>), so the user sees which condition passed and which one is still missing, rather than a bare signal.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <p class="eyebrow">Assessment</p>
+    <h2>What I'd change</h2>
+    <p>Three things are structurally wrong with it, and none of them are secrets.</p>
+    <ul class="plain">
+      <li><strong>Hash routing.</strong> Eight views share one URL. It was the right call for a tool people operate; it's the wrong call for content anyone might find. Real paths would turn one indexable page into eight.</li>
+      <li><strong>Weights are asserted, not fitted.</strong> 23/20/15/14/12/8 comes from domain reasoning, not backtesting. Defensible for an educational tool that shows its work; not defensible if the claim were predictive accuracy. Backtesting against forward returns is the honest next step &mdash; and would probably move several of those numbers.</li>
+      <li><strong>Free data has a floor.</strong> No earnings surprises, no guidance, no analyst revisions, no intraday depth. European REIT fundamentals are largely absent, leaving price, trend and yield to carry the score. The engine is explicit about this everywhere it matters, but explicitness isn't coverage.</li>
+    </ul>
+    <p>The thing I'd keep unchanged is the ceiling mechanism. Every time I've been tempted to soften a cap so a company I liked could score higher, the cap was right and I was wrong.</p>
+  </section>
+
+  <footer>
+    <div class="foot-in">
+      <span class="stamp">Andivio &middot; Case study</span>
+      <span>Live at <a href="https://andivio.com/stocks/">andivio.com/stocks</a></span>
+      <span class="muted">Educational analysis tool &mdash; not investment advice.</span>
+    </div>
+  </footer>
+
+</article>

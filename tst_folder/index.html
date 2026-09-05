@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>stocks. — scoring &amp; analiză de acțiuni</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="theme-color" content="#0d9488">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=optional" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260803d">
+</head>
+<body>
+  <div class="bg-orb orb-a"></div>
+  <div class="bg-orb orb-b"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="brand" id="brandHome" aria-label="Acasă">
+        <div class="brand-text"><strong class="brand-word">stocks<i>.</i></strong><span>scoring &amp; analiză de acțiuni</span></div>
+      </button>
+      <nav class="topnav" id="topnav">
+        <a class="nav active" href="#ideas" data-view="ideas">Idei</a>
+        <a class="nav" href="#scanner" data-view="scanner">Scanner</a>
+        <a class="nav" href="#news" data-view="news">Știri</a>
+        <a class="nav" href="#markets" data-view="markets">Indici &amp; mărfuri</a>
+        <a class="nav" href="#company" data-view="company">Companii</a>
+        <a class="nav" href="#portfolio" data-view="portfolio">Portofoliu</a>
+        <a class="nav" href="#guide" data-view="guide">Ghid</a>
+        <a class="nav" href="#about" data-view="about">Despre</a>
+      </nav>
+      <div class="status-pill" id="statusPill">Verific sursele…</div>
+    </div>
+  </header>
+
+  <main class="app">
+
+    <!-- ===================== IDEI ===================== -->
+    <section id="ideas" class="view active">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Punctul de plecare</p>
+          <h1>Găsește companii în care chiar merită să investești</h1>
+          <p class="lead">Nu știi de unde să începi? Alegi o <strong>metodă</strong> (cele mai bune, dividende, ieftine etc.) și primești o <strong>listă scurtă de idei gata analizate</strong> — fiecare cu un verdict clar și motivele din spate. Curat și pe înțeles.</p>
+        </div>
+      </div>
+      <div class="purpose">
+        <span class="badge-i">Strategii cu algoritmi în spate</span>
+        <p>Alegi o <strong>strategie</strong> (oportunități, dividende, viitori lideri, potențial de subevaluare…) și un algoritm dedicat îți întoarce o <strong>listă scurtă, explicată</strong>, cu scor, verdict și riscuri. Vrei în schimb să răsfoiești tot universul într-un tabel sortabil? Aia e în <strong>„Scanner"</strong>.</p>
+      </div>
+
+      <div class="card control-card">
+        <div class="controls">
+          <label class="field">
+            <span>Strategie</span>
+            <select id="ideaGoal">
+              <option value="balanced">⭐ Cele mai bune (scor general)</option>
+              <option value="opportunity">💎 Oportunități — ieftine cu perspectivă</option>
+              <option value="intrinsic">💰 Potențial — subevaluate (valoare justă)</option>
+              <option value="hpgc">⛰️ Healthy Pre-Golden Cross (MA50/MA200)</option>
+              <option value="pregc">📈 Healthy Trend Repair (pre/post Golden Cross)</option>
+              <option value="qpb">🎯 Quality Pullback in Uptrend</option>
+              <option value="qea">⚡ Quality Earnings Acceleration</option>
+              <option value="smid">💎 Small &amp; Mid Cap cu potențial</option>
+              <option value="fml">🚀 Future Market Leaders — viitori lideri</option>
+              <option value="dividends">💵 Dividende sustenabile (acoperite)</option>
+              <option value="defensive">🛡️ Defensive — stabile & solide</option>
+              <option value="momentum">📈 Creștere — momentum puternic</option>
+              <option value="value52">📉 Ieftine — aproape de minim 52s</option>
+              <option value="breakout52">🔥 În forță — aproape de maxim 52s</option>
+              <option value="realestate">🏢 Imobiliare & REIT</option>
+              <option value="chain">🔗 Lanțuri industriale (supply chain)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Regiune</span>
+            <select id="ideaRegion">
+              <option value="all">Toate</option>
+              <option value="us">SUA</option>
+              <option value="eu">Europa</option>
+            </select>
+          </label>
+          <label class="field" id="yieldField" style="display:none">
+            <span>Yield minim %</span>
+            <input id="ideaMinYield" type="number" value="2.5" min="0" step="0.5">
+          </label>
+          <label class="field" id="smidSizeField" style="display:none">
+            <span>Mărime</span>
+            <select id="smidSize">
+              <option value="">Toate (small + mid)</option>
+              <option value="small">Doar small (&lt; $2B)</option>
+              <option value="mid">Doar mid ($2–20B)</option>
+            </select>
+          </label>
+          <label class="field" id="chainPickField" style="display:none">
+            <span>Care lanț</span>
+            <select id="chainPick">
+              <option value="chips">🔬 Semiconductoare</option>
+              <option value="aidc">🤖 AI &amp; Data Center</option>
+              <option value="pharma">💊 Pharma — picks &amp; shovels</option>
+              <option value="energy">🛢️ Energie — de la sondă la pompă</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Câte idei</span>
+            <select id="ideaLimit"><option>6</option><option selected>9</option><option>12</option><option>18</option><option>24</option><option>30</option><option>40</option></select>
+          </label>
+          <button class="primary grow" id="findIdeas">Găsește idei</button>
+        </div>
+        <div id="strategyDesc" class="strategy-desc"></div>
+        <p class="control-hint" id="yieldHint" hidden>💡 Yield minim: sub ~3% apar și plătitori de calitate (KO, ABT); peste 3% domină REIT-urile.</p>
+        <div class="meta-row">
+          <div id="ideaMeta" class="meta-line">Apasă „Găsește idei" ca să pornești prima scanare.</div>
+          <button id="copyIdeas" class="ghost copy-btn">📋 Copiază lista</button>
+        </div>
+      </div>
+
+      <div id="ideaResults"></div>
+    </section>
+
+    <!-- ===================== SCANNER ===================== -->
+    <section id="scanner" class="view">
+      <div class="purpose">
+        <span class="badge-i">Tabel · compară & sortează</span>
+        <p><strong>Screener cu scor complet, sortabil.</strong> Scanează <strong>toate companiile</strong> din selecție (un sector sau tot universul), fiecare cu <strong>scorul real</strong> (același ca în „Analiză companie"), apoi le sortează descrescător. „Câte afișez" controlează doar câte rânduri vezi — scanarea e mereu completă. Filtrezi tabelul (scor min, P/E max, yield min, creștere min) și sortezi pe orice coloană. <br><b>Notă:</b> prima scanare „la rece" e mai lentă (încălzește cache-ul 24h); următoarele sunt rapide.</p>
+      </div>
+      <div class="card">
+        <div class="section-head"><h2>Tabel companii</h2><span>click pe coloane pentru sortare</span></div>
+        <div class="controls">
+          <label class="field"><span>Univers</span>
+            <select id="scanCaps">
+              <option value="sp500" selected>S&amp;P 500 (large cap)</option>
+              <option value="mid">+ Mid cap (S&amp;P 400)</option>
+              <option value="all">+ Small &amp; Mid (toate)</option>
+            </select>
+          </label>
+          <label class="field"><span>Sector</span><select id="sectorFilter"><option value="all">Toate</option></select></label>
+          <label class="field"><span>Regiune</span>
+            <select id="regionFilter"><option value="all">Toate</option><option value="us">SUA</option><option value="eu">Europa</option></select>
+          </label>
+          <label class="field"><span>Câte afișez</span><select id="scanShow"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="0">toate</option></select></label>
+          <button class="primary" id="runScan">Rulează scanarea</button>
+          <button class="ghost" id="refreshScanBtn" title="Rescanează cu date proaspete (ignoră cache-ul)">↻ Reîmprospătează</button>
+          <button class="ghost" id="runDiagnostics">Diagnostic API</button>
+        </div>
+        <div class="controls scan-filters" id="scanFilters" hidden>
+          <span class="filter-tag">Filtrează tabelul:</span>
+          <label class="field"><span>Capitalizare</span>
+            <select id="fCap">
+              <option value="">Toate mărimile</option>
+              <option value="mega">Mega ( &gt; $200B )</option>
+              <option value="large">Large ( $10–200B )</option>
+              <option value="mid">Mid ( $2–10B )</option>
+              <option value="small">Small ( $0.3–2B )</option>
+              <option value="micro">Micro ( &lt; $0.3B )</option>
+            </select>
+          </label>
+          <label class="field"><span>Cap. min ($B)</span><input id="fCapMin" type="number" min="0" step="0.5" placeholder="oricât"></label>
+          <label class="field"><span>Cap. max ($B)</span><input id="fCapMax" type="number" min="0" step="0.5" placeholder="oricât"></label>
+          <label class="field"><span>Scor min</span><input id="fScore" type="number" min="0" max="100" placeholder="oricât"></label>
+          <label class="field"><span>P/E max</span><input id="fPe" type="number" min="0" placeholder="oricât"></label>
+          <label class="field"><span>Yield min %</span><input id="fYield" type="number" min="0" step="0.5" placeholder="oricât"></label>
+          <label class="field"><span>Cr. ven. min %</span><input id="fGrowth" type="number" placeholder="oricât"></label>
+          <button class="ghost" id="fReset">Resetează filtrele</button>
+        </div>
+        <div class="meta-row">
+          <div id="scanMeta" class="meta-line"></div>
+          <button id="copyScan" class="ghost copy-btn">📋 Copiază tabelul</button>
+        </div>
+        <div id="scanFunnel"></div>
+        <div class="scroll-hint">👉 Glisează tabelul lateral pentru toate coloanele</div>
+        <div class="table-wrap">
+          <table id="scanTable">
+            <thead><tr>
+              <th class="sortable" data-key="symbol">Ticker</th>
+              <th>Companie</th><th>Sector</th>
+              <th class="sortable" data-key="price">Preț</th>
+              <th class="sortable" data-key="changePct">Zi %</th>
+              <th class="sortable" data-key="mcap">Cap.</th>
+              <th class="sortable" data-key="pe">P/E</th>
+              <th class="sortable" data-key="yield">Div.</th>
+              <th class="sortable" data-key="growth">Cr. ven.</th>
+              <th class="sortable" data-key="pos52">52s</th>
+              <th class="sortable" data-key="score">Score</th>
+              <th class="sortable" data-key="pct">Rang · Percentilă</th>
+              <th class="sortable" data-key="risk">Risk</th>
+              <th></th>
+            </tr></thead>
+            <tbody><tr><td colspan="14" class="empty">Apasă „Rulează scanarea".</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== NEWS RADAR ===================== -->
+    <section id="news" class="view">
+      <div class="purpose">
+        <span class="badge-i">Radar · doar impact, fără zgomot</span>
+        <p>Monitorizez continuu companii și sectoare cheie și păstrez <b>doar evenimentele care pot schimba direcția strategică</b>: schimbări de conducere, investiții/achiziții majore, lansări de produse, reglementări. Recomandările generice, mișcările de preț și listicolele sunt filtrate. Fiecare eveniment primește un <b>scor de impact</b> și e verificat pe mai multe surse.</p>
+      </div>
+      <div class="card">
+        <div class="section-head"><h2>Radar de știri cu impact</h2><span>companii cheie + filtre clare</span></div>
+        <div class="controls">
+          <label class="field"><span>Acoperire</span><select id="newsSector"><option value="">Companii cheie (bellwethers)</option></select></label>
+          <label class="field"><span>Tip eveniment</span>
+            <select id="newsType">
+              <option value="all" selected>Toate tipurile</option>
+              <option value="leadership">👤 Conducere</option>
+              <option value="ma">🤝 Investiții / M&amp;A</option>
+              <option value="product">🚀 Produs / parteneriat</option>
+              <option value="regulatory">⚖️ Reglementare / juridic</option>
+              <option value="earnings">📊 Rezultate / prognoză</option>
+              <option value="capital">🏦 Capital / restructurare</option>
+            </select>
+          </label>
+          <label class="field"><span>Perioadă</span>
+            <select id="newsWindow">
+              <option value="6">⚡ Ultimele 6 ore</option>
+              <option value="12" selected>Ultimele 12 ore</option>
+              <option value="24">Ultimele 24 ore</option>
+              <option value="72">Ultimele 3 zile</option>
+              <option value="168">Ultimele 7 zile</option>
+              <option value="336">Ultimele 14 zile</option>
+            </select>
+          </label>
+          <label class="field"><span>Prag impact</span>
+            <select id="newsImpact"><option value="45">Mediu (45+)</option><option value="55" selected>Important (55+)</option><option value="65">Doar major (65+)</option></select>
+          </label>
+          <button class="primary" id="newsRun">Caut știri</button>
+          <button class="ghost" id="newsAiBtn" title="Trece lista scurtă printr-o evaluare AI suplimentară (mai lent — serverul AI poate fi rece)">⚡ Rafinare AI</button>
+        </div>
+        <div class="meta-row">
+          <div id="newsMeta" class="meta-line">Apasă „Caut știri" — implicit monitorizez ~40 de companii cheie.</div>
+        </div>
+      </div>
+      <div id="newsResults"></div>
+    </section>
+
+    <!-- ===================== COMPANY ===================== -->
+    <section id="company" class="view">
+      <div class="card">
+        <div class="section-head"><h2>Analiză companie</h2><span>preț, trend, fundamente, dividend & verdict</span></div>
+        <div class="searchbar">
+          <input id="symbolInput" list="coOptions" autocomplete="off" placeholder="Nume sau simbol: Coca-Cola, Apple, KO, MSFT, VNA.DE…" value="AAPL">
+          <datalist id="coOptions"></datalist>
+          <button class="primary" id="loadCompany">Analizează</button>
+          <button class="ghost" id="addWatch">+ Watchlist</button>
+        </div>
+      </div>
+      <div id="companyResult" class="company-layout"></div>
+    </section>
+
+    <!-- ===================== MARKETS (indices & commodities) ===================== -->
+    <section id="markets" class="view">
+      <div class="card">
+        <div class="section-head"><h2>Indici bursieri & mărfuri</h2><span>cei mai importanți indici, aur, petrol, crypto — trend, RSI, poziție 52s și unde merită să cumperi</span></div>
+        <p class="muted small" style="margin:6px 0 0">Date live de la Yahoo Finance. „Verdictul" e un ghid simplu pe baza trendului (peste/sub MA200), RSI și distanței față de maximul de 52 de săptămâni — <b>nu</b> e sfat de investiții. Apasă pe oricare pentru analiză detaliată (grafice + statistici).</p>
+      </div>
+      <div id="marketsMeta" class="news-meta"></div>
+      <div id="marketsResult"></div>
+      <div id="marketDetail"></div>
+    </section>
+
+    <!-- ===================== PORTFOLIO ===================== -->
+    <section id="portfolio" class="view">
+      <div class="card">
+        <div class="section-head"><h2>Portofoliul meu</h2><span id="watchMeta">companiile salvate · live</span></div>
+        <p class="muted small" style="margin:6px 0 0">Companiile salvate (din „Analiză companie" → butonul „+ Watchlist"), cu preț, scor și verdict live. Apasă pe o companie pentru analiza detaliată. Salvat local în browser.</p>
+      </div>
+      <div id="watchCards"></div>
+      <div class="card">
+        <div class="section-head"><h2>Analiză diversificare</h2><span>orientativ, nu recomandare</span></div>
+        <p class="muted small" style="margin:6px 0 12px">Lasă gol ca să analizezi companiile salvate, sau scrie alte tickere.</p>
+        <div class="searchbar">
+          <input id="portfolioSymbols" placeholder="implicit: companiile salvate (sau AAPL, MSFT, O…)">
+          <button class="primary" id="buildPortfolio">Analizează</button>
+        </div>
+        <div id="portfolioOut" class="portfolio-out"></div>
+      </div>
+    </section>
+
+    <!-- ===================== GUIDE ===================== -->
+    <section id="guide" class="view">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Ghid</p>
+          <h1>Cum gândește aplicația — de la bazele bursei la strategiile algoritmului</h1>
+          <p class="lead">Două lucruri într-un singur loc: <strong>bazele investiției</strong> (ce cumperi, cum citești graficele, ce înseamnă scorul) și <strong>cum funcționează de fapt algoritmul de screening</strong> — fiecare strategie, ce caută, ce indicatori folosește și ce înseamnă fiecare verdict. Nu sunt recomandări de cumpărare, ci metode de filtrare, analiză și clasificare a oportunităților.</p>
+        </div>
+      </div>
+
+      <div class="card guide-card">
+        <div class="gtabs">
+          <button class="gtab active" data-gtab="basics">① Bazele</button>
+          <button class="gtab" data-gtab="charts">② Cum citești graficele</button>
+          <button class="gtab" data-gtab="score">③ Scorul & verdictul</button>
+          <button class="gtab" data-gtab="steps">④ Pașii concreți</button>
+          <button class="gtab" data-gtab="strategy">⑤ Strategii & psihologie</button>
+          <button class="gtab" data-gtab="algo">⑥ Strategiile algoritmului</button>
+        </div>
+
+        <!-- ===== BASICS ===== -->
+        <div class="gpane active" id="gp-basics">
+          <div class="grid two">
+            <div class="mini">
+              <h3>Ce cumperi, de fapt</h3>
+              <p class="muted">O <strong>acțiune</strong> e o bucățică dintr-o companie reală. Dacă firma valorează 1 miliard și are 1 milion de acțiuni, o acțiune ≈ 1000. Cumperi → devii co-proprietar și ai dreptul la o parte din profituri.</p>
+              <p class="muted">Câștigi din: <strong>(a)</strong> creșterea prețului în timp dacă firma crește; <strong>(b)</strong> <strong>dividende</strong> — bani împărțiți periodic acționarilor.</p>
+            </div>
+            <div class="mini">
+              <h3>De ce se mișcă prețul</h3>
+              <p class="muted">Prețul = cât cred oamenii că va valora firma în viitor. Profituri în creștere → sus. Datorii, scădere de venituri, neîncredere → jos.</p>
+              <p class="muted">Pe termen scurt e emoțional și haotic. Pe termen lung urmează rezultatele reale. De-aia investiția serioasă e un joc de răbdare, nu de noroc.</p>
+            </div>
+          </div>
+
+          <p class="muted" style="margin:6px 0 0;font-size:14px">Mai jos sunt <strong>indicatorii pe care te bazezi când decizi dacă o companie merită</strong> — împărțiți pe valoare, calitate și risc. Tipurile de instrumente (acțiune, REIT, ETF…) sunt explicate la final, ca referință.</p>
+
+          <div class="gsec">Indicatori de valoare — „e scumpă sau ieftină?"</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">P/E — preț / profit · <em>Price-to-Earnings</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cel mai folosit indicator de evaluare. Câți ani de profit actual „plătești" pentru acțiune.</p>
+              <div class="fx"><span class="eq">P/E = Capitalizare ÷ <b>Profit net anual</b></span><small>Exemplu: capitalizare 10 mld ÷ profit 0,5 mld = <b>20</b> → plătești 20 pentru fiecare 1 de profit pe an</small></div>
+              <p class="when"><b>Când contează:</b> la firme profitabile, comparate în ACELAȘI sector. <b>Când nu:</b> la firme fără profit (P/E iese negativ sau absurd) sau ciclice la vârf de ciclu. <b>Particularitate:</b> un P/E mare nu e automat rău — o firmă care crește 30%/an „merită" un P/E mai mare decât una stagnantă.</p>
+              <div class="reper"><b>&lt;15 = ieftin</b><b>15–25 = normal</b><b>&gt;30 = scump</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">PEG — P/E ajustat la creștere · <em>Price/Earnings-to-Growth</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Rezolvă slăbiciunea P/E: îl împarte la rata de creștere. Spune dacă prețul e justificat de cât de repede crește firma.</p>
+              <div class="fx"><span class="eq">PEG = P/E ÷ <b>creșterea anuală a profitului (%)</b></span><small>Exemplu: P/E 30 ÷ creștere 30% = <b>1,0</b> → corect evaluată, deși P/E pare mare</small></div>
+              <p class="when"><b>Reper:</b> PEG sub 1 = posibil ieftină pentru creșterea ei; peste 2 = scumpă. <b>Particularitate:</b> depinde de estimări de creștere, care pot greși.</p>
+              <div class="reper"><b>&lt;1 = atractiv</b><b>1–2 = corect</b><b>&gt;2 = scump</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">EPS — profit per acțiune · <em>Earnings Per Share</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât profit revine fiecărei acțiuni. Baza din care se calculează P/E.</p>
+              <div class="fx"><span class="eq">EPS = Profit net ÷ <b>număr de acțiuni</b></span><small>Exemplu: profit 1 mld ÷ 100 mil acțiuni = <b>10</b> profit per acțiune</small></div>
+              <p class="when"><b>Ce urmărești:</b> trendul pe mai mulți ani. EPS crescător constant = firmă tot mai profitabilă. <b>Particularitate:</b> recumpărările de acțiuni cresc EPS „artificial" (mai puține acțiuni), nu doar profitul mai mare.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">P/B — preț / valoare contabilă · <em>Price-to-Book</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Compară prețul cu valoarea „din acte" a firmei (active minus datorii).</p>
+              <div class="fx"><span class="eq">P/B = Capitalizare ÷ <b>Capital propriu</b></span><small>Exemplu: cap. 10 mld ÷ capital propriu 3 mld = <b>3,3</b> → plătești de 3,3× valoarea contabilă</small></div>
+              <p class="when"><b>Când contează:</b> la bănci, asigurări, REIT-uri (au active tangibile clare). <b>Când nu:</b> la firme de software/servicii, unde valoarea e în brand și oameni, nu în active — P/B iese uriaș și irelevant.</p>
+              <div class="reper"><b>&lt;1 = sub valoarea din acte</b><b>util la bănci/REIT</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">P/S — preț / vânzări · <em>Price-to-Sales</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Capitalizarea raportată la venituri. Funcționează chiar și când firma nu are profit încă.</p>
+              <div class="fx"><span class="eq">P/S = Capitalizare ÷ <b>Venituri anuale</b></span><small>Exemplu: cap. 10 mld ÷ venituri 2 mld = <b>5</b></small></div>
+              <p class="when"><b>Când contează:</b> la firme tinere de creștere, încă pe pierdere. <b>Particularitate:</b> compară doar firme cu marje similare — 1 leu de vânzări la software valorează mult mai mult decât la un retailer.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Market cap — mărimea firmei · <em>Market Capitalization</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Valoarea totală a firmei la bursă. Îți spune în ce „categorie de greutate" e.</p>
+              <div class="fx"><span class="eq">Market cap = Preț × <b>număr de acțiuni</b></span><small>Exemplu: preț 50 × 200 mil acțiuni = <b>10 mld</b> valoare totală a firmei</small></div>
+              <p class="when"><b>Particularitate:</b> large-cap = stabilitate, mișcări mici; small-cap = potențial de multiplicare, dar și de prăbușire. Nu confunda mărimea cu calitatea.</p>
+              <div class="reper"><b>Large &gt;10 mld = stabil</b><b>Mid 2–10 mld</b><b>Small &lt;2 mld = risc/potențial</b></div>
+            </div></div></div>
+          </div>
+
+          <div class="gsec">Indicatori de calitate — „e o afacere bună?"</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Marjă de profit · <em>Profit Margin</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât din fiecare leu încasat rămâne profit, după toate cheltuielile. Marjă mare = firmă eficientă, cu putere de preț.</p>
+              <div class="fx"><span class="eq">Marjă netă = (Profit net ÷ <b>Venituri</b>) × 100</span><small>Exemplu: profit 20 ÷ venituri 100 = <b>20%</b> → din 100 încasați rămân 20 profit</small></div>
+              <p class="when"><b>Particularitate:</b> există și <em>gross margin</em> (după costul produsului) și <em>operating margin</em> (după cheltuielile de operare). Marja brută mare + în creștere = avantaj competitiv durabil. Compară în același sector — supermarketurile au marje mici natural.</p>
+              <div class="reper"><b>&gt;15% = foarte bun</b><b>5–15% = ok</b><b>&lt;0% = pierdere</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">ROE — randamentul capitalului · <em>Return on Equity</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât profit produce firma din banii proprietarilor. Cât de bine folosește conducerea capitalul.</p>
+              <div class="fx"><span class="eq">ROE = (Profit net ÷ <b>Capital propriu</b>) × 100</span><small>Exemplu: profit 20 ÷ capital propriu 100 = <b>20%</b> → 20 profit din 100 ai acționarilor</small></div>
+              <p class="when"><b>Particularitate:</b> un ROE foarte mare poate veni din datorii multe, nu din eficiență — verifică și datorii/equity. <em>ROIC</em> (return on invested capital) e și mai bun, fiindcă include și datoria.</p>
+              <div class="reper"><b>&gt;15% = sănătos</b><b>constant = și mai bine</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Free Cash Flow · <em>FCF</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Numerarul real rămas după ce firma își plătește investițiile. „Banii adevărați" — mai greu de manipulat contabil decât profitul.</p>
+              <div class="fx"><span class="eq">FCF = Cash din operațiuni − <b>Investiții (capex)</b></span><small>Exemplu: cash operațional 50 mld − capex 10 mld = <b>40 mld</b> bani liberi</small></div>
+              <p class="when"><b>Când contează:</b> aproape mereu — o firmă cu profit pe hârtie dar FCF negativ e un semnal de alarmă. <b>Când nu:</b> la bănci/asigurări, unde noțiunea de capex nu se aplică la fel.</p>
+              <div class="reper"><b>FCF pozitiv & crescător = excelent</b><b>FCF yield &gt;5% = atractiv</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Marjă operațională · <em>EBIT Margin</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât de profitabilă e firma <strong>din activitatea ei de bază</strong>, înainte de dobânzi și taxe. „EBIT" = profitul operațional (Earnings Before Interest & Taxes).</p>
+              <div class="fx"><span class="eq">Marjă EBIT = (EBIT ÷ <b>Venituri</b>) × 100</span><small>Exemplu: profit operațional 25 ÷ venituri 100 = <b>25%</b> (EBIT = profit înainte de dobânzi & taxe)</small></div>
+              <p class="when"><b>De ce contează:</b> arată sănătatea operațiunilor „curate", fără efectele datoriei sau ale taxelor (care pot ascunde sau înfrumuseța imaginea). O marjă EBIT mare și stabilă = afacere eficientă, cu putere de preț. <b>Diferența față de marja netă:</b> marja netă include și dobânzile și taxele; EBIT le exclude, deci compară mai corect două firme cu datorii diferite.</p>
+              <div class="reper"><b>&gt;15% = solid</b><b>în creștere = și mai bine</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Creșterea veniturilor · <em>Revenue Growth</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât de repede cresc vânzările de la un an la altul. Motorul principal al creșterii pe termen lung a prețului.</p>
+              <div class="fx"><span class="eq">Creștere = ((Venituri noi − <b>Venituri vechi</b>) ÷ Venituri vechi) × 100</span><small>Exemplu: de la 100 la 115 = <b>+15%</b></small></div>
+              <p class="when"><b>Ce urmărești:</b> creștere constantă pe mai mulți ani, nu o singură explozie. <b>Particularitate:</b> creșterea de venituri fără creștere de profit = firma „cumpără" vânzări nerentabil.</p>
+              <div class="reper"><b>Crescătoare = sănătate</b><b>În scădere = red flag</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Payout ratio · <em>Dividend Payout</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Ce procent din profit e dat ca dividend. Arată dacă dividendul e sustenabil.</p>
+              <div class="fx"><span class="eq">Payout = (Dividend ÷ <b>Profit</b>) × 100</span><small>Exemplu: dividend 4 ÷ profit 10 per acțiune = <b>40%</b> din profit dat ca dividend</small></div>
+              <p class="when"><b>Reper:</b> sub 60% = confortabil, firma reține bani pentru creștere; peste 100% = plătește mai mult decât câștigă → posibilă tăiere a dividendului. <b>Particularitate:</b> la REIT-uri payout-ul e natural mare (80–90%+) prin lege.</p>
+            </div></div></div>
+          </div>
+
+          <div class="gsec">Indicatori de risc — „cât de periculos e?"</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Datorii / Equity · <em>Debt-to-Equity</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât de îndatorată e firma față de capitalul propriu. Datorii mari = vulnerabilă la crize și dobânzi mari.</p>
+              <div class="fx"><span class="eq">D/E = Total datorii ÷ <b>Capital propriu</b></span><small>Exemplu: datorii 50 ÷ capital 100 = <b>0,5</b> → 0,5 € datorie pt. fiecare 1 € al acționarilor</small></div>
+              <p class="when"><b>Când contează:</b> mereu, dar mai ales la firme ciclice și în perioade cu dobânzi mari. <b>Particularitate:</b> băncile și utilitățile au D/E mare prin natura businessului — e normal acolo.</p>
+              <div class="reper"><b>&lt;1 = conservator</b><b>1–2 = acceptabil</b><b>&gt;2 = risc ridicat</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Gradul de îndatorare · <em>Net Debt / EBITDA</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât de „grea" e datoria raportată la cât profit operațional (cash) produce firma. De câți ani de EBITDA ar avea nevoie ca să-și achite datoria netă.</p>
+              <div class="fx"><span class="eq">Net Debt / EBITDA = (Datorii − Cash) ÷ <b>EBITDA</b></span><small>Exemplu: datorie netă 30 mld ÷ EBITDA 15 mld = <b>2,0</b> → i-ar lua ~2 ani de profit operațional să o achite. (EBITDA = profit înainte de dobânzi, taxe, amortizare)</small></div>
+              <p class="when"><b>De ce e mai bun decât Datorii/Equity:</b> leagă datoria de capacitatea reală de a o plăti (profitul), nu de o valoare contabilă. <b>Reper:</b> sub 1 = foarte sănătos; 1–3 = ok; peste 4 = datorie grea, risc dacă afacerea încetinește. Băncile fac excepție.</p>
+              <div class="reper"><b>&lt;3 = confortabil</b><b>&gt;4 = risc mare</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Rata capitalului propriu · <em>Equity Ratio</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât din activele firmei sunt finanțate din banii proprii (capital propriu), nu din datorii. „Cât din casă e a ta, nu a băncii."</p>
+              <div class="fx"><span class="eq">Equity ratio = (Capital propriu ÷ <b>Total active</b>) × 100</span><small>Exemplu: capital 60 ÷ active 100 = <b>60%</b> → restul de 40% e finanțat din datorii</small></div>
+              <p class="when"><b>De ce contează:</b> cu cât e mai mare, cu atât firma e mai rezistentă și mai puțin dependentă de creditori. <b>Reper:</b> peste 50% = solid; sub 30% = îndatorare mare (normal la bănci/utilități, riscant la altele).</p>
+              <div class="reper"><b>&gt;50% = solid</b><b>&lt;30% = atenție</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Lichiditate curentă · <em>Current Ratio</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Poate firma să-și acopere datoriile pe termen scurt cu activele pe termen scurt? Test rapid de supraviețuire.</p>
+              <div class="fx"><span class="eq">Current ratio = Active curente ÷ <b>Datorii curente</b></span><small>Exemplu: active curente 200 ÷ datorii curente 100 = <b>2,0</b> (sănătos)</small></div>
+              <p class="when"><b>Reper:</b> peste 1,5 = confortabil; sub 1 = posibile probleme de cash pe termen scurt.</p>
+              <div class="reper"><b>&gt;1,5 = ok</b><b>&lt;1 = atenție</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Volatilitate · <em>Beta</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât de tare sare prețul față de piață. Beta = 1 se mișcă la fel ca piața, peste 1 = mai agitat, sub 1 = mai calm.</p>
+              <div class="formula"><strong>Exemplu:</strong> <span class="eg">Beta 1,5</span> = când piața face +10%, acțiunea tinde să facă +15% (și invers la scădere).</div>
+              <p class="when"><b>Când contează:</b> dacă nu suporți emoțional scăderile mari — alege Beta mic. <b>Particularitate:</b> Beta mare nu e „rău", e doar mai agitat; pe termen lung contează firma, nu zgomotul.</p>
+              <div class="reper"><b>&lt;1 = defensiv</b><b>&gt;1,3 = agresiv</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Volum & lichiditate · <em>Volume / Liquidity</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Câte acțiuni se tranzacționează zilnic. Volum mic = greu de vândut la preț corect când vrei să ieși → risc ascuns.</p>
+              <p class="when"><b>Particularitate:</b> la firme mici cu volum mic, ordinele tale pot mișca prețul singur. Spread-ul (diferența cumpărare/vânzare) e mai mare = pierzi la intrare/ieșire.</p>
+              <div class="reper"><b>Volum mare = lichid</b><b>Volum mic = prudență</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Diversificarea — plasa de siguranță · <em>Diversification</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Nu pune tot într-o firmă sau un sector. Dacă una cade, restul te protejează. Cea mai simplă și eficientă regulă de supraviețuire.</p>
+              <div class="formula"><strong>Exemplu:</strong> <span class="eg">20.000 în 1 firmă → risc maxim;</span> aceiași bani în 10 firme din 5 sectoare → o prăbușire te lovește puțin.</div>
+              <p class="when"><b>Particularitate:</b> și prea multă diversificare (50+ poziții) diluează câștigurile și devine imposibil de urmărit. Un ETF rezolvă asta dintr-o mișcare.</p>
+              <div class="reper"><b>Mai multe sectoare</b><b>Mix acțiuni + ETF</b><b>Evită concentrarea</b></div>
+            </div></div></div>
+          </div>
+
+          <div class="gsec">Sinteză — cum se leagă totul</div>
+          <div class="mini">
+            <h3>Toți indicatorii pornesc din aceleași 3 cărămizi</h3>
+            <p class="muted">Active, Obligații și Capital propriu. Din ele iese tot restul. Hai să luăm o firmă cu cifre rotunde (toate în mil. €) și să vezi cum se naște fiecare indicator, pas cu pas.</p>
+
+            <div class="bslegend">
+              <span><i style="background:#0d9488"></i>Capital propriu (al acționarilor)</span>
+              <span><i style="background:#3b5bdb"></i>Obligații (datorat altora)</span>
+            </div>
+            <div class="bsbar">
+              <i class="b-eq" style="flex:50">Equity 50</i>
+              <i class="b-li" style="flex:50">Obligații 50</i>
+            </div>
+            <p class="muted" style="font-size:12.5px;margin:2px 0 0">Toată bara = <b>Active 100</b> (fabrică 60 + utilaje 20 + cash 20). Partea verde e a ta ca acționar, partea albastră e finanțată din datorii și furnizori.</p>
+
+            <div class="chain">
+              <div class="chain-row"><span class="ci">① Active</span><span>Tot ce deține firma: fabrică, utilaje, stocuri, cash. <b>= 100</b></span></div>
+              <div class="chain-row"><span class="ci">② Obligații</span><span>Tot ce datorează: bancă, obligațiuni, furnizori, salarii, taxe. <b>= 50</b></span></div>
+              <div class="chain-row"><span class="ci">③ Capital propriu</span><span>Ce rămâne acționarilor: Active − Obligații = 100 − 50 <span class="cv">= 50</span></span></div>
+              <div class="chain-row"><span class="ci">④ Equity Ratio</span><span>Cât din firmă e finanțat de acționari: 50 ÷ 100 <span class="cv">= 50%</span> → bilanț solid</span></div>
+              <div class="chain-row"><span class="ci">⑤ Debt (financiar)</span><span>Doar datoria cu dobândă (credite 25 + obligațiuni 5), NU furnizori/salarii/taxe. <b>= 30</b></span></div>
+              <div class="chain-row"><span class="ci">⑥ Net Debt</span><span>Debt − Cash = 30 − 20 <span class="cv">= 10</span> → datoria reală, după ce scazi banii din cont</span></div>
+              <div class="chain-row"><span class="ci">⑦ EBIT</span><span>Profit operațional: Venituri 100 − costuri 84 (incl. amortizare 5) <span class="cv">= 16</span></span></div>
+              <div class="chain-row"><span class="ci">⑧ EBITDA</span><span>EBIT + Amortizare = 16 + 5 <span class="cv">= 21</span> → cash-ul brut din operațiuni</span></div>
+              <div class="chain-row"><span class="ci">⑨ Net Debt / EBITDA</span><span>10 ÷ 21 <span class="cv">≈ 0,5×</span> → i-ar lua o jumătate de an de profit să-și achite datoria = excelent</span></div>
+              <div class="chain-row"><span class="ci">⑩ Profit net</span><span>EBIT − dobânzi 3 − taxe 3 = 16 − 6 <span class="cv">= 10</span> → ce rămâne efectiv</span></div>
+              <div class="chain-row"><span class="ci">⑪ Marjă de profit</span><span>Profit ÷ Venituri = 10 ÷ 100 <span class="cv">= 10%</span> → din 100 încasați rămân 10</span></div>
+              <div class="chain-row"><span class="ci">⑫ ROE</span><span>Profit ÷ Equity = 10 ÷ 50 <span class="cv">= 20%</span> → fiecare euro al acționarilor produce 0,20 profit/an</span></div>
+              <div class="chain-row"><span class="ci">⑬ Debt / Equity</span><span>Debt ÷ Equity = 30 ÷ 50 <span class="cv">= 0,6</span> → sub 1 = sănătos</span></div>
+              <div class="chain-row"><span class="ci">⑭ P/E</span><span>Capitalizare 150 ÷ Profit 10 <span class="cv">= 15</span> → plătești 15 ani de profit actual</span></div>
+              <div class="chain-row"><span class="ci">⑮ P/B</span><span>Capitalizare 150 ÷ Equity 50 <span class="cv">= 3,0</span> → plătești de 3× valoarea contabilă</span></div>
+              <div class="chain-row"><span class="ci">⑯ Free Cash Flow</span><span>Cash din operațiuni 15 − capex 5 <span class="cv">= 10</span> → profitul se transformă în bani reali (FCF ≈ profit = semn bun)</span></div>
+            </div>
+            <p class="when" style="margin-top:14px"><b>Ce reții:</b> dintr-un bilanț (Active / Obligații / Equity) și un cont de profit (Venituri → EBIT → EBITDA → Profit) iese aproape orice indicator. Nu trebuie să le ții minte pe toate — trebuie să înțelegi din ce parte vin: <b>valoarea</b> (P/E, P/B) compară prețul cu firma, <b>calitatea</b> (marjă, ROE, FCF) arată cât de bună e afacerea, <b>riscul</b> (Net Debt/EBITDA, Equity Ratio, D/E) arată cât de fragilă e.</p>
+          </div>
+
+          <div class="gsec">Mod de lucru — analizezi o firmă în 3 minute</div>
+          <div class="mini">
+            <h3>Ordinea în care mă uit eu la o companie</h3>
+            <p class="muted">Nu te uiți la toți indicatorii deodată. Mergi de la „e periculoasă?" spre „e o afacere bună?" și abia la final „e ieftină?". Primii pași elimină rapid majoritatea firmelor slabe.</p>
+            <div class="wf">
+              <div class="wf-step"><span class="wk">Riscul datoriei</span><b>Net Debt / EBITDA.</b> Dacă e peste 4×, firma e îngropată în datorii — de obicei o sar din start, oricât de tentantă pare. Sub 3× = pot continua.</div>
+              <div class="wf-step"><span class="wk">Profitabilitatea</span><b>Marja de profit.</b> Văd dacă afacerea chiar face bani din ce vinde. Marjă mică și în scădere = semnal de slăbiciune.</div>
+              <div class="wf-step"><span class="wk">Banii reali</span><b>Free Cash Flow.</b> Profitul de pe hârtie se transformă în cash? FCF pozitiv și apropiat de profit = sănătos. FCF negativ cu profit „pe hârtie" = steag roșu.</div>
+              <div class="wf-step"><span class="wk">Eficiența capitalului</span><b>ROE.</b> Cât de bine folosește conducerea banii acționarilor. Peste 15% constant = management bun.</div>
+              <div class="wf-step"><span class="wk">Soliditatea bilanțului</span><b>Equity Ratio.</b> Cât din firmă e a acționarilor, nu a băncii. Peste 50% = rezistentă la crize.</div>
+            </div>
+            <p class="when" style="margin-top:14px"><b>Dacă reții doar 3 indicatori din toată discuția:</b> <b class="v-good">Net Debt/EBITDA</b> (riscul datoriei) + <b class="v-good">Free Cash Flow</b> (banii reali) + <b class="v-good">Marja de profit</b> (calitatea afacerii). Cu aceste trei elimini foarte rapid multe firme slabe și le scoți la suprafață pe cele care merită analizate în detaliu.</p>
+
+            <p class="muted" style="margin-top:16px;font-weight:700;color:var(--text)">Cum arată metoda pe firme reale:</p>
+            <div class="real-row">
+              <div class="real"><b>Apple (AAPL)</b>Marjă ~25%, FCF uriaș și constant, ROE foarte mare, datorie mică față de cash. Trece toți pașii → rămâne pe listă, întrebarea devine doar „la ce preț (P/E)?".</div>
+              <div class="real"><b>Coca-Cola (KO)</b>Marjă mare, FCF stabil, brand puternic (moat), datorie moderată. Firmă „de calitate, plictisitoare" — exact ce vrei pe termen lung pentru stabilitate + dividend.</div>
+              <div class="real"><b>O utilitate (ex. Engie)</b>Net Debt/EBITDA mare e <em>normal</em> aici (infrastructură finanțată pe datorie). Aplici reperele specifice sectorului, nu le judeci ca pe o firmă tech.</div>
+              <div class="real"><b>O firmă care „arde" cash</b>Profit pe hârtie dar FCF negativ ani la rând și datorie crescândă → pasul 1 și 3 o elimină în 30 de secunde, fără să mai treci la P/E.</div>
+            </div>
+            <p class="muted" style="font-size:12px;margin-top:10px">Notă: cifrele și profilurile sunt orientative, ca exemplu de raționament — verifică mereu datele actuale ale firmei în „Analiză companie".</p>
+          </div>
+
+          <div class="gsec">Concepte & termeni de piață</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Dobânda compusă · <em>Compounding</em> — cea mai importantă<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Câștigul se reinvestește și produce, la rândul lui, câștig. În timp, efectul devine exploziv — „bulgărele de zăpadă".</p>
+              <div class="formula"><strong>Exemplu:</strong> <span class="eg">10.000 la 8%/an → ~21.600 în 10 ani, ~46.600 în 20 ani, ~100.600 în 30 ani.</span> Aceeași rată, dar timpul face diferența uriașă.</div>
+              <p class="when"><b>De ce contează:</b> motivul nr.1 pentru care „timpul în piață" bate „sincronizarea pieței". Începe devreme, reinvestește dividendele.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Piață bull & bear · <em>Bull / Bear market</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Bull (taur):</strong> piață în creștere, optimism. <strong>Bear (urs):</strong> scădere de 20%+ față de vârf, pesimism.</p>
+              <p class="when"><b>Particularitate:</b> bear markets sunt normale și trecătoare. Cei care vând în panică „blochează" pierderea; cei care rămân investiți (sau cumpără constant) recuperează istoric și ies în plus.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Index bursier · <em>Index (S&P 500, Nasdaq, Dow)</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Un „coș" reprezentativ de acțiuni, folosit ca termometru al pieței. <strong>S&P 500</strong> = 500 mari firme SUA; <strong>Nasdaq 100</strong> = ~100 firme mari, accent pe tehnologie; <strong>Dow</strong> = 30 firme industriale.</p>
+              <p class="when"><b>De ce contează:</b> reperul față de care îți măsori rezultatele. Dacă portofoliul tău nu bate constant S&P 500, un simplu ETF pe index e adesea alegerea mai bună.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Randament total · <em>Total Return</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Câștigul real = creșterea prețului <strong>+ dividendele</strong> (ideal reinvestite). Mulți se uită doar la preț și subestimează rolul dividendelor.</p>
+              <div class="formula"><strong>Exemplu:</strong> preț +4% într-un an + dividend 3% → <span class="eg">randament total ~7%</span>.</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Moat — avantaj competitiv · <em>Economic Moat</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>„Șanțul de apărare" al unei firme: ceva ce o face greu de detronat — brand puternic, costuri mici, efect de rețea, patente, costuri de schimbare mari.</p>
+              <div class="formula"><strong>Exemple:</strong> <span class="eg">Apple (brand+ecosistem), Visa (rețea), Microsoft (costuri de schimbare).</span></div>
+              <p class="when"><b>De ce contează:</b> firmele cu moat își păstrează marjele și cresc profitabil ani la rând — exact ce vrei pe termen lung.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Raportare & estimări · <em>Earnings & Guidance</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>O dată pe trimestru firma raportează rezultatele (earnings). <strong>Guidance</strong> = ce estimează conducerea pentru perioada următoare.</p>
+              <p class="when"><b>Particularitate:</b> prețul poate sări brusc (±10%) în ziua raportării, mai ales dacă rezultatele sau guidance-ul diferă de așteptări. Atenție dacă tranzacționezi exact înainte de earnings.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Data ex-dividend · <em>Ex-Dividend Date</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Ca să primești următorul dividend, trebuie să deții acțiunea <strong>înainte</strong> de data ex-dividend. Cine cumpără în ziua ex-dividend (sau după) nu îl primește.</p>
+              <p class="when"><b>Particularitate:</b> în ziua ex-dividend prețul scade de obicei cu ~valoarea dividendului — deci nu e „bani gratis" să cumperi fix înainte.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Spread cumpărare-vânzare · <em>Bid-Ask Spread</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Diferența dintre cel mai bun preț de cumpărare (bid) și cel de vânzare (ask). E un cost ascuns la fiecare tranzacție.</p>
+              <p class="when"><b>Particularitate:</b> la acțiuni lichide e neglijabil (câțiva cenți); la cele cu volum mic poate fi mare → pierzi la intrare și la ieșire. Încă un motiv să eviți acțiunile nelichide.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Vânzare în lipsă · <em>Short Selling</em> — risc mare<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Pariezi că prețul va scădea: împrumuți acțiuni, le vinzi, speri să le răscumperi mai ieftin. Câștigi dacă scade.</p>
+              <p class="when"><b>Atenție:</b> pierderea e <strong>nelimitată</strong> (prețul poate urca la infinit), spre deosebire de cumpărare unde pierzi maxim suma investită. Instrument pentru avansați.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Ordin stop-loss & limită · <em>Stop-loss / Limit order</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Stop-loss:</strong> vinde automat dacă prețul scade sub un nivel — limitează pierderea. <strong>Limit order:</strong> cumperi/vinzi doar la prețul tău sau mai bun (nu „la piață").</p>
+              <p class="when"><b>De ce contează:</b> te protejează de emoții și de mișcări bruște. Folosește limit order ca să nu plătești un preț prost pe acțiuni nelichide.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Recesiune & inflație · <em>Recession / Inflation</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Recesiune:</strong> economia se contractă — profiturile scad, bursa de obicei suferă. <strong>Inflație:</strong> banii pierd putere de cumpărare în timp.</p>
+              <p class="when"><b>De ce contează:</b> a sta doar în cash înseamnă pierdere sigură la inflație. Acțiunile bune și dividendele cresc istoric peste inflație pe termen lung — de aceea investești.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">ROIC · <em>Return on Invested Capital</em> (avansat)<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât profit produce firma din TOT capitalul folosit (acțiuni + datorii). Mai bun decât ROE pentru că nu poate fi „umflat" cu datorii.</p>
+              <div class="formula"><strong>Reper:</strong> ROIC constant peste costul capitalului (~8-10%) = firmă care creează valoare reală. ROIC mare + în creștere = semn de moat.</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">EV/EBITDA (avansat)<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Alternativă la P/E care ține cont și de datorii. <strong>EV</strong> (enterprise value) = capitalizare + datorii − cash; <strong>EBITDA</strong> = profit înainte de dobânzi, taxe, amortizare.</p>
+              <p class="when"><b>De ce contează:</b> mai corect la compararea firmelor cu nivele diferite de datorie. Reper general: sub ~10 = ieftin, peste ~15 = scump (depinde de sector).</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Acoperirea dobânzii · <em>Interest Coverage</em> (avansat)<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>De câte ori își poate plăti firma dobânzile din profitul operațional. Test de siguranță pentru datorii.</p>
+              <div class="formula"><strong>Reper:</strong> peste 3–4 = confortabil; sub 1,5 = firma abia își acoperă dobânzile → risc mare la o încetinire.</div>
+            </div></div></div>
+          </div>
+
+          <div class="gsec">Tipuri de instrumente — ce poți cumpăra (referință)</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Acțiune · <em>Stock / Share</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>O parte din proprietatea unei firme. Cel mai mare potențial de creștere, dar și cel mai mare risc individual: dacă firma dă faliment, poți pierde tot ce ai pus.</p>
+              <div class="formula"><strong>Exemplu:</strong> cumperi 10 acțiuni Microsoft la 400 = 4.000 investiți. Dacă urcă la 500, valorezi 5.000 (+25%).</div>
+              <p class="when"><b>Când contează:</b> când vrei creștere și ești dispus să accepți volatilitate. <b>Particularitate:</b> o singură acțiune individuală e riscantă — câștigi din alegerea corectă, dar poți și pierde mult.</p>
+              <div class="reper"><b>Potențial: mare</b><b>Risc: mare</b><b>Orizont: 5+ ani</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Dividend & randament · <em>Dividend & Yield</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Dividendul</strong> = bani împărțiți acționarilor din profit (tipic trimestrial). <strong>Yield-ul</strong> = cât reprezintă pe an față de preț.</p>
+              <div class="formula"><strong>Formulă:</strong> Yield = dividend anual ÷ preț × 100. <br><strong>Exemplu:</strong> <span class="eg">preț 100, dividend 4/an → yield 4% → ~400/an la 10.000</span>, peste mișcarea prețului.</div>
+              <p class="when"><b>Când contează:</b> pentru venit pasiv și firme mature stabile. <b>Când nu:</b> la firme tinere de creștere (Tesla, Nvidia ani la rând) care reinvestesc tot și nu dau dividende — și e ok. <b>Particularitate:</b> un yield uriaș poate însemna că prețul a căzut, nu că firma e generoasă.</p>
+              <div class="reper"><b>2–5% = sănătos</b><b>5–8% = generos (verifică)</b><b>&gt;9% = suspect</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">REIT — imobiliare la bursă · <em>Real Estate Investment Trust</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Firmă care deține imobile (birouri, depozite, mall-uri, locuințe) și e obligată prin lege să împartă majoritatea profitului ca dividende. Mod simplu de a „avea chirii" fără să cumperi un apartament.</p>
+              <div class="formula"><strong>Exemplu:</strong> Realty Income (O) plătește dividend lunar, yield ~5%. Vonovia (VNA.DE) = locuințe în Germania.</div>
+              <p class="when"><b>Când contează:</b> pentru venit constant. <b>Particularitate:</b> sensibile la dobânzi — când dobânzile cresc, REIT-urile scad des. La REIT-uri folosește <em>P/FFO</em>, nu P/E clasic (profitul contabil e distorsionat de amortizare).</p>
+              <div class="reper"><b>Yield mare</b><b>Sensibil la dobânzi</b><b>Venit pasiv</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">ETF — coșul diversificat · <em>Exchange-Traded Fund</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Un singur instrument care conține zeci/sute de firme deodată. Cumperi o bucată din tot coșul → <strong>diversificare instant</strong>.</p>
+              <div class="formula"><strong>Exemplu:</strong> <span class="eg">SPY = cele mai mari 500 firme din SUA</span> într-o singură acțiune. Dacă una dă faliment, abia o simți.</div>
+              <p class="when"><b>Când contează:</b> aproape mereu pentru începători — baza unui portofoliu. <b>Particularitate:</b> verifică comisionul anual (TER); sub 0,3% e bine. Nu te face bogat rapid, dar rar te ruinează.</p>
+              <div class="reper"><b>Risc redus</b><b>Comision mic</b><b>Ideal de start</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Obligațiune · <em>Bond</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Un împrumut pe care îl dai unei firme sau unui stat, în schimbul unei dobânzi fixe. Mai sigur decât acțiunile, dar și câștig mai mic.</p>
+              <p class="when"><b>Când contează:</b> pentru stabilitate și protejarea capitalului, mai ales aproape de pensie. <b>Particularitate:</b> prețul obligațiunilor scade când dobânzile cresc.</p>
+              <div class="reper"><b>Risc: mic</b><b>Randament: mic-mediu</b><b>Rol: stabilizator</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Tipuri de acțiuni · <em>Blue-chip / Growth / Value</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Nu toate acțiunile sunt la fel. Trei mari categorii:</p>
+              <div class="formula"><strong>Blue-chip:</strong> firme uriașe, stabile, cunoscute (Apple, J&J) — creștere mai lentă, risc mai mic. <br><strong>Growth (creștere):</strong> cresc repede, reinvestesc tot, rar dau dividend, dar volatile (Nvidia, Tesla). <br><strong>Value (valoare):</strong> firme solide, „ieftine" față de fundamente, des cu dividend (bănci, energie).</div>
+              <p class="when"><b>Cum alegi:</b> tineri/agresivi → mai mult growth; aproape de pensie → mai mult blue-chip & value. Un mix echilibrează risc și randament.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Fond mutual / index · <em>Mutual / Index Fund</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Ca un ETF (coș de firme), dar cumpărat de obicei direct de la administrator, nu la bursă în timp real. „Index fund" = urmărește pasiv un indice (ex: S&P 500).</p>
+              <p class="when"><b>ETF vs fond:</b> ETF-ul se tranzacționează ca o acțiune (oricând, preț live) și are de obicei comisioane mai mici. <b>Particularitate:</b> fondurile <em>active</em> (cu „manager") au comisioane mari și rar bat indicele pe termen lung — de aceea index fund/ETF sunt preferate.</p>
+              <div class="reper"><b>Pasiv = ieftin</b><b>Activ = scump</b><b>Diversificare</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">ADR — companii străine la bursa SUA · <em>American Depositary Receipt</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>O modalitate de a cumpăra firme din afara SUA (ex: din Europa, Asia) direct pe bursele americane, în dolari, fără cont la o bursă străină.</p>
+              <div class="formula"><strong>Exemplu:</strong> <span class="eg">ASML, TSMC, Toyota</span> au ADR-uri pe bursele din SUA.</div>
+              <p class="when"><b>Particularitate:</b> ești expus și la cursul valutar (EUR/USD etc.) și uneori la un mic comision de custodie. Util pentru diversificare geografică.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Acțiuni preferențiale · <em>Preferred Stock</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Un hibrid între acțiune și obligațiune: plătesc un dividend fix, mai mare și mai sigur decât acțiunile obișnuite, dar fără drept de vot și cu potențial de creștere limitat.</p>
+              <p class="when"><b>Când contează:</b> pentru venit stabil. <b>Particularitate:</b> sensibile la dobânzi (ca obligațiunile); câștigi mai mult din dividend decât din creșterea prețului.</p>
+              <div class="reper"><b>Dividend fix</b><b>Risc mediu</b><b>Creștere limitată</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Opțiuni · <em>Options</em> — avansat, risc mare<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Contracte care îți dau dreptul (nu obligația) de a cumpăra/vinde o acțiune la un preț fix, până la o dată. Folosesc efect de levier — câștiguri sau pierderi amplificate.</p>
+              <p class="when"><b>Atenție:</b> instrument <strong>avansat</strong>. Mulți începători pierd rapid bani cu opțiuni. Poți pierde 100% din suma plătită foarte repede. Nu te apuca de ele până nu stăpânești bine acțiunile.</p>
+              <div class="reper"><b>Levier mare</b><b>Risc foarte mare</b><b>Doar avansați</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Mărfuri & aur · <em>Commodities</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Aur, petrol, gaze, metale, cereale — de obicei cumpărate prin ETF-uri specializate, nu fizic. Nu produc profit sau dividend; prețul depinde de cerere/ofertă.</p>
+              <p class="when"><b>Când contează:</b> aurul e văzut ca „adăpost" în crize și împotriva inflației. <b>Particularitate:</b> pe termen foarte lung, acțiunile au bătut de regulă aurul; mărfurile au mai mult rol de diversificare/asigurare.</p>
+              <div class="reper"><b>Fără dividend</b><b>Hedge la inflație</b><b>Volatil</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Criptomonede · <em>Crypto</em> — foarte speculativ<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Active digitale (Bitcoin, Ethereum etc.). Nu au fluxuri de numerar sau fundamente clasice; prețul e pur cerere/ofertă și sentiment.</p>
+              <p class="when"><b>Atenție:</b> extrem de volatile (±50% nu e neobișnuit). Dacă te bagi, doar cu o sumă mică pe care îți permiți să o pierzi total. Nu e o bază de portofoliu, ci eventual un mic „pariu" de margine.</p>
+              <div class="reper"><b>Volatilitate extremă</b><b>Fără fundamente</b><b>Sumă mică</b></div>
+            </div></div></div>
+          </div>
+        </div>
+
+        <!-- ===== CHARTS ===== -->
+        <div class="gpane" id="gp-charts">
+          <p class="muted" style="margin-top:4px">Astea sunt liniile pe care le vezi în „Analiză companie". Apasă pe fiecare ca să o desfaci — graficul se desenează animat ca să vezi exact ce înseamnă și cum se calculează.</p>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">📈 Media mobilă — liniile albastră (MA50) și galbenă (MA200)<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Prețul zilnic (verde) sare mult. <strong>Media mobilă</strong> îl netezește ca să vezi direcția reală. MA50 = trend pe termen scurt, MA200 = trend pe termen lung.</p>
+              <div class="legend"><span><i style="background:#5ef0c0"></i>Preț</span><span><i style="background:#7fa8ff"></i>MA50</span><span><i style="background:#ffd166"></i>MA200</span></div>
+              <canvas class="chart demo" data-demo="ma" height="220"></canvas>
+              <div class="formula"><strong>Cum se calculează:</strong> MA50 = media prețurilor din ultimele 50 de zile. În fiecare zi nouă fereastra „alunecă": scoți cea mai veche zi, adaugi cea nouă. <br><strong>Cum o citești:</strong> preț peste ambele medii = trend <span class="v-good">ascendent</span>. Când MA50 taie MA200 în sus = „golden cross" (semn bun); în jos = „death cross" (semn slab).</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">🔁 RSI — linia mov (supra-cumpărat / supra-vândut)<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>RSI măsoară dacă prețul a urcat sau coborât „prea repede" recent. Oscilează între 0 și 100.</p>
+              <div class="legend"><span><i style="background:#c8a6ff"></i>RSI(14)</span><span style="color:#ff9aae">zona 70+ = supra-cumpărat</span><span style="color:#7df3c0">zona 30− = supra-vândut</span></div>
+              <canvas class="chart demo" data-demo="rsi" height="220"></canvas>
+              <div class="formula"><strong>Cum se calculează:</strong> RSI = 100 − 100 ÷ (1 + RS), unde RS = media câștigurilor ÷ media pierderilor pe 14 zile. Dacă prețul a tot crescut fără pauză, media câștigurilor e mare → RSI urcă spre 100. <br><strong>Cum îl citești:</strong> peste <span class="v-bad">70</span> = posibil prea scump pe moment (risc de corecție); sub <span class="v-good">30</span> = posibil ieftin (dar poate fi și „cuțit care cade").</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">📊 Volum — barele verzi și roșii<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Câte acțiuni s-au tranzacționat în fiecare zi. Nu se „calculează", se numără.</p>
+              <div class="legend"><span><i style="background:#5ef0c0"></i>zi în creștere</span><span><i style="background:#ff7d97"></i>zi în scădere</span></div>
+              <canvas class="chart demo" data-demo="vol" height="200"></canvas>
+              <div class="formula"><strong>Cum îl citești:</strong> volum mare la o urcare = interes real, mișcarea e „confirmată" de mulți cumpărători. Volum mic constant = lichiditate slabă → mai greu de vândut și risc mai mare. Bara verde = ziua s-a închis în creștere, roșie = în scădere.</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">📍 Poziția în intervalul de 52 săptămâni<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Unde se află prețul de azi între minimul și maximul ultimului an.</p>
+              <div class="rangedemo">
+                <div class="track"><div class="fill"></div><div class="marker"></div></div>
+                <div class="ends"><span>Min 52s</span><span class="rd-val">—</span><span>Max 52s</span></div>
+              </div>
+              <div class="formula"><strong>Cum se calculează:</strong> poziție = (preț − minim52) ÷ (maxim52 − minim52) × 100. <br><strong>Cum o citești:</strong> 0% = exact la minimul anului (ieftin relativ, dar verifică de ce a căzut); 100% = la maxim (în forță, dar potențial scump).</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">〰️ Benzile Bollinger — banda de volatilitate<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Două „benzi" desenate deasupra și sub o medie de 20 de zile. Se lărgesc când prețul e agitat și se strâng când e liniște. Statistic, prețul stă ~95% din timp <strong>între</strong> benzi.</p>
+              <div class="legend"><span><i style="background:#0d9488"></i>Preț</span><span><i style="background:#3b5bdb"></i>Bandă sus/jos</span><span><i style="background:#94a3b8"></i>Media 20</span></div>
+              <canvas class="chart demo" data-demo="boll" height="200"></canvas>
+              <div class="formula"><strong>Cum se calculează:</strong> banda de sus/jos = media pe 20 de zile ± 2 abateri standard (cât de mult „sare" prețul). <br><strong>Cum le citești:</strong> atinge banda de <span class="v-bad">sus</span> = mișcare puternică/posibil scump pe termen scurt; atinge banda de <span class="v-good">jos</span> = posibil ieftin. <strong>Benzi foarte înguste</strong> („squeeze") = calm înainte de furtună — des urmează un breakout puternic într-o direcție.</div>
+              <p class="when"><b>De ce contează:</b> îți arată dacă o mișcare e „normală" sau extremă față de comportamentul recent al acțiunii — util ca să nu cumperi în plin vârf de entuziasm.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">📊 MACD — impuls și schimbări de trend<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Arată dacă impulsul prețului se întărește sau slăbește. Are 3 elemente: linia MACD, linia de semnal și histograma (barele).</p>
+              <div class="legend"><span><i style="background:#0d9488"></i>MACD</span><span><i style="background:#d97706"></i>Semnal</span><span><i style="background:#0d9488"></i>Histogramă</span></div>
+              <canvas class="chart demo" data-demo="macd" height="200"></canvas>
+              <div class="formula"><strong>Cum se calculează:</strong> MACD = media exponențială pe 12 zile − cea pe 26 zile; linia de semnal = media pe 9 zile a MACD; histograma = MACD − semnal. <br><strong>Cum îl citești:</strong> când MACD taie semnalul în <span class="v-good">sus</span> = impuls pozitiv (posibil cumpărare); în <span class="v-bad">jos</span> = impuls negativ. Histograma peste 0 și crescătoare = trend care prinde putere; histograma care se micșorează = impuls care se stinge.</div>
+              <p class="when"><b>Particularitate:</b> e foarte sensibil — dă multe semnale, unele false. Cel mai bine îl folosești în direcția trendului principal (vezi „Preț & medii"), nu izolat.</p>
+              <div class="formula" style="border-left-color:var(--accent)"><strong>De ce „linia de semnal" (EMA 9)?</strong> „EMA" = <em>media mobilă exponențială</em> — ca o medie obișnuită, dar dă mai multă greutate zilelor recente (reacționează mai repede). Linia de semnal e <strong>EMA pe 9 zile a liniei MACD</strong> — adică o versiune și mai netezită a MACD. Se numește „semnal" pentru că <strong>momentul în care MACD o taie = momentul de semnal</strong> (de cumpărare, când taie în sus; de vânzare, când taie în jos). <br><strong>Da, exact asta vezi pe graficele clasice</strong> (TradingView, platforma brokerului etc.): aceeași linie MACD + linie de semnal + histogramă, cu aceiași parametri standard (12, 26, 9).</div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">📈 Randament cumulat — „cât aș fi câștigat"<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Linia arată cât ai fi câștigat sau pierdut, în procente, dacă investeai la începutul perioadei și țineai până azi.</p>
+              <div class="legend"><span><i style="background:#0d9488"></i>Randament cumulat %</span><span style="color:#64748b">linia 0% = punctul de pornire</span></div>
+              <canvas class="chart demo" data-demo="ret" height="200"></canvas>
+              <div class="formula"><strong>Cum se calculează:</strong> prețul e „rebazat" la 0% în prima zi; fiecare punct = (preț ÷ preț inițial − 1) × 100. <br><strong>Cum îl citești:</strong> peste 0% = profit, sub 0% = pierdere pe perioada respectivă.</div>
+              <p class="when"><b>Cum îl folosești cel mai bine:</b> ca să compari rapid o acțiune cu un indice (ex: S&P 500). Dacă acțiunea a făcut +30% dar indicele +50%, ai fi câștigat mai mult cu un simplu ETF — semn că „efortul" de a alege acțiuni individuale nu a meritat acolo.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">📉 Drawdown — cât „doare" la scădere<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât de mult a scăzut prețul față de cel mai mare nivel atins până atunci. Măsoară riscul emoțional real: cât ai fi „suferit" ținând acțiunea.</p>
+              <div class="legend"><span><i style="background:#e5484d"></i>Scădere de la maxim %</span></div>
+              <canvas class="chart demo" data-demo="dd" height="200"></canvas>
+              <div class="formula"><strong>Cum se calculează:</strong> drawdown = (preț ÷ maximul atins până atunci − 1) × 100 (mereu ≤ 0). <br><strong>Cum îl citești:</strong> un drawdown maxim de −40% înseamnă că la un moment dat ai fi fost pe minus 40% față de vârf.</div>
+              <p class="when"><b>Testul „pot dormi liniștit?":</b> dacă un drawdown de −40% te-ar face să vinzi în panică, alege acțiuni/ETF-uri mai puțin volatile. E mai important să reziști în piață decât să prinzi maximul de randament.</p>
+            </div></div></div>
+          </div>
+        </div>
+
+        <!-- ===== SCORE ===== -->
+        <div class="gpane" id="gp-score">
+          <p class="muted" style="margin-top:4px">Scorul final (0–100) e o medie ponderată a 6 dimensiuni, din care se scade penalizarea de risc. Iată cum arată pentru o companie sănătoasă (barele se umplu animat):</p>
+          <div class="bars demo-bars" style="margin-top:14px">
+            <div class="bar"><label>Calitate</label><div class="track"><div class="fill" data-v="78"></div></div><strong>78</strong></div>
+            <div class="bar"><label>Evaluare</label><div class="track"><div class="fill" data-v="55"></div></div><strong>55</strong></div>
+            <div class="bar"><label>Creștere</label><div class="track"><div class="fill" data-v="64"></div></div><strong>64</strong></div>
+            <div class="bar"><label>Sănătate</label><div class="track"><div class="fill" data-v="80"></div></div><strong>80</strong></div>
+            <div class="bar"><label>Momentum</label><div class="track"><div class="fill" data-v="72"></div></div><strong>72</strong></div>
+            <div class="bar"><label>Dividend</label><div class="track"><div class="fill" data-v="60"></div></div><strong>60</strong></div>
+            <div class="bar"><label>Penalizare risc</label><div class="track"><div class="fill risk" data-v="8"></div></div><strong>8</strong></div>
+          </div>
+          <h3 style="margin-top:22px">Ce hrănește fiecare dimensiune — apasă</h3>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Calitate & Sănătate<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Calitate</strong> vine din marja de profit și ROE (cât profit scoate firma din venituri și din banii acționarilor) — date din rapoartele oficiale SEC. <strong>Sănătate</strong> vine din raportul datorii/equity: datorii mici față de capital = firmă rezistentă.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Creștere & Momentum<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Creștere</strong> = cât cresc veniturile de la o perioadă la alta. <strong>Momentum</strong> = poziția prețului față de MA50/MA200, poziția în intervalul de 52s și variația pe ultimele ~90 zile. Trend pozitiv → momentum mare.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Dividend & Penalizare de risc<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Dividend</strong> = yield-ul real calculat din plățile ultimelor 12 luni. <strong>Penalizarea de risc</strong> crește dacă: volum prea mic, RSI extrem (peste 75 / sub 30), profit negativ în ultimul raport. Aceasta se <em>scade</em> din scor.</p>
+              <div class="formula">Scor final = (calitate, evaluare, creștere, sănătate, momentum, dividend — ponderate) − penalizare risc.</div>
+            </div></div></div>
+          </div>
+          <h3 style="margin-top:22px">Cum devine scorul un verdict</h3>
+          <div class="verdict-scale">
+            <div class="vs-row"><span class="score s-good">72+</span><span>+ date suficiente, fără red flags grave → <span class="v-good">Merită analizat serios</span></span></div>
+            <div class="vs-row"><span class="score s-good">60–71</span><span><span class="v-good">Interesant, cu rezerve</span> — peste medie, verifică prețul de intrare</span></div>
+            <div class="vs-row"><span class="score s-mid">48–59</span><span><span class="v-mid">Neutru</span> — nimic ieșit din comun, mai bine aștepți</span></div>
+            <div class="vs-row"><span class="score s-bad">&lt;48</span><span><span class="v-bad">De evitat acum</span> — scor slab sau prea multe red flags</span></div>
+          </div>
+        </div>
+
+        <!-- ===== STEPS ===== -->
+        <div class="gpane" id="gp-steps">
+          <div class="steps" style="margin-top:6px">
+            <div class="step"><div class="n">1</div><div><strong>Pune-ți banii la punct întâi</strong><p class="muted">Scapă de datorii scumpe și strânge un fond de urgență (3–6 luni de cheltuieli). Investești doar bani pe care îi poți lăsa 5+ ani.</p></div></div>
+            <div class="step"><div class="n">2</div><div><strong>Stabilește obiectivul și orizontul</strong><p class="muted">Creștere pe termen lung, venit din dividende, sau ambele? Asta îți alege „metoda" din pagina Idei.</p></div></div>
+            <div class="step"><div class="n">3</div><div><strong>Deschide cont la un broker reglementat</strong><p class="muted">Compară comisioane și piețe. Verifică să fie protejat de o schemă de garantare a investitorilor (ex: în UE).</p></div></div>
+            <div class="step"><div class="n">4</div><div><strong>Începe cu diversificare (ETF)</strong><p class="muted">Un ETF larg (S&P 500 / piață globală) e cea mai sigură bază. Acțiuni individuale doar după ce înțelegi ce faci.</p></div></div>
+            <div class="step"><div class="n">5</div><div><strong>Investește constant (DCA)</strong><p class="muted">Sumă fixă lunar, indiferent de preț. Constanța bate „ghicitul" momentului perfect.</p></div></div>
+            <div class="step"><div class="n">6</div><div><strong>Analizează înainte de fiecare cumpărare</strong><p class="muted">În „Analiză companie": scor, verdict, fundamente, trend, dividend, red flags. Înțelege firma, nu cumpăra pe „a crescut".</p></div></div>
+            <div class="step"><div class="n">7</div><div><strong>Ai răbdare și reevaluează rar</strong><p class="muted">Nu vinde în panică. Verifică portofoliul de câteva ori pe an și rebalansează dacă un sector a devenit prea mare.</p></div></div>
+          </div>
+          <div class="grid two" style="margin-top:18px">
+            <div class="mini">
+              <h3>Greșeli de evitat</h3>
+              <div class="flags" style="margin-top:8px">
+                <span class="flag">Tot capitalul într-o firmă</span>
+                <span class="flag">Cumpărare pe hype/FOMO</span>
+                <span class="flag">Vânzare în panică</span>
+                <span class="flag">Bani de care ai nevoie curând</span>
+                <span class="flag">Yield uriaș neverificat</span>
+                <span class="flag">Tranzacționare prea deasă</span>
+              </div>
+            </div>
+            <div class="mini warn">
+              <h3>Important</h3>
+              <p class="muted">Material educativ, nu sfat financiar personalizat. Bursa implică risc real de pierdere. Informează-te din mai multe surse și, pentru sume importante, ia în calcul un consultant autorizat.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== STRATEGY ===== -->
+        <div class="gpane" id="gp-strategy">
+          <h3>Puterea dobânzii compuse</h3>
+          <p class="muted small" style="margin:6px 0 10px">De ce „timpul în piață" bate orice. Exemplu: pui <strong>1.000/an</strong> timp de 30 de ani (30.000 din buzunar) la o medie de <strong>8%/an</strong>.</p>
+          <div class="legend"><span><i style="background:#94a3b8"></i>Cât ai pus tu</span><span><i style="background:#0d9488"></i>Cât ai avea (cu dobândă compusă)</span></div>
+          <canvas id="demoCompound" class="chart demo" height="240"></canvas>
+          <div class="cap" id="compoundCap">Diferența uriașă dintre cele două linii = banii făcuți de bani. Cu cât începi mai devreme, cu atât e mai mare.</div>
+
+          <div class="gsec">Strategii de inv1estiție</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Investiția în indici (ETF) — cea mai simplă<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cumperi un ETF pe un indice larg (ex: S&P 500) și deții automat sute de firme. Nu „alegi câștigători", ci pariezi pe creșterea economiei în ansamblu.</p>
+              <p class="when"><b>Pentru cine:</b> 90% dintre investitori, mai ales începători. Istoric, majoritatea fondurilor active nu bat indicele pe termen lung. <b>Avantaj:</b> simplu, ieftin, diversificat.</p>
+              <div class="reper"><b>Efort: minim</b><b>Risc: mediu</b><b>Recomandat la start</b></div>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Buy & Hold — cumpără și ține<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cumperi firme/ETF-uri bune și le ții ani de zile, ignorând zgomotul zilnic. Lași dobânda compusă să lucreze.</p>
+              <p class="when"><b>De ce merge:</b> evită comisioanele și greșelile de „timing". Cei mai buni investitori (ex: Buffett) sunt în esență buy & hold. <b>Cheia:</b> răbdarea.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Cost mediu (DCA) · <em>Dollar-Cost Averaging</em><span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Investești o sumă fixă în mod regulat (ex: lunar), indiferent de preț. Uneori cumperi scump, alteori ieftin — în medie ieși bine, fără stresul „momentului perfect".</p>
+              <div class="formula"><strong>Exemplu:</strong> <span class="eg">300/lună în același ETF.</span> Când prețul scade, aceiași 300 cumpără mai multe unități → cost mediu mai bun.</div>
+              <p class="when"><b>De ce merge:</b> îți scoate emoția din ecuație și transformă scăderile în oportunități automate.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Investiția pe dividende — venit pasiv<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Construiești un portofoliu de firme care plătesc dividende constante și crescătoare. Reinvestești dividendele cât ești tânăr; le încasezi ca venit mai târziu.</p>
+              <p class="when"><b>Caută:</b> „dividend aristocrats" (firme care au crescut dividendul 25+ ani la rând). <b>Atenție:</b> yield uriaș + payout peste 100% = capcană.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Value vs Growth — două școli<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Value:</strong> cumperi firme bune subevaluate (P/E mic), aștepți să-și revină prețul. <strong>Growth:</strong> cumperi firme care cresc rapid, plătind un preț mai mare azi pentru profituri mult mai mari mâine.</p>
+              <p class="when"><b>Particularitate:</b> ambele funcționează în cicluri diferite. Un mix te protejează când unul e la modă și celălalt nu.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Alocarea pe vârstă & rebalansare<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cât pui în acțiuni (risc) vs obligațiuni/cash (siguranță), în funcție de vârstă și orizont.</p>
+              <div class="formula"><strong>Regulă orientativă:</strong> <span class="eg">% în acțiuni ≈ 110 − vârsta.</span> La 30 ani → ~80% acțiuni; la 60 ani → ~50%.</div>
+              <p class="when"><b>Rebalansare:</b> o dată pe an readuci proporțiile la țintă (vinzi ce a crescut prea mult, cumperi ce a rămas în urmă) — vinzi scump, cumperi ieftin, automat.</p>
+            </div></div></div>
+          </div>
+
+          <div class="gsec">Psihologia investitorului — capcanele minții</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">FOMO — frica de a rata<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Cumperi ceva doar pentru că „a crescut mult" și toți vorbesc despre el. De obicei cumperi fix la vârf, înainte de corecție.</p>
+              <p class="when"><b>Antidot:</b> dacă nu înțelegi de ce o cumperi, nu o cumpăra. Hype-ul nu e analiză.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Vânzarea în panică<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>La o scădere bruscă, frica te face să vinzi în pierdere — exact la fund. Apoi piața își revine fără tine.</p>
+              <p class="when"><b>Antidot:</b> scăderile sunt normale. Dacă firma e încă bună, o scădere e reducere, nu dezastru. Plan dinainte, nu decizii la cald.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Aversiunea la pierdere & „ancorarea"<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p><strong>Aversiunea la pierdere:</strong> durerea unei pierderi e ~2× mai mare decât plăcerea unui câștig egal → ții acțiunile proaste sperând „să revină". <strong>Ancorarea:</strong> te fixezi pe prețul la care ai cumpărat, deși nu mai contează.</p>
+              <p class="when"><b>Antidot:</b> evaluează fiecare acțiune ca și cum ai cumpăra-o azi: „aș mai cumpăra-o acum?". Dacă nu, de ce o ții?</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Efectul de turmă<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Faci ce face mulțimea: cumperi în euforie, vinzi în panică. Mulțimea are aproape mereu dreptate la mijloc și greșește la extreme.</p>
+              <p class="when"><b>Antidot:</b> „Fii fricos când alții sunt lacomi și lacom când alții sunt fricoși" (Buffett).</p>
+            </div></div></div>
+          </div>
+
+          <div class="gsec">Costuri & taxe (nu le ignora)</div>
+          <div class="acc-list">
+            <div class="acc"><button class="acc-head">Comisioane & spread<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>Brokerul percepe comisioane la tranzacții, iar ETF-urile au un cost anual (TER). În plus, spread-ul (diferența bid-ask) e un cost ascuns la fiecare intrare/ieșire.</p>
+              <p class="when"><b>Reper:</b> alege broker cu comisioane mici și ETF-uri cu TER sub 0,3%. Tranzacționarea deasă mănâncă randamentul prin comisioane.</p>
+            </div></div></div>
+            <div class="acc"><button class="acc-head">Impozite (orientativ, România)<span class="chev">⌄</span></button><div class="acc-body"><div class="acc-inner">
+              <p>În general plătești impozit pe <strong>câștigul</strong> realizat (când vinzi în profit) și pe <strong>dividende</strong>. Cota și regulile depind de țară și de broker (unii rețin automat).</p>
+              <p class="when"><b>Important:</b> regulile se schimbă — verifică legislația curentă sau un contabil. Un broker cu sediu în UE poate simplifica raportarea. Câștigul „pe hârtie" (nerealizat) nu se impozitează până nu vinzi.</p>
+            </div></div></div>
+          </div>
+        </div>
+
+        <!-- ===== ⑥ STRATEGIILE ALGORITMULUI ===== -->
+        <div class="gpane" id="gp-algo">
+          <div class="algo-intro">
+            <p><b>Ideea de bază:</b> algoritmul <b>nu</b> caută doar acțiuni ieftine și <b>nu</b> cumpără pentru că prețul a scăzut. Întâi verifică dacă <b>business-ul este sănătos fundamental</b>, apoi clasifică firma după <b>tipul de oportunitate</b> tehnică sau fundamentală. Întrebarea nu e „e de cumpărat?", ci „<b>ce fel de setup avem aici?</b>".</p>
+            <div class="algo-formula">Companie sănătoasă fundamental <b>+</b> setup tehnic valid <b>+</b> momentum în îmbunătățire <b>+</b> valuation acceptabilă <b>+</b> risc controlat <b>=</b> oportunitate de analizat</div>
+            <p style="margin-bottom:0"><b>Rolul fiecărui indicator</b> — niciunul nu decide singur:</p>
+            <ul class="role-list">
+              <li><b>Fundamentele</b> — spun dacă afacerea e sănătoasă (calitate, marje, FCF, datorie).</li>
+              <li><b>MA50 & MA200</b> — arată structura mare a trendului (sus/jos, golden/death cross).</li>
+              <li><b>MACD</b> — arată dacă momentum-ul începe să se îmbunătățească (secundar, confirmă).</li>
+              <li><b>RSI</b> — arată dacă acțiunea e supra-vândută, neutră sau supra-cumpărată.</li>
+              <li><b>Volumul</b> — arată dacă mișcarea e susținută real de piață.</li>
+              <li><b>Relative Strength vs SPY</b> — se comportă mai bine sau mai slab decât piața?</li>
+              <li><b>Valuation</b> — prețul e rezonabil sau deja prea scump?</li>
+              <li><b>DataQuality</b> — datele pot fi folosite cu încredere? (OK / WARNING / BAD)</li>
+            </ul>
+          </div>
+
+          <div class="gsec">Cele 6 strategii pe scurt</div>
+          <table class="strat-tbl">
+            <thead><tr><th>Strategie</th><th>Ce caută</th><th>Intrare</th><th>Risc</th></tr></thead>
+            <tbody>
+              <tr><td><b>Healthy Pre-Golden Cross</b></td><td>Trend care începe să se repare înainte de golden cross</td><td class="ent">Devreme</td><td class="ent">Mediu-ridicat</td></tr>
+              <tr><td><b>Healthy Trend Repair</b></td><td>Companie sănătoasă + trend în reparare + confirmări</td><td class="ent">Mediu-devreme</td><td class="ent">Mediu</td></tr>
+              <tr><td><b>Quality Pullback in Uptrend</b></td><td>Companie bună în trend bun, la o corecție sănătoasă</td><td class="ent">Mediu</td><td class="ent">Mediu-mic</td></tr>
+              <tr><td><b>Quality Breakout Confirmation</b></td><td>Companie bună cu breakout confirmat</td><td class="ent">Târziu</td><td class="ent">Mai mic</td></tr>
+              <tr><td><b>Quality Earnings Acceleration</b></td><td>Business care accelerează (venit/profit/marje)</td><td class="ent">Depinde</td><td class="ent">Mediu</td></tr>
+              <tr><td><b>MACD Early Momentum</b></td><td>Momentum care începe să se întoarcă (doar confirmare)</td><td class="ent">Foarte devreme</td><td class="ent">Ridicat singur</td></tr>
+            </tbody>
+          </table>
+          <p class="muted small" style="margin:4px 0 0">„Intrarea" arată cât de timpuriu prinde strategia mișcarea: mai devreme = potențial mai mare, dar și risc mai mare să te înșeli. Mai târziu = mai sigură, dar prinzi o parte mai mică din mișcare.</p>
+
+          <div class="gsec">Cum le-aș prioritiza (sincer)</div>
+          <ol class="prio-list">
+            <li><b>Quality Pullback in Uptrend</b> — cea mai practică pentru cumpărări regulate. Companii deja bune, deja în trend bun, care au făcut o corecție sănătoasă. Poate fi strategia principală.</li>
+            <li><b>Quality Earnings Acceleration</b> — adaugă componenta de <b>business</b>: îți spune dacă firma chiar devine mai bună, nu doar dacă graficul arată bine.</li>
+            <li><b>Healthy Trend Repair</b> — foarte bună pentru oportunități de recovery: companii bune <b>înainte</b> de revenirea completă, dar cu confirmări.</li>
+            <li><b>Healthy Pre-Golden Cross</b> — variantă mai simplă și mai timpurie a Trend Repair. O păstrăm, dar nu dă BUY direct — rămâne la <b>ACCUMULATE CANDIDATE</b> până la confirmare.</li>
+            <li><b>Quality Breakout Confirmation</b> — cea mai sigură tehnic, dar intri mai târziu. Bună pentru confirmări finale.</li>
+            <li><b>MACD Early Momentum</b> — utilă doar ca <b>semnal secundar</b>. MACD confirmă, nu decide singur.</li>
+          </ol>
+
+          <div class="gsec">1 · Healthy Pre-Golden Cross — începutul reparării</div>
+          <div class="plain"><span class="pi">🌱</span><div><span class="pl-k">În cuvinte simple</span>O firmă <b>bună</b> care a trecut printr-o perioadă proastă și abia <b>începe să-și revină</b>. Vrem s-o prindem devreme, înainte ca toată lumea să observe revenirea. E ca și cum ai cumpăra bilet la o trupă care tocmai prinde aripi, înainte să devină faimoasă — <b>potențial mare, dar și șansă mai mare să fie semnal fals</b>, de aceea nu dăm „cumpără" direct.</div></div>
+          <div class="sdiag">
+            <div data-schart="pgc"></div>
+            <div class="sleg"><span style="color:#16a34a"><i class="bar"></i>Lumânări — preț (verde sus/roșu jos)</span><span style="color:#0d9488"><i></i>MA50 — urcă</span><span style="color:#94a3b8"><i></i>MA200 — se aplatizează</span></div>
+            <div class="scap">Prețul a atins fundul și începe să urce. MA50 e încă <b>sub</b> MA200, dar urcă, iar distanța dintre ele („gap") se reduce. Prindem revenirea <b>înainte</b> de golden cross (momentul când MA50 trece peste MA200).</div>
+          </div>
+          <p class="muted small" style="margin:6px 0 4px"><b>Cum verifică, pas cu pas:</b></p>
+          <ol class="algo-steps">
+            <li><b>E o firmă bună?</b> Calitate &gt;75 și date de încredere — altfel nici nu intră.</li>
+            <li><b>Suntem înainte de golden cross?</b> MA50 e încă sub MA200.</li>
+            <li><b>MA50 a început să urce?</b> Pantă pozitivă în ultimele ~20 de zile.</li>
+            <li><b>Gap-ul se reduce?</b> Distanța MA50–MA200 scade de la o lună la alta.</li>
+            <li><b>MA200 nu mai cade abrupt?</b> Se aplatizează — trendul mare nu mai înrăutățește.</li>
+            <li><b>Prețul recuperează MA50 + MACD începe să confirme?</b> Atunci verdictul urcă spre Accumulate.</li>
+          </ol>
+          <div class="vchips"><span class="vchip w">WATCH</span><span class="vchip e">EARLY RECOVERY</span><span class="vchip a">ACCUMULATE CANDIDATE</span><span class="vchip b">BUY CONFIRMED</span><span class="vchip x">INVALID SETUP</span></div>
+          <p class="muted small" style="margin:2px 0 0">Setup slab → <b>WATCH</b>; primele semne → <b>EARLY RECOVERY</b>; promițător dar neconfirmat → <b>ACCUMULATE CANDIDATE</b>; MA50 trece peste MA200 / preț confirmă clar → <b>BUY CONFIRMED</b>; se strică → <b>INVALID SETUP</b>.</p>
+          <p class="when"><b>Riscul principal:</b> intrarea prea devreme — MA50 poate părea că se apropie, dar trendul se poate deteriora din nou. De aceea nu sare direct la BUY.</p>
+          <div class="wex">
+            <h5>📋 Exemplu lucrat — „NordTech" (firmă fictivă)</h5>
+            <p class="wsub">Cum trece firma prin filtru, pas cu pas:</p>
+            <div class="wrow"><span class="wk">Calitate / DataQuality</span><span class="wv">82 · OK <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">MA50 vs MA200</span><span class="wv">95 &lt; 99 — încă sub <span class="ok">✓ pre-cross</span></span></div>
+            <div class="wrow"><span class="wk">Panta MA50 (20 zile)</span><span class="wv">+1,8% — urcă <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">Gap MA50–MA200</span><span class="wv">−12% → −5% — se reduce <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">MACD histogram</span><span class="wv">negativ, dar în creștere <span class="ok">✓ parțial</span></span></div>
+            <div class="wrow"><span class="wk">Preț vs MA50</span><span class="wv">+1% — tocmai l-a recuperat</span></div>
+            <div class="wres">Trendul se repară clar și gap-ul se închide, dar golden cross-ul <b>nu e încă format</b> și confirmarea de momentum e doar parțială → verdict: <span class="wverdict a">ACCUMULATE CANDIDATE</span> (nu BUY încă).</div>
+          </div>
+
+          <div class="gsec">2 · Healthy Trend Repair — reparare cu confirmări</div>
+          <div class="plain"><span class="pi">🔧</span><div><span class="pl-k">În cuvinte simple</span>Aceeași poveste de revenire ca mai sus, dar <b>mai prudentă</b>: nu intrăm la primul semn, ci <b>așteptăm câteva dovezi</b> că revenirea e reală (prețul urcă peste media lui, volumul confirmă, se comportă mai bine ca piața). Ca atunci când cineva spune că s-a schimbat — îl crezi după ce vezi <b>faptele</b>, nu doar vorbele. Mai sigură decât prima, intri puțin mai târziu.</div></div>
+          <div class="sdiag">
+            <div data-schart="trend"></div>
+            <div class="sleg"><span style="color:#16a34a"><i class="bar"></i>Lumânări — preț</span><span style="color:#0d9488"><i></i>MA50</span><span style="color:#94a3b8"><i></i>MA200</span></div>
+            <div class="scap">Versiunea mai matură a Pre-Golden Cross: pe lângă MA50 care urcă, cere <b>confirmări în plus</b> — prețul a <b>recuperat peste MA50</b> (punctul verde), MACD se îmbunătățește, se comportă mai bine ca piața, volum mai bun pe urcări.</div>
+          </div>
+          <p class="muted small" style="margin:6px 0 4px"><b>Cum verifică, pas cu pas:</b></p>
+          <ol class="algo-steps">
+            <li><b>Firmă sănătoasă?</b> Calitate &gt;75, FCF și marjă pozitive, datorie OK, valuation nu extremă.</li>
+            <li><b>Suntem înainte de golden cross, dar cu MA50 în urcare?</b> MA50&lt;MA200, dar urcă și gap-ul se reduce.</li>
+            <li><b>Prețul a recuperat PESTE MA50?</b> (nu doar se apropie) — prima dovadă reală.</li>
+            <li><b>MACD histogram se îmbunătățește?</b> Momentum-ul se întoarce.</li>
+            <li><b>Se comportă mai bine ca piața?</b> Relative Strength vs SPY în creștere.</li>
+            <li><b>Volum mai mare pe urcări decât pe scăderi?</b> Mai multe confirmări = Accumulate spre Buy.</li>
+          </ol>
+          <p class="when"><b>Diferența față de Pre-Golden Cross:</b> aceea se uită mai ales la apropierea MA50 de MA200; Trend Repair cere <b>dovezi în plus</b> (preț, momentum, RS, volum). Mai sigură, intri ceva mai târziu.</p>
+          <div class="vchips"><span class="vchip w">WATCH</span><span class="vchip e">EARLY RECOVERY</span><span class="vchip a">ACCUMULATE CANDIDATE</span><span class="vchip b">BUY CONFIRMED</span><span class="vchip x">INVALID SETUP</span></div>
+          <div class="wex">
+            <h5>📋 Exemplu lucrat — „MedVita" (firmă fictivă)</h5>
+            <p class="wsub">Companie bună, lovită de piață, care își repară trendul:</p>
+            <div class="wrow"><span class="wk">Calitate · FCF · datorie</span><span class="wv">78 · pozitiv · OK <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">MA50 vs MA200 (pantă MA50)</span><span class="wv">96 &lt; 100 (+1,2%) <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">Preț vs MA50</span><span class="wv">100 &gt; 96 — a recuperat <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">MACD histogram</span><span class="wv">în creștere <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">RS vs SPY</span><span class="wv">−2% dar ↗ în creștere <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">Volum pe urcări</span><span class="wv">peste medie <span class="ok">✓</span></span></div>
+            <div class="wres">Trendul se repară cu <b>mai multe confirmări</b> (preț, MACD, RS, volum), dar golden cross-ul tot nu s-a format → verdict: <span class="wverdict a">ACCUMULATE CANDIDATE</span>. Devine BUY când MA50 trece peste MA200 sau prețul reclaim MA200.</div>
+          </div>
+
+          <div class="gsec">3 · Quality Pullback in Uptrend — corecție sănătoasă</div>
+          <div class="plain"><span class="pi">🏷️</span><div><span class="pl-k">În cuvinte simple</span>O firmă <b>bună, care deja urcă frumos</b>, a făcut o mică pauză și a scăzut puțin. Nu e stricată — doar „respiră". E ca o <b>reducere de sezon la un produs bun</b>: același produs de calitate, doar la un preț ceva mai bun. Așteptăm scăderea controlată spre media de 50 de zile (un fel de „suport"), nu o prăbușire.</div></div>
+          <div class="sdiag">
+            <div data-schart="pullback"></div>
+            <div class="sleg"><span style="color:#16a34a"><i class="bar"></i>Lumânări — preț</span><span style="color:#0d9488"><i></i>MA50 (suport)</span><span style="color:#94a3b8"><i></i>MA200</span></div>
+            <div class="scap">Companie <b>deja bună, deja bullish</b> (MA50&gt;MA200, preț peste MA200), care face o corecție controlată de <b>−3…−12%</b> spre MA50/suport, apoi reia urcarea. Nu e reparare de trend slab — e o intrare mai bună într-un trend deja sănătos.</div>
+          </div>
+          <p class="muted small" style="margin:6px 0 4px"><b>Cum verifică, pas cu pas:</b></p>
+          <ol class="algo-steps">
+            <li><b>Firmă de calitate mare?</b> Calitate &gt;80, profitabilă, FCF pozitiv, valuation nu extremă.</li>
+            <li><b>Uptrend confirmat?</b> MA50 &gt; MA200 și prețul peste MA200, cu pante pozitive.</li>
+            <li><b>A făcut un pullback de −3…−12%?</b> O corecție normală, nu o prăbușire.</li>
+            <li><b>RSI a intrat în 40–55?</b> S-a „răcorit", dar nu e supravândut.</li>
+            <li><b>Volumul pe scădere e normal/sub medie?</b> Fără panică (fără volum mare de vânzare).</li>
+            <li><b>Se stabilizează lângă MA50 (higher low)?</b> → Accumulate; revenire peste MA50 + RSI↑ + MACD → Buy.</li>
+          </ol>
+          <p class="when"><b>Pullback sănătos vs breakdown:</b> pullback = scădere controlată, volum normal, preț rămâne peste MA200, fundamentele intacte. <b>Breakdown</b> = cădere violentă, volum mare pe scădere, preț sub MA200, MA50 începe să scadă → setup-ul devine <b>INVALID</b>.</p>
+          <div class="vchips"><span class="vchip e">WATCH PULLBACK</span><span class="vchip a">ACCUMULATE CANDIDATE</span><span class="vchip b">STRONG ACCUMULATE / BUY CONFIRMED</span><span class="vchip x">INVALID SETUP</span></div>
+          <div class="wex">
+            <h5>📋 Exemplu lucrat — „SolarWave" (firmă fictivă)</h5>
+            <p class="wsub">Firmă bună în trend bun, care „respiră":</p>
+            <div class="wrow"><span class="wk">Calitate · FCF</span><span class="wv">86 · pozitiv <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">MA50 vs MA200 · preț</span><span class="wv">101 &gt; 96 · preț 105 &gt; MA200 <span class="ok">✓ uptrend</span></span></div>
+            <div class="wrow"><span class="wk">Pullback din vârf</span><span class="wv">−7% spre MA50 <span class="ok">✓ în interval</span></span></div>
+            <div class="wrow"><span class="wk">RSI</span><span class="wv">47 <span class="ok">✓ (40–55)</span></span></div>
+            <div class="wrow"><span class="wk">Volum pe scădere</span><span class="wv">0,8× media <span class="ok">✓ fără panică</span></span></div>
+            <div class="wres">Corecție <b>sănătoasă</b> într-un trend confirmat, cu semne de stabilizare → verdict: <span class="wverdict a">ACCUMULATE CANDIDATE</span>. Devine <b>Buy</b> când prețul revine peste MA50 cu RSI↑ și MACD în îmbunătățire.</div>
+          </div>
+
+          <div class="gsec">4 · Quality Breakout Confirmation — confirmare clară</div>
+          <div class="plain"><span class="pi">🚦</span><div><span class="pl-k">În cuvinte simple</span>Nu ghicim — <b>așteptăm să avem confirmarea clară</b>. Prețul a stat blocat sub un „tavan" (o zonă de unde tot a fost respins), iar acum îl <b>sparge cu putere și cu mulți cumpărători</b> (volum mare). E ca și cum aștepți să se facă verde la semafor înainte să pornești. Cea mai sigură tehnic, dar intri mai târziu — prinzi o parte mai mică din mișcare.</div></div>
+          <div class="sdiag">
+            <div data-schart="breakout"></div>
+            <div class="sleg"><span style="color:#16a34a"><i class="bar"></i>Lumânări — preț</span><span style="color:#d97706"><i class="dash"></i>Rezistență</span><span style="color:#0d9488"><i></i>MA50</span><span style="color:#16a34a"><i class="bar"></i>Volum ↑ la breakout</span></div>
+            <div class="scap">Cea mai conservatoare: nu anticipează, ci <b>așteaptă confirmarea</b>. Prețul a fost respins de mai multe ori de un „tavan" (rezistența), apoi îl <b>rupe clar pe volum mare</b> (barele verzi). Intri mai târziu, dar cu dovezi clare de forță.</div>
+          </div>
+          <p class="muted small" style="margin:6px 0 4px"><b>Cum verifică, pas cu pas:</b></p>
+          <ol class="algo-steps">
+            <li><b>Firmă sănătoasă?</b> Calitate &gt;75, date de încredere.</li>
+            <li><b>Trend deja pozitiv?</b> Preț peste MA50 și MA200, cu pante pozitive.</li>
+            <li><b>Există o rezistență clară?</b> Un nivel de unde prețul a fost respins de mai multe ori.</li>
+            <li><b>O sparge acum?</b> Închidere peste rezistență (nu doar o atinge).</li>
+            <li><b>Volumul confirmă?</b> La spargere, volum peste media a 20 de zile.</li>
+            <li><b>Momentum-ul confirmă?</b> MACD peste Signal + RS vs SPY pozitivă → Buy Confirmed.</li>
+          </ol>
+          <div class="vchips"><span class="vchip w">WATCH</span><span class="vchip e">BREAKOUT WATCH</span><span class="vchip b">BUY CONFIRMED</span><span class="vchip x">INVALID SETUP</span></div>
+          <div class="wex">
+            <h5>📋 Exemplu lucrat — „IronGrid" (firmă fictivă)</h5>
+            <p class="wsub">Firmă bună care sparge un nivel important:</p>
+            <div class="wrow"><span class="wk">Calitate</span><span class="wv">81 <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">Preț vs MA50 / MA200</span><span class="wv">peste ambele <span class="ok">✓ trend +</span></span></div>
+            <div class="wrow"><span class="wk">Rezistență</span><span class="wv">99 — respins de 3 ori</span></div>
+            <div class="wrow"><span class="wk">Închidere</span><span class="wv">104 — peste 99 <span class="ok">✓ breakout</span></span></div>
+            <div class="wrow"><span class="wk">Volum la breakout</span><span class="wv">2,4× media <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">MACD vs Signal · RS</span><span class="wv">peste Signal · pozitivă <span class="ok">✓</span></span></div>
+            <div class="wres">Spargere <b>confirmată</b> de volum și momentum, într-un trend deja pozitiv → verdict: <span class="wverdict b">BUY CONFIRMED</span>. <i>Notă: în aplicație, această confirmare apare ca semnal tehnic în Scanner/Idei.</i></div>
+          </div>
+
+          <div class="gsec">5 · Quality Earnings Acceleration — business-ul accelerează</div>
+          <div class="plain"><span class="pi">🚀</span><div><span class="pl-k">În cuvinte simple</span>Aici <b>nu ne uităm la grafic, ci la cifrele reale ale firmei</b>. Căutăm companii care nu doar cresc, ci <b>cresc tot mai repede</b>: vinde mai mult ca anul trecut, profitul urcă tot mai accelerat de la un trimestru la altul. E diferența dintre o mașină care merge cu viteză constantă și una care <b>apasă pedala și accelerează</b>. Întrebarea: afacerea chiar devine mai bună, sau doar graficul arată bine?</div></div>
+          <div class="sdiag">
+            <div data-schart="earnings"></div>
+            <div class="sleg"><span style="color:#16a34a"><i class="bar"></i>Creșterea de la trimestru la trimestru</span><span style="color:#3b5bdb"><i class="dash"></i>Ritmul accelerează</span></div>
+            <div class="scap">Strategie bazată pe <b>business, nu pe grafic</b>. Barele arată cât crește firma în fiecare trimestru — și nu doar că cresc, ci că <b>cresc tot mai mult</b>. Cheia: creșterea din <b>ultimul trimestru depășește media ultimelor 4 trimestre</b>.</div>
+          </div>
+          <p class="muted small" style="margin:6px 0 4px"><b>Cum verifică, pas cu pas:</b></p>
+          <ol class="algo-steps">
+            <li><b>Firmă de calitate?</b> Calitate &gt;80, marjă +, FCF +, datorie rezonabilă, valuation nu extremă.</li>
+            <li><b>Venitul accelerează?</b> Creșterea din ultimul trimestru &gt; media ultimelor 4 trimestre.</li>
+            <li><b>Profitul (EPS) accelerează?</b> La fel — ultimul Q peste media 4Q.</li>
+            <li><b>Marjele sunt stabile sau în creștere?</b> Nu scad pe măsură ce crește firma.</li>
+            <li><b>FCF margin pozitivă?</b> Creșterea produce și cash real.</li>
+            <li><b>Confirmare tehnică minimă?</b> Preț ≈/peste MA50, RS+, MACD↑ → Accumulate spre Buy.</li>
+          </ol>
+          <p class="when"><b>Onestitate față de date:</b> earnings surprise, guidance și revizuirile de analiști <b>nu există în datele gratuite</b> → marcate <b>N/A</b>, niciodată inventate sau penalizate automat. Dacă lipsesc datele trimestriale → <b>DataQuality WARNING</b> și verdict limitat la Earnings Watch.</p>
+          <div class="vchips"><span class="vchip w">WATCH</span><span class="vchip e">EARNINGS WATCH</span><span class="vchip a">ACCUMULATE CANDIDATE</span><span class="vchip b">STRONG ACCUMULATE / BUY CONFIRMED</span><span class="vchip x">REJECT</span></div>
+          <div class="wex">
+            <h5>📋 Exemplu lucrat — „CloudPeak" (firmă fictivă)</h5>
+            <p class="wsub">Afacere care chiar accelerează:</p>
+            <div class="wrow"><span class="wk">Calitate · marjă · FCF</span><span class="wv">84 · 17% · pozitiv <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">Venit: ultim Q vs medie 4Q</span><span class="wv">+18% vs +11% <span class="ok">✓ accelerează</span></span></div>
+            <div class="wrow"><span class="wk">Profit (EPS): ultim Q vs medie</span><span class="wv">+22% vs +14% <span class="ok">✓ accelerează</span></span></div>
+            <div class="wrow"><span class="wk">Marjă netă</span><span class="wv">14% → 17% — în creștere <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">FCF margin</span><span class="wv">+9% <span class="ok">✓</span></span></div>
+            <div class="wrow"><span class="wk">Tehnic (preț/RS/MACD)</span><span class="wv">peste MA50 · RS +6% · MACD↑ <span class="ok">✓</span></span></div>
+            <div class="wres">Business-ul accelerează real <b>și</b> tehnicul confirmă → verdict: <span class="wverdict b">BUY CONFIRMED</span> (dacă valuation rămâne acceptabilă; altfel se limitează la Accumulate).</div>
+          </div>
+
+          <div class="gsec">6 · MACD — confirmare de momentum (NU strategie principală)</div>
+          <div class="plain"><span class="pi">✅</span><div><span class="pl-k">În cuvinte simple</span>MACD <b>nu e o strategie</b>, ci un <b>instrument de confirmare</b>. Îți arată dacă „elanul" prețului începe să se întoarcă în favoarea cumpărătorilor. E ca un <b>martor care confirmă</b> ce spun celelalte strategii — util când e de acord cu ele, dar <b>nu îl lăsăm să decidă singur</b>. Singur, dă multe semnale false.</div></div>
+          <div class="sdiag">
+            <div data-schart="macd"></div>
+            <div class="sleg"><span style="color:#3b5bdb"><i></i>MACD</span><span style="color:#94a3b8"><i></i>Signal</span><span style="color:#16a34a"><i class="bar"></i>Histogram (− → +)</span></div>
+            <div class="scap">Când linia MACD (albastră) trece <b>peste</b> linia Signal (gri) și histogramul intră în pozitiv (din roșu în verde), momentum-ul se confirmă. <b>Confirmă, nu decide.</b></div>
+          </div>
+          <div class="fx"><span class="eq">MACD = EMA12 − EMA26 · Signal = EMA9(MACD) · Histogram = MACD − <b>Signal</b></span><small><b>EMA12</b> media rapidă (reacționează repede) · <b>EMA26</b> media lentă · <b>Histogram</b> = cât de aproape e momentum-ul de confirmare</small></div>
+          <p class="muted small" style="margin:6px 0 4px"><b>Cum îl citim, de la slab la confirmat:</b></p>
+          <ul class="vlist">
+            <li><b>MACD sub Signal</b> — momentum încă slab.</li>
+            <li><b>MACD sub Signal dar se apropie</b> — momentum-ul negativ slăbește.</li>
+            <li><b>Histogram negativ dar în creștere</b> — scăderea pierde forță.</li>
+            <li><b>MACD peste Signal (cross ↑)</b> — confirmare bullish de momentum.</li>
+            <li><b>Histogram pozitiv</b> — momentum-ul pozitiv e confirmat.</li>
+          </ul>
+          <p class="when"><b>Rolul în sistem:</b> MACD confirmă strategiile principale — că revenirea are energie (Pre-Golden Cross), că trendul se repară (Trend Repair), că pullback-ul se stabilizează (Quality Pullback), că breakout-ul e real (Breakout) și că piața reacționează la business-ul mai bun (Earnings Acceleration). <b>Niciodată singur.</b></p>
+          <div class="wex">
+            <h5>📋 Exemplu — cum confirmă MACD într-o strategie</h5>
+            <p class="wsub">Aceeași firmă „MedVita" din Trend Repair, partea de momentum:</p>
+            <div class="wrow"><span class="wk">Histogram (3 zile)</span><span class="wv">−0,4 → −0,1 → +0,2 <span class="ok">✓ trece în pozitiv</span></span></div>
+            <div class="wrow"><span class="wk">MACD vs Signal</span><span class="wv">trece peste Signal (cross ↑) <span class="ok">✓</span></span></div>
+            <div class="wres">MACD <b>confirmă</b> că revenirea din Trend Repair are energie reală. <b>Fără</b> această confirmare, verdictul rămânea WATCH, nu Accumulate. MACD nu a decis singur — doar a întărit celelalte semnale.</div>
+          </div>
+
+          <div class="gsec">Cum lucrează strategiile împreună</div>
+          <p class="muted" style="font-size:13.5px">Sistemul nu alege o singură strategie pentru toate firmele. Fiecare companie e <b>clasificată</b> după tipul de oportunitate: firmă bună deja bullish la corecție → <b>Quality Pullback</b>; firmă bună cu trend slab care se repară → <b>Trend Repair</b>; MA50 sub MA200 dar se apropie rapid → <b>Pre-Golden Cross</b>; breakout confirmat → <b>Breakout Confirmation</b>; rezultate în accelerare → <b>Earnings Acceleration</b>; doar MACD se mișcă, restul lipsește → <b>No Valid Setup / Watch Momentum</b>.</p>
+          <p class="muted small" style="margin:6px 0 8px"><b>Ordinea de analiză:</b></p>
+          <ol class="algo-steps">
+            <li><b>DataQuality</b> — dacă e BAD, verdict maxim WATCH.</li>
+            <li><b>Fundamentele</b> — dacă Quality e slab, firma nu intră în strategiile principale.</li>
+            <li><b>Valuation</b> — dacă e extremă, verdict limitat la WATCH/ACCUMULATE, chiar dacă tehnicul arată bine.</li>
+            <li><b>Tipul de setup</b> — pullback / trend repair / pre-golden cross / breakout / earnings acceleration.</li>
+            <li><b>Momentum</b> — MACD, histogram, RSI, volum, relative strength.</li>
+            <li><b>Verdictul final</b> — WATCH · EARLY RECOVERY · EARNINGS WATCH · WATCH PULLBACK · ACCUMULATE CANDIDATE · STRONG ACCUMULATE · BUY CONFIRMED · INVALID SETUP.</li>
+          </ol>
+
+          <div class="gsec">Reguli de siguranță ale algoritmului</div>
+          <ul class="rule-list">
+            <li>Nu marca BUY dacă <b>DataQuality = BAD</b>. Dacă e WARNING, verdict maxim ACCUMULATE CANDIDATE, cu explicație.</li>
+            <li>Nu marca BUY doar pentru că prețul a scăzut.</li>
+            <li>Nu marca BUY doar pentru că MACD a trecut peste Signal.</li>
+            <li>Nu marca BUY doar pentru că MA50 se apropie de MA200.</li>
+            <li>Nu marca BUY dacă valuation e extremă (decât cu justificare excepțională și risc marcat clar).</li>
+            <li>Nu marca BUY dacă fundamentele sunt slabe.</li>
+            <li>Nu marca BUY dacă prețul cade sub MA200 fără recuperare.</li>
+            <li>Nu marca BUY dacă volumul pe scădere indică distribuție agresivă.</li>
+            <li>Nu marca BUY dacă FCF e negativ fără o justificare clară de growth.</li>
+            <li>La <b>firme financiare</b> folosește metrici specifice sectorului — nu aplica mecanic Net Debt/EBITDA.</li>
+            <li>La <b>REIT-uri, BDC-uri, CEF-uri</b> sau firme de dividende speciale, folosește metrici specifice sectorului (P/FFO, AFFO etc.).</li>
+          </ul>
+
+          <div class="algo-final">
+            <h4>Scopul final</h4>
+            <p>Algoritmul nu trebuie să spună doar BUY sau WATCH — trebuie să explice <b>ce tip de oportunitate</b> e fiecare companie. Întrebarea principală nu e:</p>
+            <span class="q">„Este acțiunea de cumpărat?"</span>
+            <p>ci:</p>
+            <span class="q">„Ce tip de setup avem aici?"</span>
+            <p style="margin-bottom:0">Poate fi: companie bună la pullback · companie în trend repair · companie înainte de golden cross · companie cu breakout confirmat · companie cu earnings acceleration · sau companie fără setup valid. Scopul e să transformăm lista într-un <b>sistem explicabil</b>, nu doar într-un tabel de scoruri. Nimic din toate acestea nu e recomandare de investiție.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about" class="view">
+      <div class="grid two">
+        <div class="card">
+          <h2>Cum decide aplicația ce „merită"</h2>
+          <p class="muted">Fiecare companie primește un scor 0–100 compus din: <strong>calitate</strong> (marje, ROE din SEC), <strong>sănătate financiară</strong> (datorii/equity), <strong>creștere</strong> (venituri), <strong>momentum</strong> (poziția față de mediile mobile și 52 săptămâni) și <strong>dividend</strong> (yield din plățile reale ultimele 12 luni). Din risc se scad penalizări (volum mic, RSI extrem, profitabilitate negativă). Verdictul traduce scorul în limbaj clar.</p>
+        </div>
+        <div class="card">
+          <h2>Surse de date (gratuite)</h2>
+          <div class="source-list">
+            <div><strong>Yahoo Finance</strong><span>cotații, istoric OHLCV, dividende — SUA și Europa</span></div>
+            <div><strong>SEC EDGAR</strong><span>fundamente oficiale (doar companii SUA cu CIK)</span></div>
+          </div>
+          <p class="muted small">Notă onestă: sursele gratuite nu egalează un API plătit. Pentru REIT-urile europene fundamentele SEC lipsesc — acolo te bazezi pe preț, trend și dividend yield.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Exact cum se calculează scorul (0–100)</h2>
+        <p class="muted small" style="margin:6px 0 14px">Scorul final e o <strong>medie ponderată a 6 componente</strong> (fiecare 0–100), din care se scade penalizarea de risc, apoi se aplică <strong>plafoane dure</strong> pentru red flags. Totul e calculat din date live — nimic nu e introdus manual per companie.</p>
+        <div class="calc-grid">
+          <div class="calc-row"><b>Calitate · 23%</b><span>marje (net, EBIT) și ROE din SEC; ROE distorsionat de equity foarte mic e ignorat</span></div>
+          <div class="calc-row"><b>Sănătate · 20%</b><span>Debt/Equity, Net Debt/EBITDA, acoperirea dobânzii, equity ratio; bonus pentru cash net</span></div>
+          <div class="calc-row"><b>Momentum · 15%</b><span>preț vs MA50/MA200, RSI, poziția în 52s, randament 1 an (mișcările parabolice se plafonează)</span></div>
+          <div class="calc-row"><b>Evaluare · 14%</b><span>P/E (TTM piață), P/B, P/S, EV/EBITDA, P/FCF, FCF yield; la REIT-uri P/FFO</span></div>
+          <div class="calc-row"><b>Creștere · 12%</b><span>creșterea veniturilor; anomaliile (&gt;100% sau &lt;−50%) se ignoră, nu se recompensează</span></div>
+          <div class="calc-row"><b>Dividend · 8%</b><span>yield real (plățile ultimelor 12 luni) + sustenabilitate (payout / FFO payout)</span></div>
+          <div class="calc-row"><b>Ancoră neutră · 8%</b><span>o valoare fixă (50) ca scorul să nu fie tras în extreme de o singură componentă</span></div>
+        </div>
+        <p class="muted small" style="margin:14px 0 6px"><strong>Formula:</strong> <code>0.23·Calitate + 0.20·Sănătate + 0.15·Momentum + 0.14·Evaluare + 0.12·Creștere + 0.08·Dividend + 0.08·50 − penalizare_risc</code></p>
+        <p class="muted small" style="margin:0 0 14px"><strong>Încredere (confidence):</strong> cât de complete sunt datele (SEC disponibil, P/E necontestat, fără date învechite). Sub prag, scorul e marcat <em>„incert"</em>. <strong>Penalizarea de risc</strong> vine din volum mic, RSI extrem, profitabilitate negativă, datorie grea etc.</p>
+        <h3 style="margin:16px 0 6px;font-size:15px">Plafoane dure (după scor) — momentumul sau ieftinătatea NU pot masca un risc real</h3>
+        <ul class="calc-caps">
+          <li>Sănătate &lt;35 → scor max <b>57</b>; &lt;22 → max <b>47</b></li>
+          <li>Equity negativ, sau market cap/preț invalid → max <b>45</b></li>
+          <li>Date învechite (&gt;18 luni) → max <b>55</b></li>
+          <li>Creștere anormală/one-off neverificată, sau P/E în conflict între surse → max <b>60</b></li>
+        </ul>
+        <h3 style="margin:16px 0 6px;font-size:15px">Cum devine scorul un verdict</h3>
+        <ul class="calc-caps">
+          <li><b>≥75</b> (date suficiente, fără red flags) → „Candidat puternic pentru analiză"</li>
+          <li><b>≥60</b> → „Merită analizat, dar verifică riscurile" (sau „Mixt" dacă bilanțul e slab)</li>
+          <li><b>≥45</b> → „Neutru / doar watchlist"</li>
+          <li><b>&lt;45</b> → „Risc ridicat / evită până la clarificare"</li>
+        </ul>
+        <h3 style="margin:16px 0 6px;font-size:15px">Cum se ordonează listele de idei (fiecare metodă reponderează aceleași componente)</h3>
+        <ul class="calc-caps">
+          <li><b>Oportunități:</b> ieftin (evaluare) + calitate + creștere; momentumul contează puțin; bonus când e ieftină ȘI de calitate</li>
+          <li><b>Cele mai bune / Dividende / Defensive / Momentum / Imobiliare:</b> aceleași componente, cu ponderi specifice scopului</li>
+          <li><b>FML (viitori lideri):</b> filtre dure — venituri &gt;20% a/a, peste MA50 &amp; MA200, MA50&gt;MA200, trend în creștere, nu super-extins — apoi scor FML 0–100 (creștere 40% + trend/RS 25% + calitate 20% + bilanț 15%)</li>
+          <li><b>Potențial (valoare justă):</b> valoare justă = mediana a 3 metode (P/E corect, reversiune FCF, EV/EBITDA) vs preț → „subevaluat cu +X%", doar firme profitabile cu marjă de siguranță reală</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="section-head"><h2>Universul de companii</h2><span id="uniTotalPill" class="status-pill ok">—</span></div>
+        <p class="muted small" style="margin:0 0 14px">De unde vin companiile scanate și câte sunt. Sursa principală e <strong>lista oficială S&P 500</strong> (cele mai mari ~500 firme din SUA), cu sector GICS și CIK pentru fundamente, plus REIT-uri și ETF-uri europene/US adăugate manual pentru acoperire mai largă.</p>
+        <div id="uniBreakdown" class="uni-grid"></div>
+      </div>
+      <div class="card">
+        <div class="section-head"><h2>Cache & date</h2></div>
+        <p class="muted small" style="margin:0 0 12px">Datele se păstrează temporar pe server ca să fie rapide: fundamente SEC/Yahoo <strong>~24h</strong>, cotații 60s, istoric 15 min. Dacă vrei date proaspete imediat (ex. după un raport nou sau dacă o cifră pare veche), golește cache-ul.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="ghost" id="clearCacheBtn">🗑️ Curăță cache-ul (date proaspete)</button>
+          <span id="clearCacheMsg" class="muted small"></span>
+        </div>
+      </div>
+      <div class="card warning">
+        <h2>Disclaimer</h2>
+        <p>Aceasta este o unealtă educativă de analiză, nu o recomandare de investiție. Scorurile sunt orientative și pot conține erori din datele brute. Verifică întotdeauna manual înainte de a investi bani reali.</p>
+      </div>
+    </section>
+
+    <footer class="appfoot">
+      <a class="footlink" href="#about" data-view="about">Despre date & disclaimer</a>
+      <span>·</span>
+      <span class="muted">unealtă educativă, nu sfat financiar</span>
+    </footer>
+  </main>
+
+  <nav class="botnav" id="botnav" aria-label="Navigare principală">
+    <a class="bn active" href="#ideas" data-view="ideas"><span class="bi" aria-hidden="true">💡</span>Idei</a>
+    <a class="bn" href="#scanner" data-view="scanner"><span class="bi" aria-hidden="true">🔍</span>Scanner</a>
+    <a class="bn" href="#news" data-view="news"><span class="bi" aria-hidden="true">📰</span>Știri</a>
+    <a class="bn" href="#markets" data-view="markets"><span class="bi" aria-hidden="true">📊</span>Piețe</a>
+    <a class="bn" href="#company" data-view="company"><span class="bi" aria-hidden="true">🏢</span>Companie</a>
+    <a class="bn" href="#portfolio" data-view="portfolio"><span class="bi" aria-hidden="true">📁</span>Portofoliu</a>
+    <a class="bn" href="#guide" data-view="guide"><span class="bi" aria-hidden="true">📚</span>Ghid</a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+  <script src="assets/js/app.js?v=20260803d"></script>
+</body>
+</html>
