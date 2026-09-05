@@ -1,0 +1,8 @@
+# Admin — protecție suplimentară
+Options -Indexes
+
+# Blochează accesul direct la fișiere PHP dacă nu vine din index.php
+# (opțional — decomentează dacă vrei restricție IP)
+# Order Deny,Allow
+# Deny from all
+# Allow from YOUR_IP_HERE
